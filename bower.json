@@ -1,0 +1,22 @@
+{
+  "name": "zawntech-wordpress-helpers",
+  "homepage": "https://github.com/zawntech/wordpress-helpers",
+  "authors": [
+    "Marty Eason <dev@zawntech.com>"
+  ],
+  "description": "Custom WordPress extensions by Zawntech",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout-components": "*",
+    "knockout": "^3.4.0",
+    "knockout-mapping": "^2.4.1"
+  }
+}
