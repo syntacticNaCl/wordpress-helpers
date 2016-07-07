@@ -2,6 +2,8 @@
 
 A collection of custom WordPress extensions by Zawntech.
 
+**Currently in initial development. API subject to change until a release is tagged.**
+
 ### Installation
 
 This plugin must be installed to the must-use plugins directory, ```wp-content/mu-plugins```, by default, so that 
