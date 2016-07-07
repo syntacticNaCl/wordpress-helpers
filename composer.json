@@ -1,0 +1,20 @@
+{
+  "name": "zawntech/wordpress-helpers",
+  "description": "Adds enhancements to WordPress.",
+  "type": "wordpress-plugin",
+  "authors": [
+    {
+      "name": "Marty Eason",
+      "email": "dev@zawntech.com"
+    }
+  ],
+  "license": "proprietary",
+  "require": {
+    "philo/laravel-blade": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zawntech\\WordPress\\": "code/"
+    }
+  }
+}
