@@ -34,9 +34,5 @@ define( 'WORDPRESS_HELPERS_DIR', __DIR__ . '/' );
  */
 define( 'WORDPRESS_HELPERS_URL', plugin_dir_url( __FILE__ ) );
 
-// Activate plugin function.
-register_activation_hook( __FILE__ , function() {
-
-    // Install the PostsPivot structure.
-    \Zawntech\WordPress\PostsPivot\PostsPivot::install();
-});
+// Enqueue admin javascripts.
+new \Zawntech\WordPress\AdminScripts;
