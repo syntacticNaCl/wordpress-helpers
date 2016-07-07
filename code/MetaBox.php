@@ -1,12 +1,37 @@
 <?php
 namespace Zawntech\WordPress;
 
+/**
+ * Class MetaBox
+ * @package Zawntech\WordPress
+ */
 class MetaBox
 {
+    /**
+     * @var string Meta box element ID.
+     */
     protected $id;
+
+    /**
+     * @var string The metabox title as displayed in the WordPress admin.
+     */
     protected $title;
+
+    /**
+     * @var array An array of post types to which this metabox should be hooked.
+     */
     protected $postTypes = [];
+
+    /**
+     * @var string Absolute path to view model javascript file.
+     * If left empty, then no view model javascript file is enqueued.
+     */
     protected $viewModel;
+
+    /**
+     * @var string Javascript preload variable name used by view model.
+     * If let empty, no preload data is printed to the metabox.
+     */
     protected $viewModelPreloadVar;
 
     /**
@@ -15,6 +40,9 @@ class MetaBox
      */
     protected $metaKeys = [];
 
+    /**
+     * Register the metabox to the post types defined in $this->postTypes.
+     */
     public function register()
     {
         // Register the metabox for each associated post type.
@@ -30,6 +58,10 @@ class MetaBox
         }
     }
 
+    /**
+     * @param $postId
+     * @return mixed|string|void
+     */
     protected function getPreloadModel($postId)
     {
         // Meta get post meta.
@@ -49,6 +81,9 @@ class MetaBox
         return json_encode($output);
     }
 
+    /**
+     * @param $postId
+     */
     protected function printPreloadJavascript($postId)
     {
         ?>
@@ -64,7 +99,6 @@ class MetaBox
             // Enqueue the view model javascript.
             wp_enqueue_script(
                 md5($this->id . $this->title) . '-view-model',
-                PROJECTION_PLUGIN_URL . 'assets/js/view-models/admin/' .
                 $this->viewModel,
                 ['jquery', 'knockout'],
                 null,
