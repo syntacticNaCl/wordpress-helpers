@@ -463,33 +463,50 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-// ko-button ViewModel
+/**
+ * <ko-textarea></ko-textarea>
+ */
 var KoTextareaViewModel = (function () {
     function KoTextareaViewModel(args) {
+        /**
+         * Default number of text area rows.
+         * @type {number}
+         */
         this.rows = 3;
-        // If the eye icon is being hovered.
-        this.beingHovered = ko.observable(false);
-        // The password value, should be passed via params.
+        /**
+         * Textarea value.
+         * @type {KnockoutObservable<string>}
+         */
         this.value = ko.observable('');
+        /**
+         * An array of validation errors.
+         * @type {KnockoutObservableArray<string>}
+         */
         this.validator = ko.observableArray([]);
-        this.type = 'input';
+        /**
+         * Textarea placeholder.
+         * @type {string}
+         */
         this.placeholder = '';
+        /**
+         * Textarea label.
+         * @type {string}
+         */
         this.label = '';
+        /**
+         * Text area name attribute, for forms.
+         * @type {string}
+         */
+        this.name = '';
         var object = this;
         _.each(args, function (value, key) {
             object[key] = args[key] ? args[key] : object[key];
         });
     }
-    KoTextareaViewModel.prototype._in = function () {
-        this.beingHovered(true);
-    };
-    KoTextareaViewModel.prototype._out = function () {
-        this.beingHovered(false);
-    };
     return KoTextareaViewModel;
 }());
 // ko-button Template
-var KoTextareaTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <textarea class=\"form-control\" data-bind=\"textInput: value, placeholder: placeholder, attr: { rows: rows ? rows : 3 }\"></textarea>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
+var KoTextareaTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <textarea class=\"form-control\" data-bind=\"textInput: value, placeholder: placeholder, attr: { rows: rows ? rows : 3, name: name }\"></textarea>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
 var KnockoutTextareaComponent = (function (_super) {
     __extends(KnockoutTextareaComponent, _super);
     function KnockoutTextareaComponent() {
