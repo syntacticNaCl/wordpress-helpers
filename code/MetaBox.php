@@ -23,7 +23,7 @@ class MetaBox
     protected $postTypes = [];
 
     /**
-     * @var string Absolute path to view model javascript file.
+     * @var string Public URL to view model javascript file.
      * If left empty, then no view model javascript file is enqueued.
      */
     protected $viewModel;
