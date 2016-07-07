@@ -86,6 +86,11 @@ class MetaBox
      */
     protected function printPreloadJavascript($postId)
     {
+        // Do nothing if no view model preload variable specified.
+        if ( ! $this->viewModelPreloadVar ) {
+            return;
+        }
+
         ?>
         <script>var <?= $this->viewModelPreloadVar; ?> = <?= $this->getPreloadModel($postId); ?>;</script>
         <?php
