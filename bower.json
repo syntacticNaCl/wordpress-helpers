@@ -17,6 +17,7 @@
   "dependencies": {
     "knockout-components": "*",
     "knockout": "^3.4.0",
-    "knockout-mapping": "^2.4.1"
+    "knockout-mapping": "^2.4.1",
+    "font-awesome": "^4.6.3"
   }
 }
