@@ -24,6 +24,9 @@ if ( ! is_file($autoloadPath) )
 // Require composer assets.
 require_once $autoloadPath;
 
+// Include global helper functions.
+require_once __DIR__ . '/code/Functions.php';
+
 /**
  * Define absolute path to plugin directory.
  */
