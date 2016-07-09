@@ -14,16 +14,19 @@ class PostsPivotMetaBox
     protected $title;
 
     /**
-     * @var string Primary post type.
+     * @var string Primary post type key.
      */
     protected $postType;
 
     /**
-     * @var string Related type.
+     * @var string Related type key.
      */
     protected $relatedType;
 
-    protected $viewModel = 'pivots/posts-pivoter.js';
+    /**
+     * @var string Public URL to posts pivoter view model javascript.
+     */
+    protected $viewModel = WORDPRESS_HELPERS_URL . 'assets/js/view-models/posts-pivoter-meta-box-view-model.js';
     
     protected $viewModelPreloadVar;
 
@@ -44,13 +47,11 @@ class PostsPivotMetaBox
 
     public function render($post)
     {
-        //$query = new eopleQuery();
-
         $relatedPosts = PostsPivot::getRelatedPostIdsByPostType( $post->ID, $this->relatedType );
 
-        echo view('admin.post-types.pivots.post-pivot-metabox', [
+        echo view('admin.post-types.pivots.posts-pivot-meta-box', [
             'post' => $post,
-            'elementId' => ''
+            'elementId' => $this->id
         ]);
     }
 
@@ -62,7 +63,6 @@ class PostsPivotMetaBox
             // Enqueue the view model javascript.
             wp_enqueue_script(
                 md5($this->id . $this->title) . '-view-model',
-                PROJECTION_PLUGIN_URL . 'assets/js/view-models/admin/' .
                 $this->viewModel,
                 ['jquery', 'knockout'],
                 null,

@@ -10,6 +10,9 @@ use Zawntech\WordPress\PostsPivot\PostsPivot;
  */
 class PluginBootstrapper
 {
+    /**
+     * Installs plugin assets: posts_pivot table.
+     */
     public function verifyInstallation()
     {
         // Check if the posts pivot table is installed.
@@ -22,7 +25,7 @@ class PluginBootstrapper
 
     public function __construct()
     {
-        // Do nothing if not administrator.
+        // Do nothing if not administrator screen.
         if ( ! is_admin() ) {
             return;
         }

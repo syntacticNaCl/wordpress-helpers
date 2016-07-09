@@ -49,7 +49,7 @@ class PostsPivot
         // Install table.
         $wpdb->query( $sql );
 
-        
+
     }
 
     /**
@@ -99,10 +99,19 @@ class PostsPivot
      */
     public static function getRelatedPostIdsByPostType($postId, $postType='post')
     {
+
         global $wpdb;
 
         // Get related post IDs.
         $postIds = static::getRelatedPostIds($postId);
+
+        // No post IDs
+        if ( ! $postIds )
+        {
+            return [];
+        }
+
+        // Join integers by comma.
         $postIdsString = implode( ',', $postIds );
 
         // Prepare SQL.
