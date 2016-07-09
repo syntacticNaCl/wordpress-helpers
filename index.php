@@ -36,3 +36,6 @@ define( 'WORDPRESS_HELPERS_URL', plugin_dir_url( __FILE__ ) );
 
 // Enqueue admin javascripts.
 new \Zawntech\WordPress\AdminScripts;
+
+// Bootstrap the plugin.
+new \Zawntech\WordPress\PluginBootstrapper;

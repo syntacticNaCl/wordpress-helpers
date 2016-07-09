@@ -16,6 +16,24 @@ class PostsPivot
     const TABLE_NAME = 'posts_pivot';
 
     /**
+     * Determine if the database tables have been installed.
+     * @return bool
+     */
+    public static function isInstalled()
+    {
+        global $wpdb;
+
+        // Get database table name.
+        $tableName = static::getTableName();
+
+        // Prepare SQL string.
+        $sql = "SELECT 1 FROM `{$tableName}` LIMIT 1";
+
+        // If the table exists, we will get a result higher than 0.
+        return count( $wpdb->get_results($sql) ) > 0;
+    }
+
+    /**
      * Install the database table.
      */
     public static function install()
@@ -30,6 +48,8 @@ class PostsPivot
 
         // Install table.
         $wpdb->query( $sql );
+
+        
     }
 
     /**
