@@ -17,3 +17,14 @@ if ( ! function_exists('view') )
         return \Zawntech\WordPress\View::render($viewName, $viewData);
     }
 }
+
+if ( ! function_exists('get_no_image_url') )
+{
+    /**
+     * @return string Get public URL to 'no image' image.
+     */
+    function get_no_image_url()
+    {
+        return WORDPRESS_HELPERS_URL . 'assets/img/no-image-150.png';
+    }
+}
