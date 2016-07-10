@@ -27,8 +27,6 @@ class PostsPivotMetaBox
      * @var string Public URL to posts pivoter view model javascript.
      */
     protected $viewModel = WORDPRESS_HELPERS_URL . 'assets/js/view-models/posts-pivoter-meta-box-view-model.js';
-    
-    protected $viewModelPreloadVar;
 
     /**
      * Hook the metabox to $this->postType.
@@ -47,8 +45,6 @@ class PostsPivotMetaBox
 
     public function render($post)
     {
-        $relatedPosts = PostsPivot::getRelatedPostIdsByPostType( $post->ID, $this->relatedType );
-
         echo view('admin.post-types.pivots.posts-pivot-meta-box', [
 
             // Prepare an options object to be passed to the
