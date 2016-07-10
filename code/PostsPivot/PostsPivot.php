@@ -126,7 +126,7 @@ class PostsPivot
         // Loop through results, determine the post IDs we need to return.
         foreach( $results as $result )
         {
-            $resultIds[] = $result->ID;
+            $resultIds[] = (integer) $result->ID;
         }
 
         return $resultIds;

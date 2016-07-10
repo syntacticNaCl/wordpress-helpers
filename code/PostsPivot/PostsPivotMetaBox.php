@@ -50,8 +50,15 @@ class PostsPivotMetaBox
         $relatedPosts = PostsPivot::getRelatedPostIdsByPostType( $post->ID, $this->relatedType );
 
         echo view('admin.post-types.pivots.posts-pivot-meta-box', [
-            'post' => $post,
-            'elementId' => $this->id
+
+            // Prepare an options object to be passed to the
+            // PostsPivoterViewModel constructor in the view.
+            'options' => [
+                'elementId' => $this->id,
+                'postId' => (integer) $post->ID,
+                'postType' => $this->postType,
+                'relatedType' => $this->relatedType
+            ],
         ]);
     }
 

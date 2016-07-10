@@ -2,6 +2,7 @@
 namespace Zawntech\WordPress;
 
 use Zawntech\WordPress\PostsPivot\PostsPivot;
+use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
 
 /**
  * A utility class for installing and bootstrapping the WordPress helper plugin.
@@ -25,6 +26,9 @@ class PluginBootstrapper
 
     public function __construct()
     {
+        // Hook Posts Pivot Ajax functions.
+        new PostsPivotAjaxHandler;
+
         // Do nothing if not administrator screen.
         if ( ! is_admin() ) {
             return;

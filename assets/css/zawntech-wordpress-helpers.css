@@ -7039,4 +7039,7 @@
     .wpbs .hidden-print {
       display: none !important; } }
 
+.posts-pivot-meta-box .attached {
+  background-color: rgba(255, 213, 5, 0.22); }
+
 /*# sourceMappingURL=zawntech-wordpress-helpers.css.map */
