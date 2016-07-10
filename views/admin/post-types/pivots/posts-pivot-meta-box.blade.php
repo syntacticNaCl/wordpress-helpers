@@ -56,7 +56,7 @@
                             <!-- /ko -->
 
                             <!-- Title -->
-                            <span data-bind="text: $data.title"></span>
+                            <a target="_blank" data-bind="attr: { href: '{{ admin_url() . 'post.php?post=' }}' + $data.id() + '&action=edit' }, text: $data.title"></a>
 
                             <!-- Right Side Button Group -->
                             <div class="pull-right">
