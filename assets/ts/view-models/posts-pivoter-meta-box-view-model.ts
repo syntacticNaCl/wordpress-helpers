@@ -1,13 +1,59 @@
 interface PostsPivoterOptionsInterface
 {
-    postId;
-    elementId;
-    postType;
-    relatedType;
+    postId: number;
+    elementId: string;
+    postType: string;
+    relatedType: string;
+    relatedPostsCreator: boolean;
+}
+
+class CreateRelatedPostFormViewModel
+{
+    constructor(parent: PostsPivoterViewModel) {
+        this.parent = parent;
+    }
+
+    parent: PostsPivoterViewModel;
+
+    post_title = ko.observable('');
+    post_content = ko.observable('');
+
+    submit(btn)
+    {
+        // Set busy state to true.
+        btn.busy(true);
+
+        // Do ajax.
+        this.parent.ajax(
+            'create_related',
+            {
+                postId: this.parent.options.postId,
+                relatedType: this.parent.options.relatedType,
+                newPost: {
+                    post_title: this.post_title(),
+                    post_content: this.post_content()
+                }
+            },
+            (r) => {
+                // Loop through the posts returned by server.
+                _.each(r.posts, (post) => {
+                    // Add the current item to collection.
+                    this.parent.collection.push( ko.mapping.fromJS(post) );
+                    // Add the current post ID to related IDs.
+                    this.parent.relatedIds.push(post.id);
+                });
+
+                // Done.
+                btn.busy(false);
+            }
+        );
+    }
 }
 
 class PostsPivoterViewModel
 {
+    creator: CreateRelatedPostFormViewModel;
+
     /**
      * Options passed to views which instantiate PostPivoterViewModel instances.
      */
@@ -42,6 +88,12 @@ class PostsPivoterViewModel
      * @type {KnockoutObservable<boolean>}
      */
     showSearch = ko.observable(false);
+
+    /**
+     * Show the related posts creator form?
+     * @type {KnockoutObservable<boolean>}
+     */
+    showRelatedPostsCreator = ko.observable(false);
 
     filteredCollection = ko.pureComputed(() =>
     {
@@ -188,6 +240,9 @@ class PostsPivoterViewModel
 
         this.all();
         this.get();
+
+        // Instantiate related posts creator.
+        this.creator = new CreateRelatedPostFormViewModel(this);
 
         // Apply knockout bindings.
         ko.applyBindings( this, document.getElementById(options.elementId) );

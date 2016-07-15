@@ -29,6 +29,55 @@ class PostsPivotMetaBox
     protected $viewModel = WORDPRESS_HELPERS_URL . 'assets/js/view-models/posts-pivoter-meta-box-view-model.js';
 
     /**
+     * @var bool If true, then the meta box will show an option for automatically creating and relating posts of
+     * the related type. If false, the option does not appear.
+     */
+    protected $enableRelatedPostsCreator = true;
+
+    protected $labels = [
+        'related_post_singular' => 'Post',
+        'related_post_plural' => 'Posts'
+    ];
+
+    protected function printCreateRelatedPostForm()
+    {
+        // Start PHP buffer.
+        ob_start();
+
+        // Declare form ID.
+        $formId = $this->id . '-create-related-post-form';
+
+        ?>
+        <hr>
+
+        <div id="<?= $formId ?>">
+            <ko-input params="
+                label: '<?= $this->labels['related_post_singular']; ?>  Title',
+                placeholder: '<?= $this->labels['related_post_singular']; ?> Title',
+                value: creator.post_title
+            "></ko-input>
+
+            <ko-textarea params="
+                label: '<?= $this->labels['related_post_singular']; ?> Content',
+                placeholder: '<?= $this->labels['related_post_singular']; ?> content...',
+                value: creator.post_content
+            "></ko-textarea>
+
+            <ko-button params="
+                text: 'Create <?= $this->labels['related_post_singular']; ?>',
+                busyText: 'Creating <?= $this->labels['related_post_singular']; ?>',
+                class: 'btn btn-success',
+                click: function(){ creator.submit(this) }
+            ">
+            </ko-button>
+        </div>
+
+        <hr>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
      * Hook the metabox to $this->postType.
      */
     public function register()
@@ -53,8 +102,13 @@ class PostsPivotMetaBox
                 'elementId' => $this->id,
                 'postId' => (integer) $post->ID,
                 'postType' => $this->postType,
-                'relatedType' => $this->relatedType
+                'relatedType' => $this->relatedType,
+                'relatedPostsCreator' => $this->enableRelatedPostsCreator,
             ],
+
+            'relatedPostsForm' => $this->printCreateRelatedPostForm(),
+
+            'labels' => $this->labels
         ]);
     }
 
@@ -121,7 +175,7 @@ class PostsPivotMetaBox
     {
         // Verify the extending class is correctly defined.
         $this->validateClass();
-
+        
         // Register the meta box (hooks to post type defined in $this->postType).
         add_action( 'add_meta_boxes', [$this, 'register'] );
     }

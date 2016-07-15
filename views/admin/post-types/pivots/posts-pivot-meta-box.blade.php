@@ -21,7 +21,22 @@
             <i class="fa fa-search"></i>
             Search
         </button>
+
+        <!-- ko if: options.relatedPostsCreator -->
+        <button type="button" class="btn btn-primary btn-default" data-bind="
+            css: { active: showRelatedPostsCreator() },
+            click: function(){ showRelatedPostsCreator( ! showRelatedPostsCreator() ); }">
+            <i class="fa fa-plus"></i>
+            Create {{ $labels['related_post_singular'] }}
+        </button>
+        <!-- /ko -->
     </div>
+
+    <!-- ko if: options.relatedPostsCreator && showRelatedPostsCreator() -->
+    <div class="form-group">
+        {!! $relatedPostsForm !!}
+    </div>
+    <!-- /ko -->
 
     <div data-bind="visible: showSearch" class="form-group">
         <ko-input params="value: search, label: 'Search', placeholder: 'Search by title'"></ko-input>

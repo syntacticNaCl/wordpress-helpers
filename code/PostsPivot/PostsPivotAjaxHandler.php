@@ -82,11 +82,39 @@ class PostsPivotAjaxHandler
         exit;
     }
 
+    public function create_related()
+    {
+        // Verify request.
+        $this->validateRequest();
+
+        $newPost = wp_insert_post([
+            'post_type' => $_POST['relatedType'],
+            'post_author' => get_current_user_id(),
+            'post_title' => $_POST['newPost']['post_title'],
+            'post_content' => $_POST['newPost']['post_content'],
+            'post_status' => 'publish',
+            'meta_input' => [],
+        ]);
+
+        if ( $newPost )
+        {
+            // Attach the model.
+            PostsPivot::attach($_POST['postId'], $newPost);
+
+            echo json_encode([
+                'posts' => $this->prepareModels([get_post($newPost)])
+            ]);
+        }
+
+        exit;
+    }
+
     public function __construct()
     {
         add_action( 'wp_ajax_posts_pivot_all', [$this, 'all'] );
         add_action( 'wp_ajax_posts_pivot_get', [$this, 'get'] );
         add_action( 'wp_ajax_posts_pivot_attach', [$this, 'attach'] );
         add_action( 'wp_ajax_posts_pivot_detach', [$this, 'detach'] );
+        add_action( 'wp_ajax_posts_pivot_create_related', [$this, 'create_related'] );
     }
 }

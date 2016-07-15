@@ -1,3 +1,35 @@
+var CreateRelatedPostFormViewModel = (function () {
+    function CreateRelatedPostFormViewModel(parent) {
+        this.post_title = ko.observable('');
+        this.post_content = ko.observable('');
+        this.parent = parent;
+    }
+    CreateRelatedPostFormViewModel.prototype.submit = function (btn) {
+        var _this = this;
+        // Set busy state to true.
+        btn.busy(true);
+        // Do ajax.
+        this.parent.ajax('create_related', {
+            postId: this.parent.options.postId,
+            relatedType: this.parent.options.relatedType,
+            newPost: {
+                post_title: this.post_title(),
+                post_content: this.post_content()
+            }
+        }, function (r) {
+            // Loop through the posts returned by server.
+            _.each(r.posts, function (post) {
+                // Add the current item to collection.
+                _this.parent.collection.push(ko.mapping.fromJS(post));
+                // Add the current post ID to related IDs.
+                _this.parent.relatedIds.push(post.id);
+            });
+            // Done.
+            btn.busy(false);
+        });
+    };
+    return CreateRelatedPostFormViewModel;
+}());
 var PostsPivoterViewModel = (function () {
     function PostsPivoterViewModel(options) {
         var _this = this;
@@ -26,6 +58,11 @@ var PostsPivoterViewModel = (function () {
          * @type {KnockoutObservable<boolean>}
          */
         this.showSearch = ko.observable(false);
+        /**
+         * Show the related posts creator form?
+         * @type {KnockoutObservable<boolean>}
+         */
+        this.showRelatedPostsCreator = ko.observable(false);
         this.filteredCollection = ko.pureComputed(function () {
             // Declare an array for filtered output.
             var filtered = [], search = _this.search().trim().toLowerCase();
@@ -73,6 +110,8 @@ var PostsPivoterViewModel = (function () {
         this.options = options;
         this.all();
         this.get();
+        // Instantiate related posts creator.
+        this.creator = new CreateRelatedPostFormViewModel(this);
         // Apply knockout bindings.
         ko.applyBindings(this, document.getElementById(options.elementId));
     }
