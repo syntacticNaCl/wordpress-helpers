@@ -159,6 +159,12 @@ class PostsPivot
         return count( $wpdb->get_results($sql) ) > 0;
     }
 
+    /**
+     * Attaches post A to post B.
+     * @param $postIdA int
+     * @param $postIdB int
+     * @return bool|false|int
+     */
     public static function attach($postIdA, $postIdB)
     {
         // Do nothing if the relationship already exists.
@@ -180,6 +186,12 @@ class PostsPivot
         return $wpdb->query($sql);
     }
 
+    /**
+     * Detaches post A from post B.
+     * @param $postIdA
+     * @param $postIdB
+     * @return array|null|object
+     */
     public static function detach($postIdA, $postIdB)
     {
         global $wpdb;

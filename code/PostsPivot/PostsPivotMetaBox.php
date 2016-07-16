@@ -1,6 +1,11 @@
 <?php
 namespace Zawntech\WordPress\PostsPivot;
 
+/**
+ * An extensible class for hooking Posts Pivot Meta Boxes.
+ * Class PostsPivotMetaBox
+ * @package Zawntech\WordPress\PostsPivot
+ */
 class PostsPivotMetaBox
 {
     /**
