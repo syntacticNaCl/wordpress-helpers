@@ -145,7 +145,10 @@ class MetaBox
         // Verify the nonce.
         if (
             ! $isQuickEdit &&
-            ! ( isset( $_POST[$this->getNonceName()] ) || $this-$this->verifyNonce( $_POST[$this->getNonceName()] ) )
+            (
+                ! isset( $_POST[$this->getNonceName()] ) ||
+                ! $this-$this->verifyNonce( $_POST[$this->getNonceName()] )
+            )
         ) {
             return;
         }
