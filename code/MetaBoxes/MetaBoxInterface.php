@@ -115,7 +115,7 @@ class MetaBoxInterface
         $this->render($post);
     }
 
-    public function render()
+    public function render($post)
     {
         echo "Override render()!";
     }
