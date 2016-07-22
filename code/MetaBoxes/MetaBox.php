@@ -1,5 +1,5 @@
 <?php
-namespace Zawntech\WordPress;
+namespace Zawntech\WordPress\MetaBoxes;
 
 /**
  * Class MetaBox

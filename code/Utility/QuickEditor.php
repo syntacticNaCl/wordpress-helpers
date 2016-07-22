@@ -1,5 +1,5 @@
 <?php
-namespace Zawntech\WordPress;
+namespace Zawntech\WordPress\Utility;
 
 /**
  * Provides a utility for easily hooking into the quick editor.

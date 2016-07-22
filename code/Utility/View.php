@@ -1,5 +1,5 @@
 <?php
-namespace Zawntech\WordPress;
+namespace Zawntech\WordPress\Utility;
 
 use Philo\Blade\Blade;
 

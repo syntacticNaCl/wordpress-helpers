@@ -1,5 +1,5 @@
 <?php
-namespace Zawntech\WordPress;
+namespace Zawntech\WordPress\PostTypes;
 
 class PostMeta
 {

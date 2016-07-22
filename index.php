@@ -25,7 +25,7 @@ if ( ! is_file($autoloadPath) )
 require_once $autoloadPath;
 
 // Include global helper functions.
-require_once __DIR__ . '/code/Functions.php';
+require_once __DIR__ . '/code/Utility/Functions.php';
 
 /**
  * Define absolute path to plugin directory.
@@ -38,7 +38,7 @@ define( 'WORDPRESS_HELPERS_DIR', __DIR__ . '/' );
 define( 'WORDPRESS_HELPERS_URL', plugin_dir_url( __FILE__ ) );
 
 // Enqueue admin javascripts.
-new \Zawntech\WordPress\AdminScripts;
+new \Zawntech\WordPress\Setup\AdminScripts;
 
 // Bootstrap the plugin.
-new \Zawntech\WordPress\PluginBootstrapper;
+new \Zawntech\WordPress\Setup\PluginBootstrapper;

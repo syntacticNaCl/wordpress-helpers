@@ -1,5 +1,5 @@
 <?php
-namespace Zawntech\WordPress;
+namespace Zawntech\WordPress\Setup;
 
 use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
