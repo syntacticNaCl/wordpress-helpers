@@ -35,7 +35,7 @@ path to the directory to the View class via **View::addViewDirectory($absolutePa
 
 ```php
 <?php
-use Zawntech\WordPress\View;
+use Zawntech\WordPress\Utility\View;
 
 // Register a views directory
 View::addViewDirectory( '/path/to/views' );
