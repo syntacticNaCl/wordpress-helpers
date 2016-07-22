@@ -6,18 +6,8 @@ namespace Zawntech\WordPress\MetaBoxes;
  * Class PostsPivotMetaBox
  * @package Zawntech\WordPress\PostsPivot
  */
-class PostsPivotMetaBox
+class PostsPivotMetaBox extends MetaBoxInterface
 {
-    /**
-     * @var string Metabox element ID.
-     */
-    protected $id;
-
-    /**
-     * @var string Metabox title
-     */
-    protected $title;
-
     /**
      * @var string Primary post type key.
      */
@@ -115,47 +105,6 @@ class PostsPivotMetaBox
 
             'labels' => $this->labels
         ]);
-    }
-
-    public function _render($post)
-    {
-        // Is a view model assigned to this meta box?
-        if ( $this->viewModel )
-        {
-            // Enqueue the view model javascript.
-            wp_enqueue_script(
-                md5($this->id . $this->title) . '-view-model',
-                $this->viewModel,
-                ['jquery', 'knockout'],
-                null,
-                true
-            );
-        }
-
-        echo $this->getNonceField();
-
-        // Call the extending class's render function.
-        $this->render($post);
-    }
-
-    protected function getNonceAction()
-    {
-        return md5( $this->id . $this->title );
-    }
-
-    protected function getNonceName()
-    {
-        return 'nonce_' . $this->getNonceAction();
-    }
-
-    protected function getNonceField()
-    {
-        return wp_nonce_field( $this->getNonceAction() , $this->getNonceName(), true, false );
-    }
-
-    protected function verifyNonce($nonce)
-    {
-        return wp_verify_nonce( $nonce, $this->getNonceAction() );
     }
 
     protected function validateClass()
