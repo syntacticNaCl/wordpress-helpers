@@ -14,7 +14,7 @@ if ( ! function_exists('view') )
      */
     function view($viewName, $viewData = [])
     {
-        return \Zawntech\WordPress\View::render($viewName, $viewData);
+        return \Zawntech\WordPress\Utility\View::render($viewName, $viewData);
     }
 }
 
