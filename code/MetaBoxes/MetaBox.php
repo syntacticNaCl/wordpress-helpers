@@ -17,7 +17,7 @@ class MetaBox extends MetaBoxInterface
             ! $isQuickEdit &&
             (
                 ! isset( $_POST[$this->getNonceName()] ) ||
-                ! $this-$this->verifyNonce( $_POST[$this->getNonceName()] )
+                ! $this->verifyNonce( $_POST[$this->getNonceName()] )
             )
         ) {
             return;
