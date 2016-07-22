@@ -50,7 +50,7 @@ class View
             $views = static::$views;
 
             // Path to cache storage.
-            $cache = __DIR__ . '/../storage/view-cache';
+            $cache = __DIR__ . '/../../storage/view-cache';
 
             // Instantiate blade.
             static::getInstance()->blade = new Blade($views, $cache);

@@ -143,8 +143,10 @@ class MetaBox
         $isQuickEdit = isset($_POST['quick_edit_nonce']);
 
         // Verify the nonce.
-        if ( ! $isQuickEdit && ! $this->verifyNonce( $_POST[$this->getNonceName()] ) )
-        {
+        if (
+            ! $isQuickEdit &&
+            ! ( isset( $_POST[$this->getNonceName()] ) || $this-$this->verifyNonce( $_POST[$this->getNonceName()] ) )
+        ) {
             return;
         }
 
