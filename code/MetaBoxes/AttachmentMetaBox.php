@@ -68,7 +68,6 @@ class AttachmentMetaBox extends MetaBoxInterface
             'options' => [
                 'elementId' => $this->id,
                 'postId' => (integer) $post->ID,
-                'postType' => $this->postType,
                 'multiple' => $this->multipleAttachments,
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
