@@ -26,6 +26,11 @@ class PostType
     protected $metaBoxes = [];
 
     /**
+     * @var array An array of taxonomy classes.
+     */
+    protected $taxonomies = [];
+
+    /**
      * Verify that the post type data is correctly defined, otherwise throw an error.
      * @throws \Exception
      */
@@ -181,6 +186,17 @@ class PostType
             {
                 // Instantiate the class.
                 new $metaBoxClass;
+            }
+        }
+
+        // Are there defined taxonomies?
+        if ( ! empty( $this->taxonomies ) )
+        {
+            // Loop through the supplied class names.
+            foreach( $this->taxonomies as $taxonomyClass )
+            {
+                // Instantiate the class.
+                new $taxonomyClass;
             }
         }
     }
