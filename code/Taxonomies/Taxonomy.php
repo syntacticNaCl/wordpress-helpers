@@ -49,7 +49,7 @@ class Taxonomy
     protected function getLabels()
     {
         return [
-            'name'              => _x( $this->singular, 'taxonomy general name' ),
+            'name'              => _x( $this->menuName ?: $this->plural, 'taxonomy general name' ),
             'singular_name'     => _x( $this->singular, 'taxonomy singular name' ),
             'search_items'      => __( 'Search ' . $this->plural ),
             'all_items'         => __( 'All ' . $this->plural ),
