@@ -62,10 +62,19 @@ class Taxonomy
         ];
     }
 
-    public function __construct()
+    /**
+     * @var bool Keep track of taxonomy registration.
+     */
+    protected static $registered = false;
+
+    /**
+     * Hook WordPress.
+     */
+    public function hook()
     {
-        // Validate taxonomy configuration.
-        $this->validationTaxonomy();
+        if ( static::$registered ) {
+            return;
+        }
 
         // Define arguments.
         $args = [
@@ -82,5 +91,17 @@ class Taxonomy
         {
             register_taxonomy($this->key, $postType, $args);
         }
+
+        // The taxonomy has been registered.
+        static::$registered = true;
+    }
+
+    public function __construct()
+    {
+        // Validate taxonomy configuration.
+        $this->validationTaxonomy();
+
+        // Hook WordPress.
+        add_action( 'init', [$this, 'hook'] );
     }
 }
