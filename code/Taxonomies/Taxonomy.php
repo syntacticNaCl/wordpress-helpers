@@ -13,6 +13,7 @@ class Taxonomy
     protected $slug;
     protected $singular;
     protected $plural;
+    protected $menuName;
 
     protected $hierarchical = false;
     protected $showUi = true;
@@ -58,7 +59,7 @@ class Taxonomy
             'update_item'       => __( 'Update ' . $this->singular ),
             'add_new_item'      => __( 'Add New ' . $this->singular ),
             'new_item_name'     => __( 'New ' . $this->singular . ' Name' ),
-            'menu_name'         => __( $this->singular ),
+            'menu_name'         => __( $this->menuName ?: $this->plural ),
         ];
     }
 
@@ -72,6 +73,7 @@ class Taxonomy
      */
     public function hook()
     {
+        // If we've already hooked the taxonomy, do nothing.
         if ( static::$registered ) {
             return;
         }
