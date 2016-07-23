@@ -396,6 +396,7 @@ var KoPasswordViewModel = (function () {
         this.value = ko.observable('');
         this.validator = ko.observableArray([]);
         this.label = '';
+        this.name = '';
         var object = this;
         _.each(args, function (value, key) {
             object[key] = args[key] ? args[key] : object[key];
@@ -410,7 +411,7 @@ var KoPasswordViewModel = (function () {
     return KoPasswordViewModel;
 }());
 // ko-button Template
-var KoPasswordTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <div class=\"input-group\">\n        <input class=\"form-control\" placeholder=\"Password\" data-bind=\"attr: { type: beingHovered() ? 'text' : 'password' }, textInput: value\">\n        <span class=\"input-group-addon\" data-bind=\"event: { mouseover: _in, mouseout: _out }\">\n            <i class=\"fa\" data-bind=\"css: { 'fa-eye-slash': !beingHovered(), 'fa-eye': beingHovered() }\"></i>\n        </span>\n    </div>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
+var KoPasswordTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <div class=\"input-group\">\n        <input class=\"form-control\" placeholder=\"Password\" data-bind=\"attr: { type: beingHovered() ? 'text' : 'password', name: name }, textInput: value\">\n        <span class=\"input-group-addon\" data-bind=\"event: { mouseover: _in, mouseout: _out }\">\n            <i class=\"fa\" data-bind=\"css: { 'fa-eye-slash': !beingHovered(), 'fa-eye': beingHovered() }\"></i>\n        </span>\n    </div>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
 var KnockoutPasswordComponent = (function (_super) {
     __extends(KnockoutPasswordComponent, _super);
     function KnockoutPasswordComponent() {
@@ -436,6 +437,7 @@ var KoSelectViewModel = (function () {
         this.value = ko.observable('');
         this.validator = ko.observableArray([]);
         this.label = '';
+        this.name = '';
         var object = this;
         _.each(args, function (value, key) {
             object[key] = args[key] ? args[key] : object[key];
@@ -444,7 +446,7 @@ var KoSelectViewModel = (function () {
     return KoSelectViewModel;
 }());
 // ko-button Template
-var KoSelectTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <select class=\"form-control\" data-bind=\"options: options, value: value\"></select>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
+var KoSelectTemplate = "\n<div class=\"form-group\" data-bind=\"css: { 'has-error': validator().length > 0 }\">\n    <label class=\"control-label\" data-bind=\"text: label\"></label>\n    <select class=\"form-control\" data-bind=\"options: options, value: value, attr: { name: name }\"></select>\n    <div data-bind=\"if: validator().length > 0\">\n        <span class=\"help-block\" data-bind=\"foreach: validator\">\n            <p data-bind=\"text: $data\"></p>\n        </span>\n    </div>\n</div>\n";
 var KnockoutSelectComponent = (function (_super) {
     __extends(KnockoutSelectComponent, _super);
     function KnockoutSelectComponent() {
