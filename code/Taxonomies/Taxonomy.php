@@ -48,18 +48,42 @@ class Taxonomy
      */
     protected function getLabels()
     {
+        // Return hierarchical labels.
+        if ( $this->hierarchical )
+        {
+            return [
+                'name'              => _x( $this->menuName ?: $this->plural, 'taxonomy general name' ),
+                'singular_name'     => _x( $this->singular, 'taxonomy singular name' ),
+                'search_items'      => __( 'Search ' . $this->plural ),
+                'all_items'         => __( 'All ' . $this->plural ),
+                'parent_item'       => __( 'Parent ' . $this->plural ),
+                'parent_item_colon' => __( 'Parent ' . $this->plural . ':' ),
+                'edit_item'         => __( 'Edit ' . $this->singular ),
+                'update_item'       => __( 'Update ' . $this->singular ),
+                'add_new_item'      => __( 'Add New ' . $this->singular ),
+                'new_item_name'     => __( 'New ' . $this->singular . ' Name' ),
+                'menu_name'         => __( $this->menuName ?: $this->plural ),
+            ];
+        }
+
+        // Return non-hierarchical labels.
         return [
-            'name'              => _x( $this->menuName ?: $this->plural, 'taxonomy general name' ),
-            'singular_name'     => _x( $this->singular, 'taxonomy singular name' ),
-            'search_items'      => __( 'Search ' . $this->plural ),
-            'all_items'         => __( 'All ' . $this->plural ),
-            'parent_item'       => __( 'Parent ' . $this->plural ),
-            'parent_item_colon' => __( 'Parent ' . $this->plural . ':' ),
-            'edit_item'         => __( 'Edit ' . $this->singular ),
-            'update_item'       => __( 'Update ' . $this->singular ),
-            'add_new_item'      => __( 'Add New ' . $this->singular ),
-            'new_item_name'     => __( 'New ' . $this->singular . ' Name' ),
-            'menu_name'         => __( $this->menuName ?: $this->plural ),
+            'name'                       => _x( $this->menuName ?: $this->plural, 'taxonomy general name' ),
+            'singular_name'              => _x( $this->singular, 'taxonomy singular name' ),
+            'search_items'               => __( 'Search ' . $this->plural ),
+            'popular_items'              => __( 'Popular ' . $this->plural ),
+            'all_items'                  => __( 'All ' . $this->plural ),
+            'parent_item'                => null,
+            'parent_item_colon'          => null,
+            'edit_item'                  => __( 'Edit ' . $this->singular ),
+            'update_item'                => __( 'Update ' . $this->singular ),
+            'add_new_item'               => __( 'Add New ' . $this->singular ),
+            'new_item_name'              => __( 'New ' . $this->singular . ' Name' ),
+            'separate_items_with_commas' => __( 'Separate ' . $this->plural . ' with commas' ),
+            'add_or_remove_items'        => __( 'Add or remove ' . $this->plural),
+            'choose_from_most_used'      => __( 'Choose from the most used ' . $this->plural ),
+            'not_found'                  => __( 'No ' . strtolower($this->plural) . ' found.' ),
+            'menu_name'                  => __( $this->menuName ?: $this->plural ),
         ];
     }
 
