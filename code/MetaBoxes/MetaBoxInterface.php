@@ -79,15 +79,15 @@ class MetaBoxInterface
             }
 
             // Check if this meta key exists in $this->casts.
-            if ( isset( $casts[$key] ) )
+            if ( isset( $this->casts[$key] ) )
             {
-                switch( $casts[$key] )
+                switch( $this->casts[$key] )
                 {
                     case 'boolean':
-                        if ( "true" === $value ) {
+                        if ( 'true' === $value ) {
                             $value = true;
                         }
-                        if ( "false" === $value ) {
+                        if ( 'false' === $value ) {
                             $value = false;
                         }
                         break;
