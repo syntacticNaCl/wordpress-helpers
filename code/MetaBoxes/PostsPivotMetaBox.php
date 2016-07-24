@@ -109,6 +109,8 @@ class PostsPivotMetaBox extends MetaBoxInterface
 
     protected function validateClass()
     {
+        parent::validateClass();
+
         // Class name.
         $class = static::class;
 

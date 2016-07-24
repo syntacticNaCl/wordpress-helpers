@@ -162,4 +162,21 @@ class MetaBoxInterface
     {
         return wp_verify_nonce( $nonce, $this->getNonceAction() );
     }
+
+    protected function validateClass()
+    {
+        // Class name.
+        $class = static::class;
+
+        // Verify element Id.
+        if ( ! $this->id )
+        {
+            throw new \Exception("No \$id is specified in class {$class}");
+        }
+
+        if ( ! $this->title )
+        {
+            throw new \Exception("No \$title is specified in class {$class}");
+        }
+    }
 }

@@ -28,24 +28,33 @@ class AttachmentMetaBox extends MetaBoxInterface
      */
     protected $attachmentButtonText = 'Set attachment';
 
+    /**
+     * Returns the prepared attachment preload array, containing Post IDs, thumbnails, etc.
+     * @param $postId
+     * @return array
+     */
     protected function getAttachmentPreload($postId)
     {
         // Get post meta.
-        $meta = trim( get_post_meta($postId, $this->metaKey, true) );
+        $meta = get_post_meta($postId, $this->metaKey, true);
 
-        if ( false === strpos($meta, ',') && '' == $meta )
+        // There are no attached IDs, so return an empty array.
+        if ( '' === $meta )
         {
             return [];
         }
 
-        // Split by comma.
-        $postIds = explode(',', $meta);
+        // If a comma is found in the $meta string, then split by comma, otherwise
+        // cast the returned meta as an array.
+        $postIds = false === strpos($meta, ',') ? [$meta] : explode(',', $meta);
 
         // Declare an array for output.
         $data = [];
 
+        // Loop through the post Ids
         foreach( $postIds as $postID )
         {
+            // Push this iteration to $data.
             $data[] = [
                 'id' => $postID,
                 'sizes' => [
@@ -80,15 +89,18 @@ class AttachmentMetaBox extends MetaBoxInterface
 
     protected function validateClass()
     {
+        parent::validateClass();
+
         // Class name.
         $class = static::class;
-
+        
         // Verify that a post type is specified (ie, which post types this metabox
         // should be hook).
         if ( empty( $this->postTypes ) )
         {
             throw new \Exception("No \$postTypes specified in class {$class}.");
         }
+
 
         // A meta key is required.
         if ( ! $this->metaKey )
