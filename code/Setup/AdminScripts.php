@@ -20,6 +20,9 @@ class AdminScripts
         // Twitter Bootstrap (JS)
         wp_enqueue_script('bootstrap', WORDPRESS_HELPERS_URL. 'assets/js/lib/bootstrap.min.js', ['jquery'], null, true);
 
+        // Bootstrap datetime picker
+        wp_enqueue_script('bootstrap-datetime-picker', WORDPRESS_HELPERS_URL. 'assets/js/lib/bootstrap-datetimepicker.min.js', ['jquery', 'bootstrap'], null, true);
+
         // Zawntech WP Helper CSS
         wp_enqueue_style('zawntech-compiled', WORDPRESS_HELPERS_URL. 'assets/css/zawntech-wordpress-helpers.css');
     }
