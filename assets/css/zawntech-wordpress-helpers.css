@@ -7043,6 +7043,38 @@
   @media print {
     .wpbs .hidden-print {
       display: none !important; } }
+  .wpbs .btn-circle {
+    width: 49px;
+    height: 49px;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 20px;
+    line-height: 2.00;
+    border-radius: 30px; }
+  .wpbs .btn-circle-micro {
+    width: 19px;
+    height: 19px;
+    text-align: center;
+    padding: 1px 0;
+    font-size: 13px;
+    line-height: 0.1;
+    border-radius: 30px; }
+  .wpbs .btn-circle-sm {
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 2px 0;
+    font-size: 20px;
+    line-height: 1.65;
+    border-radius: 30px; }
+  .wpbs .btn-circle-lg {
+    width: 79px;
+    height: 79px;
+    text-align: center;
+    padding: 13px 0;
+    font-size: 30px;
+    line-height: 2.00;
+    border-radius: 70px; }
   .wpbs .sr-only, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="incrementMinutes"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="decrementHours"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="decrementMinutes"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="showHours"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="showMinutes"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="togglePeriod"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="clear"]::after, .wpbs .bootstrap-datetimepicker-widget .btn[data-action="today"]::after, .wpbs .bootstrap-datetimepicker-widget .picker-switch::after, .wpbs .bootstrap-datetimepicker-widget table th.prev::after, .wpbs .bootstrap-datetimepicker-widget table th.next::after {
     position: absolute;
     width: 1px;
@@ -7240,5 +7272,28 @@
 
 .posts-pivot-meta-box .attached {
   background-color: rgba(255, 213, 5, 0.22); }
+
+.attachment-model-container {
+  width: 160px;
+  display: inline-block;
+  padding: 10px; }
+  .attachment-model-container .attached-model {
+    position: relative; }
+    .attachment-model-container .attached-model .img-controls {
+      position: absolute;
+      top: 0;
+      right: -10px;
+      opacity: 0.05;
+      transition: opacity 175ms; }
+    .attachment-model-container .attached-model:hover .img-controls {
+      opacity: 1; }
+
+.attachment-model-highlight {
+  display: inline-block;
+  width: 140px;
+  height: 80px;
+  padding: 10px;
+  background-color: rgba(255, 217, 83, 0.2);
+  border: dashed 1px rgba(0, 0, 0, 0.33); }
 
 /*# sourceMappingURL=zawntech-wordpress-helpers.css.map */

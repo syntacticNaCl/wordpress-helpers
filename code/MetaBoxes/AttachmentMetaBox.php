@@ -93,14 +93,13 @@ class AttachmentMetaBox extends MetaBoxInterface
 
         // Class name.
         $class = static::class;
-        
+
         // Verify that a post type is specified (ie, which post types this metabox
         // should be hook).
         if ( empty( $this->postTypes ) )
         {
             throw new \Exception("No \$postTypes specified in class {$class}.");
         }
-
 
         // A meta key is required.
         if ( ! $this->metaKey )

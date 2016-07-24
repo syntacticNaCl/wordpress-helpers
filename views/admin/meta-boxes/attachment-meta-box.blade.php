@@ -6,14 +6,32 @@
     <p>No attachments.</p>
     <!-- /ko -->
 
-    <!-- ko if: attachmentIds().length > 0 -->
+    <div class="attachment-models">
     <!-- ko foreach: collection -->
-    <div class="attached-model">
-        <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
-        <ko-button params="text: 'Remove', class: 'btn-danger btn-sm', click: function(){ $parent.removeModel($data); }"></ko-button>
+    <div class="attachment-model-container" data-bind="attr: { 'data-id': $data.id }">
+
+        <div class="attached-model">
+            <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
+
+            <div class="img-controls">
+
+                <ko-button params="
+                    text: '',
+                    icon: 'fa-times',
+                    class: 'btn-circle-micro btn-danger delete-button',
+                    click: function(){ $parent.removeModel($data); }"></ko-button>
+
+                <br>
+
+                <a href="#" class="btn btn-circle-micro btn-default move-button">
+                    <i class="fa fa-arrows"></i>
+                </a>
+
+            </div>
+        </div>
     </div>
     <!-- /ko -->
-    <!-- /ko -->
+    </div>
 
     <hr>
 

@@ -8,6 +8,11 @@ class AdminScripts
      */
     public function registerScripts()
     {
+        wp_enqueue_script('jquery-ui-core');
+        wp_enqueue_script('jquery-ui-draggable');
+        wp_enqueue_script('jquery-ui-droppable');
+        wp_enqueue_script('jquery-ui-sortable');
+
         // Moment
         wp_enqueue_script('moment', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment.min.js');
         wp_enqueue_script('moment-timezone', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment-timezone.min.js');
@@ -19,7 +24,7 @@ class AdminScripts
         wp_enqueue_script('knockout-mapping', WORDPRESS_HELPERS_URL . 'assets/js/lib/knockout.mapping.js');
 
         // Register custom knockout components.
-        wp_enqueue_script('zawntech-knockout-components', WORDPRESS_HELPERS_URL. 'assets/js/lib/zawntech-knockout-components.js');
+        wp_enqueue_script('zawntech-knockout-components', WORDPRESS_HELPERS_URL. 'assets/js/lib/knockout.components.js');
 
         // Twitter Bootstrap (JS)
         wp_enqueue_script('bootstrap', WORDPRESS_HELPERS_URL. 'assets/js/lib/bootstrap.min.js', ['jquery'], null, true);

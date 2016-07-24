@@ -4,6 +4,7 @@
 .wpbs
 {
   @import "lib/bootstrap/bootstrap";
+  @import "lib/bootstrap-circle-buttons/_bootstrap-circle-buttons";
   @import "lib/bootstrap-datetime-picker/bootstrap-datetimepicker-build";
 }
 
@@ -14,3 +15,5 @@
     background-color: rgba(255, 213, 5, 0.22);
   }
 }
+
+@import "admin/attachment-meta-box";

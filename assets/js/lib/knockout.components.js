@@ -20,7 +20,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var KoButtonViewModel = (function () {
     function KoButtonViewModel(args) {
         // The default button text state.
-        this.text = 'Set Text';
+        this.text = '';
         this.id = '';
         this.icon = false;
         // The text when the button is busy.
@@ -48,7 +48,7 @@ var KoButtonViewModel = (function () {
     return KoButtonViewModel;
 }());
 // ko-button Template
-var KoButtonTemplate = "\n    <button class=\"btn\" data-bind=\"disable: busy(), click: click, attr: { class: getClass(), id: id }\">\n        <i class=\"fa fa-spinner fa-spin\" data-bind=\"visible: busy()\"></i>\n        <span data-bind=\"text: busy() ? busyText : text\"></span>\n        <!-- ko if: false != icon -->\n        <i class=\"fa\" data-bind=\"css: getIcon()\"></i>\n        <!-- /ko -->\n    </button>\n";
+var KoButtonTemplate = "\n    <button class=\"btn\" data-bind=\"disable: busy(), click: click, attr: { class: getClass(), id: id }\">\n        <i class=\"fa fa-spinner fa-spin\" data-bind=\"visible: busy()\"></i>\n        <span data-bind=\"text: busy() ? busyText : ( text ? text : '' )\"></span>\n        <!-- ko if: false != icon -->\n        <i class=\"fa\" data-bind=\"css: getIcon()\"></i>\n        <!-- /ko -->\n    </button>\n";
 var KnockoutButtonComponent = (function (_super) {
     __extends(KnockoutButtonComponent, _super);
     function KnockoutButtonComponent() {

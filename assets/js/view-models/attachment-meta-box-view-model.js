@@ -18,8 +18,10 @@ var AttachmentMetaboxViewModel = (function () {
         });
         // Initialize knockout.
         ko.applyBindings(this, document.getElementById(options.elementId));
+        this.applySortables();
     }
     AttachmentMetaboxViewModel.prototype.removeModel = function (model) {
+        console.log(model);
         this.collection.remove(model);
         this.attachmentIds.remove(model.id);
     };
@@ -33,6 +35,7 @@ var AttachmentMetaboxViewModel = (function () {
                 _this.attachmentIds.push(model.id);
             }
         });
+        this.applySortables();
     };
     AttachmentMetaboxViewModel.prototype.initializeFrame = function () {
         if (!this.frame) {
@@ -76,6 +79,25 @@ var AttachmentMetaboxViewModel = (function () {
         frame.lastState();
         // Open the modal.
         frame.open();
+    };
+    AttachmentMetaboxViewModel.prototype.applySortables = function () {
+        var _this = this;
+        jQuery("#" + this.options.elementId + " .attachment-models").sortable({
+            // Placeholder class.
+            placeholder: 'attachment-model-highlight',
+            // The move item handle.
+            handle: '.move-button',
+            // Listen to update changes so that we can update the attachment ID order.
+            update: function (event, ui) {
+                var divs = jQuery("#" + _this.options.elementId + " .attachment-model-container"), order = [];
+                // Loop through the divs, extract data-id attributes.
+                _.each(divs, function (item) {
+                    order.push(jQuery(item).data('id'));
+                });
+                // Map the new order back to this.attachmentIds observable.
+                ko.mapping.fromJS(order, {}, _this.attachmentIds);
+            }
+        });
     };
     return AttachmentMetaboxViewModel;
 }());
