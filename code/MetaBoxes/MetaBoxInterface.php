@@ -37,6 +37,11 @@ class MetaBoxInterface
     protected $metaKeys = [];
 
     /**
+     * @var array An array of meta keys by intended variable casting.
+     */
+    protected $casts = [];
+
+    /**
      * Register the metabox to the post types defined in $this->postTypes.
      */
     public function register()
@@ -68,10 +73,28 @@ class MetaBoxInterface
         {
             if ( isset( $meta[$key] ) )
             {
-                $output[$key] = $meta[$key][0];
+                $value = $meta[$key][0];
             } else {
-                $output[$key] = '';
+                $value = '';
             }
+
+            // Check if this meta key exists in $this->casts.
+            if ( isset( $casts[$key] ) )
+            {
+                switch( $casts[$key] )
+                {
+                    case 'boolean':
+                        if ( "true" === $value ) {
+                            $value = true;
+                        }
+                        if ( "false" === $value ) {
+                            $value = false;
+                        }
+                        break;
+                }
+            }
+
+            $output[$key] = $value;
         }
 
         return json_encode($output);
