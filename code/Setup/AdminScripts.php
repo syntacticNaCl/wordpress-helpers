@@ -8,6 +8,10 @@ class AdminScripts
      */
     public function registerScripts()
     {
+        // Moment
+        wp_enqueue_script('moment', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment.min.js');
+        wp_enqueue_script('moment-timezone', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment-timezone.min.js');
+
         // Knockout JS
         wp_enqueue_script('knockout', WORDPRESS_HELPERS_URL . 'assets/js/lib/knockout.debug.js');
 

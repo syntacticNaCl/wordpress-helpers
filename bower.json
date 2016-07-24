@@ -19,6 +19,7 @@
     "knockout": "^3.4.0",
     "knockout-mapping": "^2.4.1",
     "font-awesome": "^4.6.3",
-    "eonasdan-bootstrap-datetimepicker": "^4.17.37"
+    "eonasdan-bootstrap-datetimepicker": "^4.17.37",
+    "moment": "^2.14.1"
   }
 }
