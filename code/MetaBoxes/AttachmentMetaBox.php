@@ -31,9 +31,9 @@ class AttachmentMetaBox extends MetaBoxInterface
     protected function getAttachmentPreload($postId)
     {
         // Get post meta.
-        $meta = get_post_meta($postId, $this->metaKey, true);
+        $meta = trim( get_post_meta($postId, $this->metaKey, true) );
 
-        if ( false === strpos($meta, ',') )
+        if ( false === strpos($meta, ',') && '' == $meta )
         {
             return [];
         }
