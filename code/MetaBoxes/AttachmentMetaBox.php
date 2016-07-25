@@ -21,7 +21,7 @@ class AttachmentMetaBox extends MetaBoxInterface
     /**
      * @var string Attachment types, ie: 'image'
      */
-    protected $attachmentType = 'image';
+    protected $attachmentType = '';
 
     /**
      * @var string
