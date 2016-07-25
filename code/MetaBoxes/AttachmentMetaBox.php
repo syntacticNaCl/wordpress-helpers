@@ -19,7 +19,7 @@ class AttachmentMetaBox extends MetaBoxInterface
     protected $multipleAttachments = true;
 
     /**
-     * @var string
+     * @var string Attachment types, ie: 'image'
      */
     protected $attachmentType = 'image';
 
@@ -57,17 +57,28 @@ class AttachmentMetaBox extends MetaBoxInterface
             $postData = get_post($postID);
             $attachmentData = wp_get_attachment_metadata($postID);
 
-            // Push this iteration to $data.
-            $data[] = [
+            $newItem = [
                 'id' => $postID,
                 'title' => $postData->post_title,
-                'sizes' => [
+                'meta' => $attachmentData,
+                'filename' => basename( get_attached_file( $postID ) )
+            ];
+
+            // Get thumbnail url.
+            $thumb = wp_get_attachment_thumb_url($postID);
+
+            // Push thumbnail.
+            if ( false != $thumb )
+            {
+                $newItem['sizes'] = [
                     'thumbnail' => [
                         'url' => wp_get_attachment_thumb_url($postID)
                     ]
-                ],
-                'meta' => $attachmentData
-            ];
+                ];
+            }
+
+            // Push data.
+            $data[] = $newItem;
         }
 
         return $data;

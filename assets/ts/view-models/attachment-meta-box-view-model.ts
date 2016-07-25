@@ -40,6 +40,84 @@ class AttachmentMetaboxViewModel
         return this.attachmentIds().join(',');
     });
 
+    icons = {
+        aac: 'aac',
+        ai: 'ai',
+        aiff: 'aiff',
+        asp: 'asp',
+        avi: 'avi',
+        bmp: 'bmp',
+        c: 'c',
+        cpp: 'cpp',
+        css: 'css',
+        dat: 'dat',
+        dmg: 'dmg',
+        doc: 'doc',
+        docx: 'docx',
+        dot: 'dot',
+        dotx: 'dotx',
+        dwg: 'dwg',
+        dxf: 'dxf',
+        eps: 'eps',
+        exe: 'exe',
+        flv: 'flv',
+        gif: 'gif',
+        h: 'h',
+        html: 'html',
+        ics: 'ics',
+        iso: 'iso',
+        java: 'java',
+        jpg: 'jpg',
+        key: 'key',
+        m4v: 'm4v',
+        mid: 'mid',
+        mov: 'mov',
+        mp3: 'mp3',
+        mp4: 'mp4',
+        mpg: 'mpg',
+        odp: 'odp',
+        ods: 'ods',
+        odt: 'odt',
+        otp: 'otp',
+        ots: 'ots',
+        ott: 'ott',
+        pdf: 'pdf',
+        php: 'php',
+        png: 'png',
+        pps: 'pps',
+        ppt: 'ppt',
+        pptx: 'ppt',
+        psd: 'psd',
+        pt: 'pt',
+        qt: 'qt',
+        rar: 'rar',
+        rb: 'rb',
+        rtf: 'rtf',
+        sql: 'sql',
+        tga: 'tga',
+        tgz: 'tgz',
+        tiff: 'tiff',
+        txt: 'txt',
+        wav: 'wav',
+        xls: 'xls',
+        xlsx: 'xlsx',
+        xml: 'xml',
+        yml: 'yml',
+        zip: 'zip',
+    };
+    
+    renderIcon(model) {
+
+        let file = model.filename,
+            index = file.lastIndexOf('.'),
+            ext = file.substr(index + 1),
+            path = this.icons[ext] ?
+                wordpress_helpers.assets + 'img/file-type-icons/' + this.icons[ext] + '.png' :
+                    wordpress_helpers.assets + 'img/no-image-150.png';
+
+        return `<img src="${path}">`;
+    }
+
     removeModel(model) {
         this.collection.remove(model);
         this.attachmentIds.remove(model.id);

@@ -34,6 +34,14 @@ class AdminScripts
 
         // Zawntech WP Helper CSS
         wp_enqueue_style('zawntech-compiled', WORDPRESS_HELPERS_URL. 'assets/css/zawntech-wordpress-helpers.css');
+
+        // Expose global javascript.
+        wp_localize_script('knockout', 'wordpress_helpers',
+            [
+                // Public URL to wordpress helpers directory.
+                'assets' => WORDPRESS_HELPERS_URL . 'assets/'
+            ]
+        );
     }
 
     public function __construct()

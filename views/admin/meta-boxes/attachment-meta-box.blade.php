@@ -17,6 +17,10 @@
                 <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
                 <!-- /ko -->
 
+                <!-- ko if: ! $data.sizes -->
+                <div data-bind="html: $parent.renderIcon($data)" style="text-align: center;"></div>
+                <!-- /ko -->
+
                 <div class="img-controls">
 
                     <ko-button params="
@@ -52,6 +56,10 @@
                 <td>
                     <!-- ko if: $data.sizes -->
                     <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
+                    <!-- /ko -->
+
+                    <!-- ko if: ! $data.sizes -->
+                    <div data-bind="html: $parent.renderIcon($data)"></div>
                     <!-- /ko -->
                 </td>
                 <td>
