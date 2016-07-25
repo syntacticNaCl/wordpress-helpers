@@ -43,6 +43,7 @@ var AttachmentMetaboxViewModel = (function () {
     AttachmentMetaboxViewModel.prototype.onSelect = function () {
         var _this = this;
         var models = this.frame.state().get('selection').toJSON();
+        console.log(models);
         _.each(models, function (model) {
             // If the model ID is not already in the attachment IDs array.
             if (-1 == _this.attachmentIds.indexOf(model.id)) {

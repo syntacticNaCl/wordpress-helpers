@@ -19,8 +19,8 @@ class AttachmentMetaboxViewModel
 
     collection = ko.observableArray([]);
 
-    orderedCollection = ko.pureComputed(() => {
-
+    orderedCollection = ko.pureComputed(() =>
+    {
         let output = [];
 
         _.each( this.attachmentIds(), (id) => {
@@ -48,6 +48,8 @@ class AttachmentMetaboxViewModel
     onSelect()
     {
         let models = this.frame.state().get('selection').toJSON();
+
+        console.log(models);
 
         _.each(models, (model) =>
         {

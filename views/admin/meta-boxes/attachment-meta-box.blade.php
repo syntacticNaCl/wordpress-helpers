@@ -12,7 +12,10 @@
         <div class="attachment-model-container" data-bind="attr: { 'data-id': $data.id }">
 
             <div class="attached-model">
+
+                <!-- ko if: $data.sizes -->
                 <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
+                <!-- /ko -->
 
                 <div class="img-controls">
 
@@ -47,7 +50,9 @@
         <tbody data-bind="foreach: orderedCollection">
             <tr>
                 <td>
+                    <!-- ko if: $data.sizes -->
                     <img data-bind="attr: { src: $data.sizes.thumbnail.url }" class="img-thumbnail">
+                    <!-- /ko -->
                 </td>
                 <td>
                     <span data-bind="text: $data.title"></span>
