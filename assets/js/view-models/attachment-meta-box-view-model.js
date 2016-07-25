@@ -1,7 +1,19 @@
 var AttachmentMetaboxViewModel = (function () {
     function AttachmentMetaboxViewModel(options) {
         var _this = this;
+        this.view = ko.observable('grid');
         this.collection = ko.observableArray([]);
+        this.orderedCollection = ko.pureComputed(function () {
+            var output = [];
+            _.each(_this.attachmentIds(), function (id) {
+                _.each(_this.collection(), function (model) {
+                    if (model.id == id) {
+                        output.push(model);
+                    }
+                });
+            });
+            return output;
+        });
         this.attachmentIds = ko.observableArray([]);
         this.valueString = ko.pureComputed(function () {
             return _this.attachmentIds().join(',');
@@ -18,10 +30,13 @@ var AttachmentMetaboxViewModel = (function () {
         });
         // Initialize knockout.
         ko.applyBindings(this, document.getElementById(options.elementId));
+        // Reapply sortables on view changes.
+        this.view.subscribe(function () {
+            _this.applySortables();
+        });
         this.applySortables();
     }
     AttachmentMetaboxViewModel.prototype.removeModel = function (model) {
-        console.log(model);
         this.collection.remove(model);
         this.attachmentIds.remove(model.id);
     };
@@ -89,12 +104,18 @@ var AttachmentMetaboxViewModel = (function () {
             handle: '.move-button',
             // Listen to update changes so that we can update the attachment ID order.
             update: function (event, ui) {
-                var divs = jQuery("#" + _this.options.elementId + " .attachment-model-container"), order = [];
+                var divs = jQuery("#" + _this.options.elementId + " .attachment-model-container"), models = [], order = [];
                 // Loop through the divs, extract data-id attributes.
                 _.each(divs, function (item) {
-                    order.push(jQuery(item).data('id'));
+                    // Get attachment ID.
+                    var attachmentId = jQuery(item).data('id');
+                    // Skip if already in array.
+                    if (-1 != order.indexOf(attachmentId)) {
+                        return;
+                    }
+                    // Push to order.
+                    order.push(attachmentId);
                 });
-                // Map the new order back to this.attachmentIds observable.
                 ko.mapping.fromJS(order, {}, _this.attachmentIds);
             }
         });

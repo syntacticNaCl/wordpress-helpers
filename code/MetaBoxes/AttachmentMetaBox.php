@@ -54,14 +54,19 @@ class AttachmentMetaBox extends MetaBoxInterface
         // Loop through the post Ids
         foreach( $postIds as $postID )
         {
+            $postData = get_post($postID);
+            $attachmentData = wp_get_attachment_metadata($postID);
+
             // Push this iteration to $data.
             $data[] = [
                 'id' => $postID,
+                'title' => $postData->post_title,
                 'sizes' => [
                     'thumbnail' => [
                         'url' => wp_get_attachment_thumb_url($postID)
                     ]
-                ]
+                ],
+                'meta' => $attachmentData
             ];
         }
 
