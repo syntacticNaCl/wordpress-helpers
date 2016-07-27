@@ -84,7 +84,7 @@ class AttachmentMetaBox extends MetaBoxInterface
         return $data;
     }
 
-    public function render($post)
+    public function render(\WP_Post $post)
     {
         echo view('admin.meta-boxes.attachment-meta-box', [
 

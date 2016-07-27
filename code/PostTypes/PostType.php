@@ -18,7 +18,7 @@ class PostType
 
     protected $searchMeta = [];
 
-    protected $supports = ['title', 'editor', 'author', 'thumbnail'];
+    protected $supports = ['title', 'editor', 'author', 'post-thumbnail'];
 
     /**
      * @var array MetaBox[]
