@@ -24,10 +24,10 @@
                 <div class="img-controls">
 
                     <ko-button params="
-                    text: '',
-                    icon: 'fa-times',
-                    class: 'btn-circle-micro btn-danger delete-button',
-                    click: function(){ $parent.removeModel($data); }"></ko-button>
+                        text: '',
+                        icon: 'fa-times',
+                        class: 'btn-circle-micro btn-danger delete-button',
+                        click: function(){ $parent.removeModel($data); }"></ko-button>
 
                     <br>
 

@@ -138,7 +138,10 @@ class MetaBoxInterface
         $this->render($post);
     }
 
-    public function render($post)
+    /**
+     * @param \WP_Post $post
+     */
+    public function render(\WP_Post $post)
     {
         echo "Override render()!";
     }
