@@ -87,7 +87,7 @@ class PostsPivotMetaBox extends MetaBoxInterface
         );
     }
 
-    public function render($post)
+    public function render(\WP_Post $post)
     {
         echo view('admin.post-types.pivots.posts-pivot-meta-box', [
 
