@@ -27,6 +27,8 @@ require_once $autoloadPath;
 // Include global helper functions.
 require_once __DIR__ . '/code/Utility/Functions.php';
 
+add_theme_support('post-thumbnails');
+
 /**
  * Define absolute path to plugin directory.
  */
