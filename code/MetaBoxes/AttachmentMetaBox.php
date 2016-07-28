@@ -29,6 +29,16 @@ class AttachmentMetaBox extends MetaBoxInterface
     protected $attachmentButtonText = 'Set attachment';
 
     /**
+     * @param $postId
+     * @return mixed|string
+     */
+    protected function getAttachmentSource($postId)
+    {
+        $meta = get_post_meta($postId, $this->metaKey . '_source', true);
+        return false === $meta ? 'wp' : $meta;
+    }
+
+    /**
      * Returns the prepared attachment preload array, containing Post IDs, thumbnails, etc.
      * @param $postId
      * @return array
@@ -38,7 +48,14 @@ class AttachmentMetaBox extends MetaBoxInterface
         // Get post meta.
         $meta = get_post_meta($postId, $this->metaKey, true);
 
-        // There are no attached IDs, so return an empty array.
+        // Get attachment source.
+        $attachmentSource = $this->getAttachmentSource($postId);
+
+        if ( 'url' === $attachmentSource ) {
+            return $meta;
+        }
+
+        // There are no attached IDs, or this is a URL type, so return an empty array.
         if ( '' === $meta )
         {
             return [];
@@ -86,6 +103,8 @@ class AttachmentMetaBox extends MetaBoxInterface
 
     public function render(\WP_Post $post)
     {
+        $attachmentSource = get_post_meta($post->ID, $this->metaKey . '_source', true);
+
         echo view('admin.meta-boxes.attachment-meta-box', [
 
             // Prepare an options object to be passed to the
@@ -96,7 +115,8 @@ class AttachmentMetaBox extends MetaBoxInterface
                 'multiple' => $this->multipleAttachments,
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
-                'attachmentPreload' => $this->getAttachmentPreload($post->ID)
+                'attachmentPreload' => $this->getAttachmentPreload($post->ID),
+                'attachmentSource' => $attachmentSource ?: 'wp'
             ],
 
             'metaKey' => $this->metaKey
@@ -138,9 +158,11 @@ class AttachmentMetaBox extends MetaBoxInterface
         {
             // Get value.
             $value = $_POST[$this->metaKey];
+            $source = $_POST[$this->metaKey . '_source'];
 
             // Set the value.
             update_post_meta($postId, $this->metaKey, $value);
+            update_post_meta($postId, $this->metaKey . '_source', $source);
         }
     }
 

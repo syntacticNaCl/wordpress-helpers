@@ -1,6 +1,21 @@
 <div id="{{ $options['elementId'] }}" class="wpbs">
 
     <input type="hidden" name="{{ $metaKey }}" data-bind="value: valueString">
+    <input type="hidden" name="{{ $metaKey }}_source" data-bind="value: attachmentSource">
+
+    <!-- ko if: 'url' == attachmentSource() -->
+    <ko-input params="
+        label: 'Custom URL',
+        value: customInput
+    "></ko-input>
+
+    <button type="button" class="btn btn-primary" data-bind="click: function() { attachmentSource('wp'); }">
+        <i class="fa fa-wordpress"></i>
+        Choose WordPress Media
+    </button>
+    <!-- /ko -->
+
+    <!-- ko if: 'wp' == attachmentSource() -->
 
     <!-- ko if: attachmentIds().length == 0 -->
     <p>No attachments.</p>
@@ -86,6 +101,12 @@
         <span data-bind="text: options.multiple ? 'Select Files' : 'Select File'"></span>
     </button>
 
+    <button class="btn btn-primary" type="button" data-bind="
+        click: function() { attachmentSource('url') }">
+        <i class="fa fa-link"></i>
+        Custom URL
+    </button>
+
     <div class="pull-right">
         <div class="btn-group">
             <button type="button" class="btn" data-bind="css: { active: 'grid' == view() }, click: function(){ view('grid'); }">
@@ -96,6 +117,8 @@
             </button>
         </div>
     </div>
+
+    <!-- /ko -->
 </div>
 
 <script>

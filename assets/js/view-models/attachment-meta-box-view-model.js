@@ -16,8 +16,19 @@ var AttachmentMetaboxViewModel = (function () {
         });
         this.attachmentIds = ko.observableArray([]);
         this.valueString = ko.pureComputed(function () {
-            return _this.attachmentIds().join(',');
+            if ('wp' == _this.attachmentSource()) {
+                return _this.attachmentIds().join(',');
+            }
+            if ('url' == _this.attachmentSource()) {
+                return _this.customInput();
+            }
         });
+        /**
+         * The attachment meta box source, defaults to 'wp'.
+         * @type {KnockoutObservable<string>}
+         */
+        this.attachmentSource = ko.observable('');
+        this.customInput = ko.observable('');
         this.icons = {
             aac: 'aac',
             ai: 'ai',
@@ -85,14 +96,22 @@ var AttachmentMetaboxViewModel = (function () {
         };
         // Set options.
         this.options = options;
-        // Loop through preload items.
-        _.each(options.attachmentPreload, function (model) {
-            // If the model ID is not already in the attachment IDs array.
-            if (-1 == _this.attachmentIds.indexOf(model.id)) {
-                _this.collection.push(model);
-                _this.attachmentIds.push(model.id);
-            }
-        });
+        this.attachmentSource(options.attachmentSource);
+        // Load preload data.
+        // If this is a URL, simply set the value.
+        if ('url' == options.attachmentSource) {
+            this.customInput(options.attachmentPreload);
+        }
+        else {
+            // Loop through preload items.
+            _.each(options.attachmentPreload, function (model) {
+                // If the model ID is not already in the attachment IDs array.
+                if (-1 == _this.attachmentIds.indexOf(model.id)) {
+                    _this.collection.push(model);
+                    _this.attachmentIds.push(model.id);
+                }
+            });
+        }
         // Initialize knockout.
         ko.applyBindings(this, document.getElementById(options.elementId));
         // Reapply sortables on view changes.

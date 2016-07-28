@@ -7,6 +7,7 @@ interface AttachmentOptionsInterface
     attachmentType: string;
     attachmentButtonText: string;
     attachmentPreload: any[];
+    attachmentSource: string;
 }
 
 class AttachmentMetaboxViewModel
@@ -36,9 +37,27 @@ class AttachmentMetaboxViewModel
 
     attachmentIds = ko.observableArray([]);
 
-    valueString = ko.pureComputed(() => {
-        return this.attachmentIds().join(',');
+    valueString = ko.pureComputed(() =>
+    {
+
+        if ( 'wp' == this.attachmentSource() )
+        {
+            return this.attachmentIds().join(',');
+        }
+
+        if ( 'url' == this.attachmentSource() )
+        {
+            return this.customInput();
+        }
     });
+
+    /**
+     * The attachment meta box source, defaults to 'wp'.
+     * @type {KnockoutObservable<string>}
+     */
+    attachmentSource = ko.observable('');
+
+    customInput = ko.observable('');
 
     icons = {
         aac: 'aac',
@@ -244,15 +263,29 @@ class AttachmentMetaboxViewModel
         // Set options.
         this.options = options;
 
-        // Loop through preload items.
-        _.each( options.attachmentPreload, (model) => {
+        this.attachmentSource(options.attachmentSource);
 
-            // If the model ID is not already in the attachment IDs array.
-            if ( -1 == this.attachmentIds.indexOf(model.id) ) {
-                this.collection.push(model);
-                this.attachmentIds.push(model.id);
-            }
-        });
+        // Load preload data.
+
+        // If this is a URL, simply set the value.
+        if ( 'url' == options.attachmentSource )
+        {
+            this.customInput( options.attachmentPreload );
+        }
+
+        // Otherwise, loop through attachment models.
+        else
+        {
+            // Loop through preload items.
+            _.each( options.attachmentPreload, (model) => {
+
+                // If the model ID is not already in the attachment IDs array.
+                if ( -1 == this.attachmentIds.indexOf(model.id) ) {
+                    this.collection.push(model);
+                    this.attachmentIds.push(model.id);
+                }
+            });
+        }
 
         // Initialize knockout.
         ko.applyBindings( this, document.getElementById( options.elementId ) );
