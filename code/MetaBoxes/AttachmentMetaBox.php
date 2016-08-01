@@ -34,7 +34,7 @@ class AttachmentMetaBox extends MetaBoxInterface
      */
     protected function getAttachmentSource($postId)
     {
-        $meta = get_post_meta($postId, $this->metaKey . '_source', true);
+        $meta = get_post_meta($postId, $this->metaKey . '_type', true);
         return false === $meta ? 'wp' : $meta;
     }
 
@@ -52,7 +52,7 @@ class AttachmentMetaBox extends MetaBoxInterface
         $attachmentSource = $this->getAttachmentSource($postId);
 
         if ( 'url' === $attachmentSource ) {
-            return $meta;
+            return json_decode($meta);
         }
 
         // There are no attached IDs, or this is a URL type, so return an empty array.
@@ -103,7 +103,7 @@ class AttachmentMetaBox extends MetaBoxInterface
 
     public function render(\WP_Post $post)
     {
-        $attachmentSource = get_post_meta($post->ID, $this->metaKey . '_source', true);
+        $attachmentSource = get_post_meta($post->ID, $this->metaKey . '_type', true);
 
         echo view('admin.meta-boxes.attachment-meta-box', [
 
@@ -116,7 +116,7 @@ class AttachmentMetaBox extends MetaBoxInterface
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
                 'attachmentPreload' => $this->getAttachmentPreload($post->ID),
-                'attachmentSource' => $attachmentSource ?: 'wp'
+                'type' => $attachmentSource ?: 'wp'
             ],
 
             'metaKey' => $this->metaKey
@@ -158,11 +158,11 @@ class AttachmentMetaBox extends MetaBoxInterface
         {
             // Get value.
             $value = $_POST[$this->metaKey];
-            $source = $_POST[$this->metaKey . '_source'];
+            $source = $_POST[$this->metaKey . '_type'];
 
             // Set the value.
             update_post_meta($postId, $this->metaKey, $value);
-            update_post_meta($postId, $this->metaKey . '_source', $source);
+            update_post_meta($postId, $this->metaKey . '_type', $source);
         }
     }
 
