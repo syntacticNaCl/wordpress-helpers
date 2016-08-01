@@ -54,7 +54,7 @@
                 There are no models.
             </div>
 
-            <div class="list-group">
+            <div class="list-group" style="max-height: 200px; overflow-x: hidden;">
 
                 <div data-bind="foreach: filteredCollection">
 
