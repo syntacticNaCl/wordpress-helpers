@@ -1,7 +1,5 @@
 <!-- ko if: 'url' == type() -->
-
 <!-- ko with: types.url -->
-
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -30,10 +28,12 @@
         </tbody>
     </table>
 
+    <!-- ko if: $parent.options.multiple -->
     <button type="button" class="btn btn-success" data-bind="click: function() { add(); }">
         <i class="fa fa-plus"></i>
         Add URL
     </button>
+    <!-- /ko -->
 
     <button type="button" class="btn btn-primary" data-bind="click: function() { $parent.type('wp'); }">
         <i class="fa fa-wordpress"></i>
@@ -41,5 +41,4 @@
     </button>
 
 <!-- /ko -->
-
 <!-- /ko -->

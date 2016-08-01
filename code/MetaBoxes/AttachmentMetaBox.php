@@ -19,6 +19,11 @@ class AttachmentMetaBox extends MetaBoxInterface
     protected $multipleAttachments = true;
 
     /**
+     * @var string The type of attachment metabox default ('wp' or 'url').
+     */
+    protected $defaultType = 'wp';
+
+    /**
      * @var string Attachment types, ie: 'image'
      */
     protected $attachmentType = '';
@@ -116,7 +121,7 @@ class AttachmentMetaBox extends MetaBoxInterface
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
                 'attachmentPreload' => $this->getAttachmentPreload($post->ID),
-                'type' => $attachmentSource ?: 'wp'
+                'type' => $attachmentSource ?: $this->defaultType
             ],
 
             'metaKey' => $this->metaKey

@@ -15,7 +15,6 @@ class PostType
     const ENTER_TITLE_HERE = null;
     const MENU_NAME = null;
     
-
     protected $searchMeta = [];
 
     protected $supports = ['title', 'editor', 'author', 'thumbnail'];
