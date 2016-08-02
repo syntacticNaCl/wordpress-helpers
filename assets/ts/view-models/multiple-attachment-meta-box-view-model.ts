@@ -27,9 +27,6 @@ class Attachment
             wp: new WordPressMediaAttachmentsViewModel(parent, options),
             url: new CustomUrlAttachmentsViewModel(parent, options)
         };
-
-        alert( this.type() );
-
         this.types[ this.type() ].initialize();
     }
 

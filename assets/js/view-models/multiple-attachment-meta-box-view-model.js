@@ -13,7 +13,6 @@ var Attachment = (function () {
             wp: new WordPressMediaAttachmentsViewModel(parent, options),
             url: new CustomUrlAttachmentsViewModel(parent, options)
         };
-        alert(this.type());
         this.types[this.type()].initialize();
     }
     return Attachment;
