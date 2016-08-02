@@ -102,7 +102,6 @@ var WordPressMediaAttachmentsViewModel = (function () {
         this.value = ko.pureComputed(function () {
             return _this.attachmentIds().join(',');
         });
-        console.log(options);
         // Link the parent node view model so we can share data.
         this.parent = parent;
         // Set options.

@@ -5,7 +5,6 @@ class WordPressMediaAttachmentsViewModel
 {
     constructor(parent, options: AttachmentOptionsInterface)
     {
-        console.log( options );
         // Link the parent node view model so we can share data.
         this.parent = parent;
 
