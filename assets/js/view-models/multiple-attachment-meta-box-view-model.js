@@ -8,11 +8,12 @@ var Attachment = (function () {
         this.parent = parent;
         this.key = options.key;
         this.label = options.label;
-        this.type(options.sourceType);
+        this.type(options.sourceType || options.type);
         this.types = {
             wp: new WordPressMediaAttachmentsViewModel(parent, options),
             url: new CustomUrlAttachmentsViewModel(parent, options)
         };
+        alert(this.type());
         this.types[this.type()].initialize();
     }
     return Attachment;
