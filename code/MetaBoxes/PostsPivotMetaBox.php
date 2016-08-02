@@ -6,7 +6,7 @@ namespace Zawntech\WordPress\MetaBoxes;
  * Class PostsPivotMetaBox
  * @package Zawntech\WordPress\PostsPivot
  */
-class PostsPivotMetaBox extends MetaBoxInterface
+class PostsPivotMetaBox extends MetaBoxAbstract
 {
     /**
      * @var string Primary post type key.

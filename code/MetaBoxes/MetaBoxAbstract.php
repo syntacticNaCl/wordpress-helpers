@@ -1,7 +1,13 @@
 <?php
 namespace Zawntech\WordPress\MetaBoxes;
 
-class MetaBoxInterface
+/**
+ * Primitive MetaBox abstract class from which usable MetaBox extensions are derived.
+ *
+ * Class MetaBoxAbstract
+ * @package Zawntech\WordPress\MetaBoxes
+ */
+class MetaBoxAbstract
 {
     /**
      * @var string Meta box element ID.

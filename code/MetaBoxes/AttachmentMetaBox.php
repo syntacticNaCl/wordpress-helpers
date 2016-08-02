@@ -6,7 +6,7 @@ namespace Zawntech\WordPress\MetaBoxes;
  * Class AttachmentMetaBox
  * @package Zawntech\WordPress\MetaBoxes
  */
-class AttachmentMetaBox extends MetaBoxInterface
+class AttachmentMetaBox extends MetaBoxAbstract
 {
     /**
      * @var string A specified meta key for relating this attachment.

@@ -6,7 +6,7 @@ namespace Zawntech\WordPress\MetaBoxes;
  * Class AttachmentMetaBox
  * @package Zawntech\WordPress\MetaBoxes
  */
-class MultipleAttachmentMetaBox extends MetaBoxInterface
+class MultipleAttachmentMetaBox extends MetaBoxAbstract
 {
     /**
      * @var array The class takes an options array to initialize individual
