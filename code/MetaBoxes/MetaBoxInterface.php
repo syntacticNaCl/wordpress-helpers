@@ -19,7 +19,7 @@ class MetaBoxInterface
     protected $postTypes = [];
 
     /**
-     * @var string Public URL to view model javascript file.
+     * @var string|array Public URL(s) to view model javascript file(s).
      * If left empty, then no view model javascript file is enqueued.
      */
     protected $viewModel;
@@ -120,14 +120,34 @@ class MetaBoxInterface
         // Is a view model assigned to this meta box?
         if ( $this->viewModel )
         {
-            // Enqueue the view model javascript.
-            wp_enqueue_script(
-                md5($this->id . $this->title) . '-view-model',
-                $this->viewModel,
-                ['jquery', 'knockout'],
-                null,
-                true
-            );
+            // If the view model is a string, enqueue the single file.
+            if ( is_string( $this->viewModel ) )
+            {
+                // Enqueue the view model javascript.
+                wp_enqueue_script(
+                    md5($this->id . $this->title) . '-view-model',
+                    $this->viewModel,
+                    ['jquery', 'knockout'],
+                    null,
+                    true
+                );
+            }
+
+            // If the view model is an array, iterate through it.
+            if ( is_array( $this->viewModel ) )
+            {
+                foreach( $this->viewModel as $viewModel )
+                {
+                    // Enqueue the view model javascript.
+                    wp_enqueue_script(
+                        md5($viewModel) . '-view-model',
+                        $viewModel,
+                        ['jquery', 'knockout'],
+                        null,
+                        true
+                    );
+                }
+            }
 
             // Print the line preload javascript data.
             $this->printPreloadJavascript($post->ID);

@@ -2,68 +2,45 @@
 namespace Zawntech\WordPress\MetaBoxes;
 
 /**
- * A metabox for attaching media or custom URLs to a single meta key.
+ * A metabox for attaching media or custom URLs across multiple meta keys.
  * Class AttachmentMetaBox
  * @package Zawntech\WordPress\MetaBoxes
  */
-class AttachmentMetaBox extends MetaBoxInterface
+class MultipleAttachmentMetaBox extends MetaBoxInterface
 {
     /**
-     * @var string A specified meta key for relating this attachment.
+     * @var array The class takes an options array to initialize individual
      */
-    protected $metaKey;
+    protected $options = [
+        // An example option:
+        // [
+        //     'key' => '',
+        //     'label' => '',
+        //     'multiple' => true,
+        //     'type' => '',
+        // ]
+    ];
 
-    /**
-     * @var string Public URL to posts pivoter view model javascript.
-     */
+    protected $defaultType = 'wp';
+    protected $defaultMultiple = true;
+
     protected $viewModel = [
         WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/custom-url-attachments-view-model.js',
         WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/wordpress-media-attachments-view-model.js',
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box-view-model.js'
+        WORDPRESS_HELPERS_URL . 'assets/js/view-models/multiple-attachment-meta-box-view-model.js'
     ];
 
-    /**
-     * @var bool
-     */
-    protected $multipleAttachments = true;
-
-    /**
-     * @var string The type of attachment metabox default ('wp' or 'url').
-     */
-    protected $defaultType = 'wp';
-
-    /**
-     * @var string Attachment types, ie: 'image'
-     */
-    protected $attachmentType = '';
-
-    /**
-     * @var string
-     */
-    protected $attachmentButtonText = 'Set attachment';
-
-    /**
-     * @param $postId
-     * @return mixed|string
-     */
-    protected function getAttachmentSource($postId)
+    protected function getAttachmentSource($postId, $metaKey)
     {
-        $meta = get_post_meta($postId, $this->metaKey . '_type', true);
+        $meta = get_post_meta($postId, $metaKey . '_type', true);
         return false === $meta ? 'wp' : $meta;
     }
 
-    /**
-     * Returns the prepared attachment preload array, containing Post IDs, thumbnails, etc.
-     * @param $postId
-     * @return array
-     */
-    protected function getAttachmentPreload($postId)
+    protected function getAttachmentPreload($postId, $metaKey)
     {
         // Get post meta.
-        $meta = get_post_meta($postId, $this->metaKey, true);
-
-        // Get attachment source.
-        $attachmentSource = $this->getAttachmentSource($postId);
+        $meta = get_post_meta($postId, $metaKey, true);
+        $attachmentSource = $this->getAttachmentSource($postId, $metaKey);
 
         if ( 'url' === $attachmentSource ) {
             return json_decode($meta);
@@ -115,25 +92,28 @@ class AttachmentMetaBox extends MetaBoxInterface
         return $data;
     }
 
+    protected function getOptionsPreload($postId)
+    {
+        foreach( $this->options as &$option )
+        {
+            $option['preload'] = $this->getAttachmentPreload($postId, $option['key']);
+            $option['sourceType'] = $this->getAttachmentSource($postId, $option['key']);
+        }
+
+        return $this->options;
+    }
+
     public function render(\WP_Post $post)
     {
-        $attachmentSource = get_post_meta($post->ID, $this->metaKey . '_type', true);
-
-        echo view('admin.meta-boxes.attachment-meta-box', [
+        echo view('admin.meta-boxes.multiple-attachment-meta-box', [
 
             // Prepare an options object to be passed to the
             // PostsPivoterViewModel constructor in the view.
             'options' => [
                 'elementId' => $this->id,
                 'postId' => (integer) $post->ID,
-                'multiple' => $this->multipleAttachments,
-                'attachmentType' => $this->attachmentType,
-                'attachmentButtonText' => $this->attachmentButtonText,
-                'attachmentPreload' => $this->getAttachmentPreload($post->ID),
-                'type' => $attachmentSource ?: $this->defaultType
+                'options' => $this->getOptionsPreload($post->ID)
             ],
-
-            'metaKey' => $this->metaKey
         ]);
     }
 
@@ -152,9 +132,39 @@ class AttachmentMetaBox extends MetaBoxInterface
         }
 
         // A meta key is required.
-        if ( ! $this->metaKey )
+        if ( empty( $this->options) )
         {
-            throw new \Exception("No metaKey is specified in class {$class}");
+            throw new \Exception("No input options are specified for class {$class}");
+        }
+
+        // Define required option keys:
+        $requiredKeys = ['key', 'label'];
+
+        // Validate options.
+        foreach( $this->options as $key => $option )
+        {
+            // Check required keys.
+            foreach( $requiredKeys as $requiredKey )
+            {
+                if ( ! in_array( $requiredKey, $requiredKeys ) )
+                {
+                    throw new \Exception("Each option must have a '{$requiredKey}' value defined.");
+                }
+            }
+
+            // Set defaults.
+            if ( ! isset( $option['type'] ) || '' === $option['type'] )
+            {
+                // Set the default option type.
+                $this->options[$key]['type'] = $this->defaultType;
+            }
+
+            // Set defaults.
+            if ( ! isset( $option['multiple'] ) )
+            {
+                // Set the default option type.
+                $this->options[$key]['multiple'] = $this->defaultMultiple;
+            }
         }
     }
 
@@ -167,17 +177,22 @@ class AttachmentMetaBox extends MetaBoxInterface
         {
             return;
         }
-        
-        if ( isset( $_POST[$this->metaKey] ) )
-        {
-            // Get value.
-            $value = $_POST[$this->metaKey];
-            $source = $_POST[$this->metaKey . '_type'];
 
-            // Set the value.
-            update_post_meta($postId, $this->metaKey, $value);
-            update_post_meta($postId, $this->metaKey . '_type', $source);
+        // Loop through options.
+        foreach( $this->options as $option )
+        {
+            if ( isset( $_POST[$option['key']] ) )
+            {
+                // Get value.
+                $value = $_POST[$option['key']];
+                $type = $_POST[$option['key'] . '_type'];
+
+                // Set the value.
+                update_post_meta($postId, $option['key'], $value);
+                update_post_meta($postId, $option['key'] . '_type', $type);
+            }
         }
+
     }
 
     public function __construct()
