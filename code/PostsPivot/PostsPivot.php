@@ -206,4 +206,24 @@ class PostsPivot
 
         return $wpdb->get_results($sql);
     }
+
+    /**
+     * Remove instances of a post ID from either column.
+     * @param $postId
+     * @return array|null|object
+     */
+    public static function delete($postId)
+    {
+        global $wpdb;
+
+        // Get table name.
+        $tableName = static::getTableName();
+
+        // Prepare SQL.
+        $sql = "DELETE FROM {$tableName} WHERE ( id_1 = %d ) OR ( id_2 = %d )";
+
+        $sql = $wpdb->prepare( $sql, $postId, $postId );
+
+        return $wpdb->get_results($sql);
+    }
 }
