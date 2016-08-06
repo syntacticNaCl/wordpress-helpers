@@ -16,15 +16,11 @@ class Validator
      */
     public static function hasRequiredKeys( $args = [], $requiredKeys = [] )
     {
-        // Check if the supplied arguments array is an object.
-        if ( is_object($args) )
-        {
-            // Cast $args as array.
-            $args = (array) $args;
-        }
+        // Get keys.
+        $keys = array_keys( $args );
 
         // Loop through supplied arguments.
-        foreach( $args as $arg )
+        foreach( $keys as $arg )
         {
             if ( ! in_array( $arg, $requiredKeys ) )
             {
