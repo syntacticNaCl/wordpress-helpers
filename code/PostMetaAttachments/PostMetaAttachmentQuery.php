@@ -4,13 +4,31 @@ namespace Zawntech\WordPress\PostMetaAttachments;
 class PostMetaAttachmentQuery
 {
     /**
+     * @param $postId
+     * @param $metaKey
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public static function getAttachments($postId, $metaKey)
+    {
+        // Get attachments
+        $attachments = static::getMultipleAttachments($postId, [$metaKey]);
+
+        if ( count($attachments) > 0 ) {
+            return $attachments[0];
+        }
+
+        return false;
+    }
+
+    /**
      * Returns an array of [[ 'value' => ..., 'type' => ... ]] meta key attachment models.
      * @param $postId
      * @param $metaKeys
      * @throws \Exception
      * @return array
      */
-    public static function getAttachments($postId, $metaKeys)
+    public static function getMultipleAttachments($postId, $metaKeys)
     {
         // Verify that a post ID was supplied.
         if ( ! $postId || '' === $postId )
@@ -49,11 +67,13 @@ class PostMetaAttachmentQuery
     
     public static function getAttachmentModel($postId, $metaKey)
     {
+        $attachmentData = static::getAttachments($postId, $metaKey);
+
         // Get post meta.
-        $meta = get_post_meta($postId, $metaKey, true);
+        $meta = $attachmentData['value'];
 
         // Get attachment source.
-        $attachmentSource = static::getAttachmentType($postId, $metaKey);
+        $attachmentSource = $attachmentData['type'];
 
         if ( 'url' === $attachmentSource ) {
             return json_decode($meta);
@@ -69,8 +89,18 @@ class PostMetaAttachmentQuery
         // cast the returned meta as an array.
         $postIds = false === strpos($meta, ',') ? [$meta] : explode(',', $meta);
 
+        // Is first value null?
+        if ( is_array($postIds) && null === $postIds[0] ) {
+            return [];
+        }
+
         // Declare an array for output.
         $data = [];
+
+
+        if ( empty( $postIds ) ) {
+            return [];
+        }
 
         // Loop through the post Ids
         foreach( $postIds as $postID )
