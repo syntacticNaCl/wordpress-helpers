@@ -48,7 +48,7 @@ class Time
 
         if ( $timeData['m'] > 0 )
         {
-            $output .= $timeData['m']. ' ' . ( $timeData['m'] === 1 ? 'minute' : 'minutes' ) . ' ';
+            $output .= $timeData['m'] . ' ' . ( $timeData['m'] === 1 ? 'minute' : 'minutes' ) . ' ';
         }
 
         if ( $timeData['s'] > 0 )

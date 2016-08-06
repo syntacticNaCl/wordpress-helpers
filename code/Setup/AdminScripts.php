@@ -8,11 +8,15 @@ class AdminScripts
      */
     public function registerScripts()
     {
+        // jQuery UI components.
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-draggable');
         wp_enqueue_script('jquery-ui-droppable');
         wp_enqueue_script('jquery-ui-sortable');
 
+        // Validate JS
+        wp_enqueue_script('validate-js', WORDPRESS_HELPERS_URL . 'assets/js/lib/validate.min.js');
+        
         // Moment
         wp_enqueue_script('moment', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment.min.js');
         wp_enqueue_script('moment-timezone', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment-timezone.min.js');

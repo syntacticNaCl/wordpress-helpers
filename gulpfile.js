@@ -16,6 +16,7 @@ elixir(function(mix) {
         .copy( './bower_components/knockout/dist/knockout.debug.js', assetPath + '/js/lib/knockout.debug.js' )
         .copy( './bower_components/knockout-mapping/knockout.mapping.js', assetPath + '/js/lib/knockout.mapping.js' )
         .copy( './bower_components/knockout-components/build/zawntech-knockout-components.js', assetPath + '/js/lib/knockout.components.js' )
+        .copy( './bower_components/validate/validate.min.js', assetPath + '/js/lib/validate.min.js' )
 
         .sass(assetPath + '/scss/zawntech-wordpress-helpers.scss', assetPath + '/css/zawntech-wordpress-helpers.css');
 });
