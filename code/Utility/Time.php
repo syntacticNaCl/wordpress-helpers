@@ -1,5 +1,5 @@
 <?php
-namespace Utility;
+namespace Zawntech\WordPress\Utility;
 
 class Time
 {
