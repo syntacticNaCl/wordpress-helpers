@@ -1,15 +1,15 @@
 <?php
-namespace Zawntech\WordPress\Traits;
+namespace Zawntech\WordPress\Utility;
 
-trait ValidateParametersTrait
+class Validator
 {
     /**
      * Verify that an array has all of a set of required keys
      * @param array $args
      * @param array $requiredKeys
-     * @throws \Exception
+     * @return boolean
      */
-    protected function _validateRequiredKeys( $args = [], $requiredKeys = [] )
+    public static function hasRequiredKeys( $args = [], $requiredKeys = [] )
     {
         // Check if the supplied arguments array is an object.
         if ( is_object($args) )
@@ -18,23 +18,15 @@ trait ValidateParametersTrait
             $args = (array) $args;
         }
 
-        // Do nothing if there are no required keys.
-        if ( [] === $requiredKeys || empty( $requiredKeys ) )
-        {
-            return;
-        }
-
         // Loop through supplied arguments.
         foreach( $args as $arg )
         {
             if ( ! in_array( $arg, $requiredKeys ) )
             {
-                // Get class name.
-                $className = static::class;
-
-                // Throw exception.
-                throw new \Exception("Argument {$arg} missing in {$className}");
+                return false;
             }
         }
+
+        return true;
     }
 }
