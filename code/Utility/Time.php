@@ -43,17 +43,17 @@ class Time
 
         if ( $timeData['h'] > 0 )
         {
-            $output .= $timeData . ' ' . ( $timeData['h'] === 1 ? 'hour' : 'hours' ) . ' ';
+            $output .= $timeData['h'] . ' ' . ( $timeData['h'] === 1 ? 'hour' : 'hours' ) . ' ';
         }
 
         if ( $timeData['m'] > 0 )
         {
-            $output .= $timeData . ' ' . ( $timeData['m'] === 1 ? 'minute' : 'minutes' ) . ' ';
+            $output .= $timeData['m']. ' ' . ( $timeData['m'] === 1 ? 'minute' : 'minutes' ) . ' ';
         }
 
         if ( $timeData['s'] > 0 )
         {
-            $output .= $timeData . ' ' . ( $timeData['s'] === 1 ? 'second' : 'seconds' ) . ' ';
+            $output .= $timeData['s'] . ' ' . ( $timeData['s'] === 1 ? 'second' : 'seconds' ) . ' ';
         }
 
         return $output;
