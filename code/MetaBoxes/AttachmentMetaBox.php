@@ -1,6 +1,8 @@
 <?php
 namespace Zawntech\WordPress\MetaBoxes;
 
+use Zawntech\WordPress\PostMetaAttachments\PostMetaAttachmentQuery;
+
 /**
  * A metabox for attaching media or custom URLs to a single meta key.
  * Class AttachmentMetaBox
@@ -48,71 +50,7 @@ class AttachmentMetaBox extends MetaBoxAbstract
      */
     protected function getAttachmentSource($postId)
     {
-        $meta = get_post_meta($postId, $this->metaKey . '_type', true);
-        return false === $meta ? 'wp' : $meta;
-    }
-
-    /**
-     * Returns the prepared attachment preload array, containing Post IDs, thumbnails, etc.
-     * @param $postId
-     * @return array
-     */
-    protected function getAttachmentPreload($postId)
-    {
-        // Get post meta.
-        $meta = get_post_meta($postId, $this->metaKey, true);
-
-        // Get attachment source.
-        $attachmentSource = $this->getAttachmentSource($postId);
-
-        if ( 'url' === $attachmentSource ) {
-            return json_decode($meta);
-        }
-
-        // There are no attached IDs, or this is a URL type, so return an empty array.
-        if ( '' === $meta )
-        {
-            return [];
-        }
-
-        // If a comma is found in the $meta string, then split by comma, otherwise
-        // cast the returned meta as an array.
-        $postIds = false === strpos($meta, ',') ? [$meta] : explode(',', $meta);
-
-        // Declare an array for output.
-        $data = [];
-
-        // Loop through the post Ids
-        foreach( $postIds as $postID )
-        {
-            $postData = get_post($postID);
-            $attachmentData = wp_get_attachment_metadata($postID);
-
-            $newItem = [
-                'id' => $postID,
-                'title' => $postData->post_title,
-                'meta' => $attachmentData,
-                'filename' => basename( get_attached_file( $postID ) )
-            ];
-
-            // Get thumbnail url.
-            $thumb = wp_get_attachment_thumb_url($postID);
-
-            // Push thumbnail.
-            if ( false != $thumb )
-            {
-                $newItem['sizes'] = [
-                    'thumbnail' => [
-                        'url' => wp_get_attachment_thumb_url($postID)
-                    ]
-                ];
-            }
-
-            // Push data.
-            $data[] = $newItem;
-        }
-
-        return $data;
+        return PostMetaAttachmentQuery::getAttachmentType($postId, $this->metaKey);
     }
 
     public function render(\WP_Post $post)
@@ -129,7 +67,7 @@ class AttachmentMetaBox extends MetaBoxAbstract
                 'multiple' => $this->multipleAttachments,
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
-                'attachmentPreload' => $this->getAttachmentPreload($post->ID),
+                'attachmentPreload' => PostMetaAttachmentQuery::getAttachmentModel($post->ID, $this->metaKey),
                 'type' => $attachmentSource ?: $this->defaultType
             ],
 
@@ -172,11 +110,10 @@ class AttachmentMetaBox extends MetaBoxAbstract
         {
             // Get value.
             $value = $_POST[$this->metaKey];
-            $source = $_POST[$this->metaKey . '_type'];
+            $type = $_POST[$this->metaKey . '_type'];
 
-            // Set the value.
-            update_post_meta($postId, $this->metaKey, $value);
-            update_post_meta($postId, $this->metaKey . '_type', $source);
+            // Set attachments.
+            PostMetaAttachmentQuery::setAttachments($postId, $this->metaKey, $value, $type);
         }
     }
 

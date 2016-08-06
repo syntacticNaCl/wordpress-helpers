@@ -1,5 +1,6 @@
 <?php
 namespace Zawntech\WordPress\MetaBoxes;
+use Zawntech\WordPress\PostMetaAttachments\PostMetaAttachmentQuery;
 
 /**
  * A metabox for attaching media or custom URLs across multiple meta keys.
@@ -36,68 +37,12 @@ class MultipleAttachmentMetaBox extends MetaBoxAbstract
         return false === $meta ? 'wp' : $meta;
     }
 
-    protected function getAttachmentPreload($postId, $metaKey)
-    {
-        // Get post meta.
-        $meta = get_post_meta($postId, $metaKey, true);
-        $attachmentSource = $this->getAttachmentSource($postId, $metaKey);
-
-        if ( 'url' === $attachmentSource ) {
-            return json_decode($meta);
-        }
-
-        // There are no attached IDs, or this is a URL type, so return an empty array.
-        if ( '' === $meta )
-        {
-            return [];
-        }
-
-        // If a comma is found in the $meta string, then split by comma, otherwise
-        // cast the returned meta as an array.
-        $postIds = false === strpos($meta, ',') ? [$meta] : explode(',', $meta);
-
-        // Declare an array for output.
-        $data = [];
-
-        // Loop through the post Ids
-        foreach( $postIds as $postID )
-        {
-            $postData = get_post($postID);
-            $attachmentData = wp_get_attachment_metadata($postID);
-
-            $newItem = [
-                'id' => $postID,
-                'title' => $postData->post_title,
-                'meta' => $attachmentData,
-                'filename' => basename( get_attached_file( $postID ) )
-            ];
-
-            // Get thumbnail url.
-            $thumb = wp_get_attachment_thumb_url($postID);
-
-            // Push thumbnail.
-            if ( false != $thumb )
-            {
-                $newItem['sizes'] = [
-                    'thumbnail' => [
-                        'url' => wp_get_attachment_thumb_url($postID)
-                    ]
-                ];
-            }
-
-            // Push data.
-            $data[] = $newItem;
-        }
-
-        return $data;
-    }
-
     protected function getOptionsPreload($postId)
     {
         foreach( $this->options as &$option )
         {
-            $option['preload'] = $this->getAttachmentPreload($postId, $option['key']);
-            $option['sourceType'] = $this->getAttachmentSource($postId, $option['key']);
+            $option['preload'] = PostMetaAttachmentQuery::getAttachmentModel($postId, $option['key']);
+            $option['sourceType'] = PostMetaAttachmentQuery::getAttachmentType($postId, $option['key']);
         }
 
         return $this->options;
