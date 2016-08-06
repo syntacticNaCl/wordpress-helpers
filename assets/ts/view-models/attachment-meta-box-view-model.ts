@@ -73,7 +73,7 @@ class AttachmentMetaboxViewModel
         this.types[type].initialize();
     }
 
-    constructor(options: AttachmentOptionsInterface)
+    constructor(options: AttachmentOptionsInterface, autoBind = true)
     {
         // Set options.
         this.options = options;
@@ -90,6 +90,9 @@ class AttachmentMetaboxViewModel
         this.initialize();
 
         // Initialize knockout.
-        ko.applyBindings( this, document.getElementById( options.elementId ) );
+        if ( autoBind )
+        {
+            ko.applyBindings( this, document.getElementById( options.elementId ) );
+        }
     }
 }

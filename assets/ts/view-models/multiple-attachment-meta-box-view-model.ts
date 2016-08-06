@@ -64,7 +64,7 @@ class MultipleAttachmentMetaboxViewModel
         this.activeKey( options[0].key );
     }
 
-    constructor(data: MultipleAttachmentOptionsInterface)
+    constructor(data: MultipleAttachmentOptionsInterface, autoBind = true)
     {
         // Set options.
         this.data = data;
@@ -72,7 +72,10 @@ class MultipleAttachmentMetaboxViewModel
         // Initialize metabox.
         this.initialize();
 
-        // Initialize knockout.
-        ko.applyBindings( this, document.getElementById( data.elementId ) );
+        if ( autoBind )
+        {
+            // Initialize knockout.
+            ko.applyBindings( this, document.getElementById( data.elementId ) );
+        }
     }
 }

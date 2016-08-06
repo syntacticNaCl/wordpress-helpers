@@ -3,8 +3,9 @@
  * through WordPressMediaAttachments or CustomInputAttachments.
  */
 var AttachmentMetaboxViewModel = (function () {
-    function AttachmentMetaboxViewModel(options) {
+    function AttachmentMetaboxViewModel(options, autoBind) {
         var _this = this;
+        if (autoBind === void 0) { autoBind = true; }
         /**
          * The attachment meta box source type, defaults to 'wp'.
          * Available types: 'wp', 'url'
@@ -42,7 +43,9 @@ var AttachmentMetaboxViewModel = (function () {
         // Setup the object.
         this.initialize();
         // Initialize knockout.
-        ko.applyBindings(this, document.getElementById(options.elementId));
+        if (autoBind) {
+            ko.applyBindings(this, document.getElementById(options.elementId));
+        }
     }
     /**
      * Initialize the attachment meta box type.

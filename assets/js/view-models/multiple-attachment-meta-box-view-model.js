@@ -18,7 +18,8 @@ var Attachment = (function () {
     return Attachment;
 }());
 var MultipleAttachmentMetaboxViewModel = (function () {
-    function MultipleAttachmentMetaboxViewModel(data) {
+    function MultipleAttachmentMetaboxViewModel(data, autoBind) {
+        if (autoBind === void 0) { autoBind = true; }
         this.options = ko.observableArray([]);
         // The currently active meta key.
         this.activeKey = ko.observable('');
@@ -26,8 +27,10 @@ var MultipleAttachmentMetaboxViewModel = (function () {
         this.data = data;
         // Initialize metabox.
         this.initialize();
-        // Initialize knockout.
-        ko.applyBindings(this, document.getElementById(data.elementId));
+        if (autoBind) {
+            // Initialize knockout.
+            ko.applyBindings(this, document.getElementById(data.elementId));
+        }
     }
     MultipleAttachmentMetaboxViewModel.prototype.initialize = function () {
         var _this = this;
