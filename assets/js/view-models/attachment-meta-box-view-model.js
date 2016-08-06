@@ -56,5 +56,10 @@ var AttachmentMetaboxViewModel = (function () {
         // Initialize the type.
         this.types[type].initialize();
     };
+    AttachmentMetaboxViewModel.prototype.clear = function () {
+        this.types.url.collection.removeAll();
+        this.types.wp.collection.removeAll();
+        this.types.wp.attachmentIds.removeAll();
+    };
     return AttachmentMetaboxViewModel;
 }());
