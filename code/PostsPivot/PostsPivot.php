@@ -65,7 +65,7 @@ class PostsPivot
     /**
      * Return an array of related post IDs for a given post.
      * @param $postId
-     * @return array
+     * @return array|boolean
      */
     public static function getRelatedPostIds($postId)
     {
