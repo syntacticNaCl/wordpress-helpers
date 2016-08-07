@@ -16,6 +16,9 @@ class AdminScripts
 
         // Validate JS
         wp_enqueue_script('validate-js', WORDPRESS_HELPERS_URL . 'assets/js/lib/validate.min.js');
+
+        // Custom WordPress Helpers class
+        wp_enqueue_script('validate-js', WORDPRESS_HELPERS_URL . 'assets/js/classes/wp-helper.js');
         
         // Moment
         wp_enqueue_script('moment', WORDPRESS_HELPERS_URL . 'assets/js/lib/moment.min.js');
