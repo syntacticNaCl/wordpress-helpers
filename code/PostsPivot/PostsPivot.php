@@ -86,10 +86,16 @@ class PostsPivot
         // Loop through results, determine the post IDs we need to return.
         foreach( $results as $result )
         {
-            $relatedPostIds[] = $postId == $result->id_1 ? $result->id_2 : $result->id_1;
+            $value = (int) $postId == $result->id_1 ? $result->id_2 : $result->id_1;
+
+            if ( 0 !== $value )
+            {
+                $relatedPostIds[] = $value;
+            }
+
         }
 
-        return $relatedPostIds;
+        return empty($relatedPostIds) ? false : $relatedPostIds;
     }
 
     /**
