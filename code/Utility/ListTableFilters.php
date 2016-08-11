@@ -15,6 +15,12 @@ class ListTableFilters
     ];
 
     /**
+     * @var array An array of quick editor columns keys.
+     */
+    protected $quickEditorColumns = [
+    ];
+
+    /**
      * @var array A list of (default) column keys to unset/remove from display.
      */
     protected $unset = [];
@@ -109,7 +115,11 @@ class ListTableFilters
         // Hook custom columns into the QuickEditor.
         foreach( $this->columns as $key => $label )
         {
-            $quickEditor->addColumn($key, $label);
+            // Check if this $key exists in the quick editor columns array.
+            if ( in_array( $key, $this->quickEditorColumns ) )
+            {
+                $quickEditor->addColumn($key, $label);
+            }
         }
     }
 }
