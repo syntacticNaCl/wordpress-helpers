@@ -1,7 +1,5 @@
 <?php
-namespace Zawntech\Gump\PostTypes;
-
-use Zawntech\WordPress\PostTypes\PostTypeModel;
+namespace Zawntech\WordPress\PostTypes;
 
 abstract class PostTypeQuery
 {
