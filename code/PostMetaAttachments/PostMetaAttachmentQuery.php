@@ -57,7 +57,7 @@ class PostMetaAttachmentQuery
             {
                 $output[] = [
                     'value' => $metaValue,
-                    'type' => $metaType
+                    'type' => '' == $metaType ? 'wp' : $metaType
                 ];
             }
         }
