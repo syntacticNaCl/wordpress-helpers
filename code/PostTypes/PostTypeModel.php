@@ -1,7 +1,7 @@
 <?php
-namespace PostTypes;
+namespace Zawntech\WordPress\PostTypes;
 
-class PostTypeModel
+abstract class PostTypeModel
 {
     public $postId;
     public $title;
