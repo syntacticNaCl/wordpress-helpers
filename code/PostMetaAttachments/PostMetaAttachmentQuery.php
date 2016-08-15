@@ -155,6 +155,9 @@ class PostMetaAttachmentQuery
     public static function getAttachmentType($postId, $metaKey)
     {
         $meta = get_post_meta($postId, $metaKey . '_type', true);
+        if ( '' === $meta ) {
+            $meta = 'wp';
+        }
         return false === $meta ? 'wp' : $meta;
     }
 }
