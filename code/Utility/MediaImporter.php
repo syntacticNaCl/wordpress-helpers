@@ -65,7 +65,7 @@ class MediaImporter
 
         $attachment = [
             'post_mime_type' => static::$contentType,
-            'post_title'     => $title || static::$fileName,
+            'post_title'     => $title ?: static::$fileName,
             'post_content'   => '',
             'post_status'    => 'publish'
         ];
