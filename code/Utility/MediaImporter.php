@@ -9,10 +9,18 @@ namespace Zawntech\WordPress\Utility;
 class MediaImporter
 {
     /**
-     * @var
+     * @var string File name, determined after URL response is returned..
      */
     protected static $fileName;
+
+    /**
+     * @var string Mime content type, determined after URL response is returned.
+     */
     protected static $contentType;
+
+    /**
+     * @var string /wp-content/uploads/YYYY/MM/downloaded-file.ext
+     */
     protected static $uploadPath;
 
     /**
@@ -32,9 +40,9 @@ class MediaImporter
         $response = $http->get($url);
 
         // Set file name internally.
-        static::$fileName = preg_replace('/^.+\\\\/', '', $url);
+        static::$fileName = substr( $url, strrpos($url, '/') + 1 );
         static::$contentType = $response['headers']['content-type'];
-        static::$uploadPath = $basePath . '/' . $response['filename'];
+        static::$uploadPath = $basePath . '/' . static::$fileName;
 
         // Store the file.
         file_put_contents( static::$uploadPath, $response['body'] );
@@ -44,6 +52,7 @@ class MediaImporter
     }
 
     /**
+     * Downloads a URL into the WordPress Media Library.
      * @param $url
      * @param null $title
      * @param int $attachTo
