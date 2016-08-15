@@ -8,9 +8,15 @@ namespace Zawntech\WordPress\Utility;
  */
 class MediaImporter
 {
+    /**
+     * @var
+     */
     protected static $fileName;
+    protected static $contentType;
+    protected static $uploadPath;
 
     /**
+     * Downloads a given URL into the current /wp-content/uploads/YYYY/MM folder.
      * @param $url
      * @return string
      */
@@ -25,17 +31,16 @@ class MediaImporter
         // Get URL.
         $response = $http->get($url);
 
-        // File path
-        $path = $basePath . '/' . $response['filename'];
-
         // Set file name internally.
-        static::$fileName = $response['filename'];
+        static::$fileName = preg_replace('/^.+\\\\/', '', $url);
+        static::$contentType = $response['headers']['content-type'];
+        static::$uploadPath = $basePath . '/' . $response['filename'];
 
         // Store the file.
-        file_put_contents( $path, $response['body'] );
+        file_put_contents( static::$uploadPath, $response['body'] );
 
         // Return the upload path.
-        return $path;
+        return static::$uploadPath;
     }
 
     /**
@@ -50,7 +55,7 @@ class MediaImporter
         $uploadPath = static::download($url);
 
         $attachment = [
-            'post_mime_type' => wp_check_filetype($uploadPath)['type'],
+            'post_mime_type' => static::$contentType,
             'post_title'     => $title || static::$fileName,
             'post_content'   => '',
             'post_status'    => 'publish'
