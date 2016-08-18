@@ -1,7 +1,7 @@
 var IOAjax = (function () {
     function IOAjax() {
     }
-    IOAjax.post = function (action, data, cb) {
+    IOAjax.post = function (action, data, success, fail) {
         var postData = {
             action: 'io_' + action
         };
@@ -10,8 +10,12 @@ var IOAjax = (function () {
             postData[key] = item;
         });
         jQuery.post(ajaxurl, postData, function (r) {
-            if (cb) {
-                cb(r);
+            if (success) {
+                success(r);
+            }
+        }).fail(function (r) {
+            if (fail) {
+                fail(r.responseJSON);
             }
         });
     };
@@ -41,15 +45,40 @@ var IOManagerImporter = (function () {
         this.validKey = ko.observable(false);
         this.validUrl = ko.observable(false);
         this.hasFetchedData = ko.observable(false);
+        this.session = {
+            active: ko.observable(false),
+            sessionId: ko.observable(false),
+            remoteUrl: ko.observable(false),
+            securityKey: ko.observable(false),
+            createdAt: ko.observable(false),
+            instanceData: {
+                json: ko.observable(false),
+                postTypes: ko.observable(false),
+                postTypesCount: ko.observable(false),
+                usersCount: ko.observable(false),
+                users: ko.observable(false),
+                siteData: {
+                    admin_email: ko.observable(false),
+                    description: ko.observable(false),
+                    name: ko.observable(false),
+                    url: ko.observable(false),
+                    wpurl: ko.observable(false)
+                }
+            }
+        };
         this.parent = parent;
     }
     IOManagerImporter.prototype.getInstanceData = function () {
+        var _this = this;
         IOAjax.post('get_remote_data', {
             remoteUrl: this.validUrl(),
             remoteSecurityKey: this.remoteSecurityKey(),
             nonce: this.parent.nonce()
         }, function (r) {
-            console.log(r);
+            // Assign session internally.
+            //ko.mapping.fromJS( session );
+            ko.merge.fromJS(_this.session, r);
+            _this.hasFetchedData(true);
         });
     };
     IOManagerImporter.prototype.connect = function () {
@@ -60,26 +89,28 @@ var IOManagerImporter = (function () {
             var curKey_1 = this.remoteSecurityKey(), curUrl_1 = this.remoteUrl();
             // Set busy status.
             this.busy(true);
-            IOAjax.post('can_connect_to_remote', {
+            var success = function (r) {
+                // Clear busy status.
+                _this.busy(false);
+                // Set valid key.
+                _this.validKey(curKey_1);
+                _this.validUrl(curUrl_1);
+                // Set screen to connected
+                _this.screen('connected');
+                // Fetch instance data.
+                _this.getInstanceData();
+            };
+            var fail = function (r) {
+                _this.busy(false);
+                alert(r);
+            };
+            var postData = {
                 remoteUrl: this.remoteUrl(),
                 remoteSecurityKey: this.remoteSecurityKey(),
                 nonce: this.parent.nonce()
-            }, function (r) {
-                // Clear busy status.
-                _this.busy(false);
-                if (true == r.connected) {
-                    // Set valid key.
-                    _this.validKey(curKey_1);
-                    _this.validUrl(curUrl_1);
-                    // Set screen to connected
-                    _this.screen('connected');
-                    // Fetch instance data.
-                    _this.getInstanceData();
-                }
-                else {
-                    alert(r.error);
-                }
-            });
+            };
+            // Perform request.
+            IOAjax.post('can_connect_to_remote', postData, success, fail);
         }
     };
     return IOManagerImporter;

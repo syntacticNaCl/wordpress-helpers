@@ -41,7 +41,7 @@ class FileManager
         // Create the directory if it does not exist.
         if ( ! is_dir( $this->workingDir ) )
         {
-            mkdir( $this->workingDir );
+            mkdir( $this->workingDir, 0777, true );
         }
 
         return $this;

@@ -5,7 +5,7 @@ interface IOManagerOptionsInterface {
 
 class IOAjax
 {
-    static post(action, data, cb)
+    static post(action, data, success, fail?)
     {
         let postData = {
             action: 'io_' + action,
@@ -21,11 +21,35 @@ class IOAjax
             postData,
             function(r)
             {
-                if ( cb ) {
-                    cb(r);
+                if ( success ) {
+                    success(r);
                 }
             }
-        );
+        ).fail((r) => {
+            if ( fail )
+            {
+                fail(r.responseJSON);
+            }
+        });
+    }
+}
+
+interface IOImporterSessionOptions
+{
+    sessionId: string;
+    remoteUrl: string;
+    securityKey: string;
+    createdAt: number;
+    instanceData: {
+        json: string[],
+        postTypes: string[],
+        siteData: {
+            admin_email: string,
+            description: string,
+            name: string,
+            url: string,
+            wpurl: string,
+        }
     }
 }
 
@@ -78,9 +102,35 @@ class IOManagerImporter
             nonce: this.parent.nonce()
         }, (r) =>
         {
-            console.log(r);
+            // Assign session internally.
+            //ko.mapping.fromJS( session );
+            ko.merge.fromJS(this.session, r);
+
+            this.hasFetchedData(true);
         });
     }
+
+    session = {
+        active: ko.observable(false),
+        sessionId: ko.observable(false),
+        remoteUrl: ko.observable(false),
+        securityKey: ko.observable(false),
+        createdAt: ko.observable(false),
+        instanceData: {
+            json: ko.observable(false),
+            postTypes: ko.observable(false),
+            postTypesCount: ko.observable(false),
+            usersCount: ko.observable(false),
+            users: ko.observable(false),
+            siteData: {
+                admin_email: ko.observable(false),
+                description: ko.observable(false),
+                name: ko.observable(false),
+                url: ko.observable(false),
+                wpurl: ko.observable(false)
+            }
+        }
+    };
     
     connect()
     {
@@ -94,37 +144,37 @@ class IOManagerImporter
             // Set busy status.
             this.busy(true);
 
-            IOAjax.post( 'can_connect_to_remote', {
-                remoteUrl: this.remoteUrl(),
-                remoteSecurityKey: this.remoteSecurityKey(),
-                nonce: this.parent.nonce()
-            }, (r) =>
+            let success = (r) =>
             {
                 // Clear busy status.
                 this.busy(false);
 
-                if ( true == r.connected )
-                {
-                    // Set valid key.
-                    this.validKey(curKey);
-                    this.validUrl(curUrl);
+                // Set valid key.
+                this.validKey(curKey);
+                this.validUrl(curUrl);
 
-                    // Set screen to connected
-                    this.screen('connected');
+                // Set screen to connected
+                this.screen('connected');
 
-                    // Fetch instance data.
-                    this.getInstanceData();
-                }
+                // Fetch instance data.
+                this.getInstanceData();
+            };
 
-                // Unable to connect, alert error.
-                else
-                {
-                    alert(r.error);
-                }
-            });
+            let fail = (r) =>
+            {
+                this.busy(false);
+                alert(r);
+            };
+
+            let postData = {
+                remoteUrl: this.remoteUrl(),
+                remoteSecurityKey: this.remoteSecurityKey(),
+                nonce: this.parent.nonce()
+            };
+
+            // Perform request.
+            IOAjax.post( 'can_connect_to_remote', postData, success, fail );
         }
-
-
     }
 }
 

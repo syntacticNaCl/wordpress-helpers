@@ -1,15 +1,28 @@
 <?php
 namespace Zawntech\WordPress\IO\Ajax;
 
-use Zawntech\WordPress\IO\PostDumper;
+use Zawntech\WordPress\IO\IODataDumper;
+use Zawntech\WordPress\IO\SecurityKey;
 
 trait IOAjaxRemoteTrait
 {
+    /**
+     * Determines if a supplied security key is valid.
+     */
+    public function check_security_key()
+    {
+        echo json_encode( SecurityKey::getKey() === $_GET['securityKey'] );
+    }
+
     public function dump_instance_data()
     {
-        $postDumper = new PostDumper();
-        $postDumper->dump();
+        // Make dumper object.
+        $dumper = new IODataDumper();
 
+        // Dump database to json files.
+        $dumper->exportToJson();
+
+        // Print output.
         echo json_encode([
 
             'siteData' => [
@@ -20,7 +33,15 @@ trait IOAjaxRemoteTrait
                 'admin_email' => get_bloginfo('admin_email'),
             ],
 
-            'postTypes' => $postDumper->getPostTypes(),
+            'postTypes' => $dumper->getPostTypes(),
+
+            'postTypesCount' => $dumper->postTypeCount,
+
+            'usersCount' => $dumper->usersCount,
+
+            'users' => $dumper->users,
+
+            'json' => $dumper->getJsonList()
         ]);
     }
 }

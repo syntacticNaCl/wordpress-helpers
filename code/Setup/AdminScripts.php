@@ -14,6 +14,7 @@ class AdminScripts
         wp_enqueue_script('jquery-ui-droppable');
         wp_enqueue_script('jquery-ui-sortable');
 
+        // Underscore and Backbone
         wp_enqueue_script('underscore');
         wp_enqueue_script('backbone');
 
@@ -32,6 +33,9 @@ class AdminScripts
 
         // Knockout JS Mapping Plugin
         wp_enqueue_script('knockout-mapping', WORDPRESS_HELPERS_URL . 'assets/js/lib/knockout.mapping.js');
+
+        // Knockout Merge plugin
+        wp_enqueue_script('knockout-merge', WORDPRESS_HELPERS_URL . 'assets/js/lib/knockout.merge.js');
 
         // Register custom knockout components.
         wp_enqueue_script('zawntech-knockout-components', WORDPRESS_HELPERS_URL. 'assets/js/lib/knockout.components.js');

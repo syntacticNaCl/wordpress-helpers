@@ -19,5 +19,5 @@
 <!-- /ko -->
 
 <!-- ko if: 'export' == mode() -->
-export
+Use the importer for now.
 <!-- /ko -->

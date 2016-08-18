@@ -12,19 +12,6 @@ class IOAjaxHandler
         IOAjaxLocalTrait,
         IOAjaxValidatorTrait;
     
-    /**
-     * Determines if a supplied security key is valid.
-     */
-    public function check_security_key()
-    {
-        echo json_encode( SecurityKey::getKey() === $_GET['securityKey'] );
-    }
-    
-    public function dump_posts()
-    {
-        echo json_encode('t');
-    }
-    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     public function __construct()

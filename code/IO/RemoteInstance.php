@@ -7,7 +7,6 @@ namespace Zawntech\WordPress\IO;
  */
 class RemoteInstance
 {
-
     /**
      * @var \WP_Http
      */
@@ -34,6 +33,7 @@ class RemoteInstance
     protected $connectionError = false;
 
     /**
+     * Get the remote's admin-ajax.php url.
      * @param array $params
      * @return string Return ajax URL.
      */
@@ -189,14 +189,31 @@ class RemoteInstance
         return true;
     }
 
+    /**
+     * @param $action
+     * @param array $params
+     * @return array|\WP_Error
+     */
+    protected function get($action, $params = [])
+    {
+        // Prepare the remote URL for the given action.
+        $remoteUrl = $this->getAjaxUrl($action);
+
+        // If URL parameters are supplied, append them to the request URL.
+        if ( [] !== $params )
+        {
+            $paramsString = http_build_query( $params );
+            $remoteUrl = '&' . $paramsString;
+        }
+
+        // Return the request.
+        return $this->http->get( $remoteUrl );
+    }
 
     public function getInstanceData()
     {
-        // Prepare URL.
-        $url = $this->getAjaxUrl('io_dump_instance_data');
-
         // Perform request.
-        $responseData = $this->http->get($url);
+        $responseData = $this->get('io_dump_instance_data');
 
         // Good response?
         if ( 200 == $responseData['response']['code'] )
