@@ -1,10 +1,25 @@
 <?php
 namespace Zawntech\WordPress\IO;
 
+/**
+ * Class RemoteInstance
+ * @package Zawntech\WordPress\IO
+ */
 class RemoteInstance
 {
+    /**
+     * @var string URL to the remote WordPress instance.
+     */
     protected $url;
+
+    /**
+     * @var string An MD5 string of the remote WordPress instance's IO Manager security key.
+     */
     protected $securityKey;
+
+    /**
+     * @var bool Debug mode enabled?
+     */
     protected $debug = true;
     
     /**
@@ -12,6 +27,18 @@ class RemoteInstance
      */
     protected $connectionError = false;
 
+    /**
+     * @return bool|string
+     */
+    public function getConnectionError()
+    {
+        return $this->connectionError;
+    }
+
+    /**
+     * Determines if the supplied URL and SecurityKey are valid for a remote connection.
+     * @return bool
+     */
     public function canConnect()
     {
         // Instantiate a WP_Http object.
@@ -136,7 +163,12 @@ class RemoteInstance
         // All good!
         return true;
     }
-    
+
+    /**
+     * RemoteInstance constructor.
+     * @param $url
+     * @param $securityKey
+     */
     public function __construct($url, $securityKey)
     {
         $this->url = $url;

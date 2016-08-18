@@ -80,6 +80,12 @@ class FileManager
         return $this->workingDir . '/';
     }
 
+    /**
+     * Get a file from disk.
+     * @param $filename
+     * @param bool $decodeJson
+     * @return array|bool|mixed|object|string
+     */
     public function get($filename, $decodeJson = false)
     {
         // Prepare path to file.
@@ -98,6 +104,9 @@ class FileManager
         return $decodeJson ? json_decode( $data ) : $data;
     }
 
+    /**
+     * FileManager constructor.
+     */
     public function __construct()
     {
         // Initialize working directory.

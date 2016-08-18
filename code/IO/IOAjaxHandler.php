@@ -5,6 +5,9 @@ use Zawntech\WordPress\Utility\Ajax;
 
 class IOAjaxHandler
 {
+    /**
+     * Determines if a supplied security key is valid.
+     */
     public function check_security_key()
     {
         echo json_encode( SecurityKey::getKey() === $_GET['securityKey'] );
@@ -12,7 +15,7 @@ class IOAjaxHandler
     
     public function dump_posts()
     {
-        echo json_encode("hello world");
+        echo json_encode('');
     }
 
     public function update_settings()
@@ -95,7 +98,6 @@ class IOAjaxHandler
         $privateAjaxCalls =[
             'update_settings',
             'reset_security_key',
-            'check_security_key'
         ];
 
         // Loop through defined ajax calls.

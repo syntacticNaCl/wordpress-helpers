@@ -4,7 +4,7 @@ class RemoteInstanceTest extends TestCase
     public function testCanCreateRemoteInstance()
     {
         $url = 'http://wordpress-helpers.wp';
-        $key = 'e20daaf9a0e7b3a7f6d6d66524ab85a1';
+        $key = 'ccb1dba43c861a23cef7c252b4ca6f6f';
         $remote = new \Zawntech\WordPress\IO\RemoteInstance($url, $key);
 
         // Try to connect
