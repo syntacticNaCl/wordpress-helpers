@@ -21,7 +21,7 @@ class PostDumper
     public function getJsonList()
     {
         // Files.
-        $files = array_diff( scandir( $this->files->getPath() ), [ '.', '..'] );
+        $files = array_values( array_diff( scandir( $this->files->getPath() ), [ '.', '..'] ) );
 
         // Loop through files.
         foreach( $files as &$file )

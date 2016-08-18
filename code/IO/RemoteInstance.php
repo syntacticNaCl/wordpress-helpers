@@ -7,6 +7,12 @@ namespace Zawntech\WordPress\IO;
  */
 class RemoteInstance
 {
+
+    /**
+     * @var \WP_Http
+     */
+    protected $http;
+
     /**
      * @var string URL to the remote WordPress instance.
      */
@@ -28,6 +34,33 @@ class RemoteInstance
     protected $connectionError = false;
 
     /**
+     * @param array $params
+     * @return string Return ajax URL.
+     */
+    protected function getAjaxUrl($action = '', $params = [])
+    {
+        // Determine last slash position in the url string.
+        $lastSlashPos = strrpos( $this->url, '/' );
+
+        // Get the URL base.
+        $urlBase = $lastSlashPos > 8 ? substr( $this->url, $lastSlashPos ) : $this->url . '/';
+
+        // Prepare remote admin ajax URL.
+        $adminAjaxUrl = $urlBase . 'wp-admin/admin-ajax.php';
+
+        // Prepare post data.
+        $tokenQuery = [
+            'action' => $action,
+            'securityKey' => $this->securityKey
+        ];
+
+        // Prepare URL string.
+        $url = $adminAjaxUrl . '?' . http_build_query( array_merge( $tokenQuery, $params ) );
+
+        return $url;
+    }
+
+    /**
      * @return bool|string
      */
     public function getConnectionError()
@@ -41,15 +74,12 @@ class RemoteInstance
      */
     public function canConnect()
     {
-        // Instantiate a WP_Http object.
-        $http = new \WP_Http();
-
         /*----------------------------------------------
         | Step 1: Can we access the server?
         \*----------------------------------------------*/
 
         // Perform the request.
-        $responseData = $http->get( $this->url );
+        $responseData = $this->http->get( $this->url );
 
         // Reference the response code.
         $responseCode = $responseData['response']['code'];
@@ -92,7 +122,7 @@ class RemoteInstance
         $adminAjaxUrl = $urlBase . 'wp-admin/admin-ajax.php';
 
         // Perform the request.
-        $responseData = $http->get( $adminAjaxUrl );
+        $responseData = $this->http->get( $adminAjaxUrl );
 
         // Reference the response code.
         $responseCode = $responseData['response']['code'];
@@ -125,16 +155,11 @@ class RemoteInstance
         | Step 3: Can we authorize the security key?
         \*----------------------------------------------*/
 
-        // Prepare post data.
-        $tokenQuery = [
-            'action' => 'io_check_security_key',
-            'securityKey' => $this->securityKey
-        ];
-
-        $url = $adminAjaxUrl . '?' . http_build_query( $tokenQuery );
+        // Get the ajax url.
+        $url = $this->getAjaxUrl('io_check_security_key');
 
         // Perform request.
-        $responseData = $http->post( $url );
+        $responseData = $this->http->post( $url );
 
         // Debug.
         if ( $this->debug )
@@ -164,6 +189,24 @@ class RemoteInstance
         return true;
     }
 
+
+    public function getInstanceData()
+    {
+        // Prepare URL.
+        $url = $this->getAjaxUrl('io_dump_instance_data');
+
+        // Perform request.
+        $responseData = $this->http->get($url);
+
+        // Good response?
+        if ( 200 == $responseData['response']['code'] )
+        {
+            return json_decode( $responseData['body'] );
+        } else {
+            return false;
+        }
+    }
+
     /**
      * RemoteInstance constructor.
      * @param $url
@@ -173,5 +216,6 @@ class RemoteInstance
     {
         $this->url = $url;
         $this->securityKey = $securityKey;
+        $this->http = new \WP_Http;
     }
 }
