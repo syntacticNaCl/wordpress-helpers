@@ -14,6 +14,9 @@ class AdminScripts
         wp_enqueue_script('jquery-ui-droppable');
         wp_enqueue_script('jquery-ui-sortable');
 
+        wp_enqueue_script('underscore');
+        wp_enqueue_script('backbone');
+
         // Validate JS
         wp_enqueue_script('validate-js', WORDPRESS_HELPERS_URL . 'assets/js/lib/validate.min.js');
 

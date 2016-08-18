@@ -1,6 +1,7 @@
 <?php
 namespace Zawntech\WordPress\Setup;
 
+use Zawntech\WordPress\IO\IOManager;
 use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
 use Zawntech\WordPress\PostsPivot\PostsPivotHooks;
@@ -27,6 +28,9 @@ class PluginBootstrapper
 
     public function __construct()
     {
+        // Load IO Manager.
+        new IOManager;
+        
         // Load posts pivoter functionality by instantiating their respective classes.
         new PostsPivotAjaxHandler;
         new PostsPivotHooks;

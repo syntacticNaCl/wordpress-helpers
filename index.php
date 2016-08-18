@@ -39,6 +39,11 @@ define( 'WORDPRESS_HELPERS_DIR', __DIR__ . '/' );
  */
 define( 'WORDPRESS_HELPERS_URL', plugin_dir_url( __FILE__ ) );
 
+/**
+ * Define an options key prefix.
+ */
+define( 'WORDPRESS_HELPERS_OPTIONS_PREFIX', 'wph_' );
+
 // Enqueue admin javascripts.
 new \Zawntech\WordPress\Setup\AdminScripts;
 
