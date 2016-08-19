@@ -28,7 +28,8 @@ class IOAjaxHandler
             'update_settings',
             'reset_security_key',
             'can_connect_to_remote',
-            'get_remote_data'
+            'get_remote_data',
+            'download_remote_resource'
         ];
 
         // Loop through defined ajax calls.

@@ -1,39 +1,3 @@
-interface IOManagerOptionsInterface {
-    settingsNonce: string;
-    securityKey: string;
-}
-
-class IOAjax
-{
-    static post(action, data, success, fail?)
-    {
-        let postData = {
-            action: 'io_' + action,
-        };
-
-        // Merge data.
-        _.each( data, (item, key) => {
-            postData[key] = item;
-        });
-
-        jQuery.post(
-            ajaxurl,
-            postData,
-            function(r)
-            {
-                if ( success ) {
-                    success(r);
-                }
-            }
-        ).fail((r) => {
-            if ( fail )
-            {
-                fail(r.responseJSON);
-            }
-        });
-    }
-}
-
 interface IOImporterSessionOptions
 {
     sessionId: string;
@@ -53,11 +17,21 @@ interface IOImporterSessionOptions
     }
 }
 
+interface IOManagerOptionsInterface {
+    settingsNonce: string;
+    securityKey: string;
+}
+
 class IOManagerImporter
 {
+    options: IOManagerImportOptions;
+
+    main = new IOImporter(this);
+
     constructor(parent)
     {
         this.parent = parent;
+        this.options = new IOManagerImportOptions;
     }
 
     screen = ko.observable('connect');
@@ -71,7 +45,7 @@ class IOManagerImporter
     {
         if ( false != this.validKey() )
         {
-
+            return false;
         }
 
         if ( 32 != this.remoteSecurityKey().length )
@@ -131,7 +105,7 @@ class IOManagerImporter
             }
         }
     };
-    
+
     connect()
     {
         // No valid key yet, let's test it.
@@ -175,46 +149,5 @@ class IOManagerImporter
             // Perform request.
             IOAjax.post( 'can_connect_to_remote', postData, success, fail );
         }
-    }
-}
-
-class IOManagerViewModel
-{
-    nonce = ko.observable('');
-    securityKey = ko.observable('');
-    mode = ko.observable('import');
-    resetting = ko.observable(false);
-
-    importer = new IOManagerImporter(this);
-
-    updateSettings() {
-        IOAjax.post('update_settings', {
-            nonce: this.nonce(),
-            settings: {
-                securityKey: this.securityKey()
-            }
-        }, (r) => {
-            this.securityKey(r);
-        });
-    }
-
-    resetKey() {
-        this.resetting(true);
-        this.securityKey('Resetting...');
-        IOAjax.post('reset_security_key', {
-            nonce: this.nonce(),
-            settings: {
-                securityKey: this.securityKey()
-            }
-        }, (r) => {
-            this.resetting(false);
-            this.securityKey(r);
-        });
-    }
-
-    constructor(options: IOManagerOptionsInterface)
-    {
-        this.nonce( options.settingsNonce );
-        this.securityKey( options.securityKey );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Zawntech\WordPress\IO\Ajax;
 
+use Zawntech\WordPress\IO\FileManager;
 use Zawntech\WordPress\IO\IOSession;
 use Zawntech\WordPress\IO\RemoteInstance;
 use Zawntech\WordPress\IO\SecurityKey;
@@ -74,7 +75,6 @@ trait IOAjaxLocalTrait
         
         // Make remote session.
         $session = new IOSession();
-        $session->start();
 
         // Get instance data.
         $instanceData = $remote->getInstanceData();
@@ -83,8 +83,26 @@ trait IOAjaxLocalTrait
         $session->instanceData = $instanceData;
         $session->remoteUrl = $url;
         $session->securityKey = $key;
+        $session->save();
 
         // Send the session back to the client.
         Ajax::jsonResponse( $session );
+    }
+    
+    public function download_remote_resource()
+    {
+        // Get resource url that we need to download.
+        $resourceUrl = $_POST['url'];
+
+        // Load session
+        $session = new IOSession( $_POST['sessionId'] );
+
+        // File manager.
+        $files = new FileManager;
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
+
+        $newUrl = $files->download( $resourceUrl );
+
+        Ajax::jsonResponse( $newUrl );
     }
 }

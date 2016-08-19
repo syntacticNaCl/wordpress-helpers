@@ -105,6 +105,31 @@ class FileManager
     }
 
     /**
+     * Download a URL to the working directory.
+     * @param $url
+     * @param bool $customFilename
+     * @return string
+     */
+    public function download($url, $customFilename = false)
+    {
+        // Make HTTP
+        $http = new \WP_Http();
+
+        // Get URL.
+        $response = $http->get($url);
+
+        // Set file name internally.
+        $filename = substr( $url, strrpos($url, '/') + 1 );
+        $path = $this->getPath() . '/' . ( $customFilename ?: $filename );
+
+        // Store the file.
+        file_put_contents( $path, $response['body'] );
+
+        // Return the upload path.
+        return $path;
+    }
+
+    /**
      * FileManager constructor.
      */
     public function __construct()

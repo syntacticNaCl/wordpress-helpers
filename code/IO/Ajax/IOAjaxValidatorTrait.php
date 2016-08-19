@@ -2,6 +2,7 @@
 namespace Zawntech\WordPress\IO\Ajax;
 
 use Zawntech\WordPress\IO\SecurityKey;
+use Zawntech\WordPress\Utility\Ajax;
 
 trait IOAjaxValidatorTrait
 {
@@ -18,15 +19,13 @@ trait IOAjaxValidatorTrait
         // Is the security key specified in the request string?
         if ( ! isset( $_GET[$this->securityKeyLabel] ) )
         {
-            echo json_encode('Error: No security key supplied.');
-            exit;
+            Ajax::jsonError('Error: No security key supplied.');
         }
 
         // Is the access key valid?
         if ( $_GET[$this->securityKeyLabel] !== SecurityKey::getKey() )
         {
-            echo json_encode('Error: Invalid security key supplied.');
-            exit;
+            Ajax::jsonError('Error: Invalid security key supplied.');
         }
     }
 
@@ -38,15 +37,13 @@ trait IOAjaxValidatorTrait
         // Verify that a nonce was supplied.
         if ( ! isset( $_POST['nonce'] ) )
         {
-            echo json_encode('Error: No security nonce supplied.');
-            exit;
+            Ajax::jsonError('Error: No security nonce supplied.');
         }
 
         // Verify the supplied nonce is correct.
         if ( ! wp_verify_nonce( $_POST['nonce'], 'io-update-settings' ) )
         {
-            echo json_encode('Error: Invalid security key supplied.');
-            exit;
+            Ajax::jsonError('Error: Invalid security key supplied.');
         }
     }
 }
