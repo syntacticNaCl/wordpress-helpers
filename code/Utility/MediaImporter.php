@@ -56,7 +56,7 @@ class MediaImporter
      * @param $url
      * @param null $title
      * @param int $attachTo
-     * @return int
+     * @return integer WordPress Post ID.
      */
     public static function import($url, $title=null, $attachTo=0)
     {

@@ -1,7 +1,3 @@
-
-
-
-
 class IOManagerViewModel
 {
     nonce = ko.observable('');

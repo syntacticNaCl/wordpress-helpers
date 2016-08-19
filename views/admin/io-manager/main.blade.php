@@ -26,12 +26,16 @@
 
 <script>
     // Print preload data.
-    var ioManagerPreload = {!! json_encode( $options ) !!};
+    var ioManagerPreload = {!! json_encode( $options ) !!},
+        ioManager;
 
     // On jQuery ready.
     jQuery(document).ready(function()
     {
+        // Instantiate class.
+        ioManager = new IOManagerViewModel( ioManagerPreload );
+
         // Bind knockout.
-        ko.applyBindings( new IOManagerViewModel( ioManagerPreload ), document.getElementById( 'io-settings-wrapper' ) );
+        ko.applyBindings( ioManager, document.getElementById( 'io-settings-wrapper' ) );
     });
 </script>

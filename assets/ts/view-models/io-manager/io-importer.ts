@@ -51,9 +51,165 @@ class IOImporter
         IOAjax.post('download_remote_resource', postData, success, fail );
     }
 
-    processJsonFiles()
+    /**
+     * Executes an array of functions.
+     * @param pool An array of functions.
+     * @param done Callback function when chain is complete.
+     */
+    doFunctions(pool, done)
     {
-        
+        // Get the first function.
+        let a = pool.shift();
+
+        // Do the function.
+        (() => {
+            a();
+
+            if ( 0 != pool.length ) {
+                return this.doFunctions(pool, done);
+            } else {
+                return done();
+            }
+        })();
+    }
+
+    processPosts(postIds: string[], postType, onSuccess?, onFail?, done?)
+    {
+        // Extract a postID from the postIDs array.
+        let postId = postIds.shift();
+
+        let postData = {
+            postId: postId,
+            sessionId: this.parent.session.sessionId,
+            key: this.parent.remoteSecurityKey,
+            nonce: this.parent.parent.nonce(),
+            postType: postType
+        };
+
+        let success = (r) =>
+        {
+            // If a download success callback is defined, run it.
+            if ( onSuccess ) {
+                onSuccess(r);
+            }
+
+            IOProgressBar.bump();
+
+            if ( 0 == postIds.length )
+            {
+
+                if ( done )
+                {
+                    return done();
+                } else {
+                    return;
+                }
+
+            } else {
+                return this.processPosts( postIds, postType, onSuccess, onFail, done );
+            }
+        };
+
+        let fail = (r) =>
+        {
+            // If a download success callback is defined, run it.
+            if ( onFail ) {
+                onFail(r);
+            }
+
+            alert(`${r} Failed to process post.`);
+
+            IOProgressBar.bump();
+        };
+
+        // Download
+        IOAjax.post('import_post', postData, success, fail );
+    }
+
+    processPostTypes(type, then?)
+    {
+        let postData = {
+            nonce: this.parent.parent.nonce(),
+            sessionId: this.parent.session.sessionId(),
+            postType: type
+        };
+
+        let success = (r) =>
+        {
+            let count = r.count,
+                postIds = r.postIds,
+                postType = r.postType;
+
+            // Reset the progress bar.
+            IOProgressBar.reset( count );
+            IOProgressBar.message( `Processing ${type}s...` );
+
+            let onSuccess = () => {
+
+            };
+
+            let onFail = () => {
+
+            };
+
+            let onDone = () => {
+                IOProgressBar.logOutput(`${count} ${type}${count>1?'s':''} processed`);
+
+                if ( then ) {
+                    then();
+                }
+            };
+
+            // Process attachments.
+            this.processPosts( postIds, postType, onSuccess, onFail, onDone );
+        };
+
+        let fail = (r) => {
+
+        };
+
+        IOAjax.post( 'get_post_manifest', postData, success, fail );
+    }
+
+    processPostTypeSequence(sequence)
+    {
+        if ( 0 !== sequence.length )
+        {
+            // Get first in sequence.
+            let postType = sequence.shift();
+
+            this.processPostTypes( postType, () =>
+            {
+                if ( sequence.length > 0 ) {
+                    return this.processPostTypeSequence( sequence );
+                } else {
+                    alert('Sequence complete!');
+                }
+            });
+        }
+    }
+
+    processData()
+    {
+        // Function sequence.
+        let functions = [];
+
+        if ( -1 !== this.parent.options.selectedPostTypes().indexOf('attachment') )
+        {
+            functions.push( 'attachment' );
+        }
+
+        _.each( this.parent.options.selectedPostTypes(), (postType) =>
+        {
+            // Skip attachments.
+            if ( 'attachment' == postType ) {
+                return;
+            }
+
+            functions.push( postType );
+        });
+
+        this.processPostTypeSequence(functions);
     }
 
     downloadJsonFiles(then?)
@@ -76,7 +232,7 @@ class IOImporter
         };
 
         let done = () => {
-            IOProgressBar.logOutput(`${IOProgressBar.total} data files downloaded from remote server!.`);
+            IOProgressBar.logOutput(`${IOProgressBar.total} data files downloaded from remote server`);
             if ( then ) { then() };
         };
 
@@ -93,11 +249,11 @@ class IOImporter
             importerScreen.fadeIn(() =>
             {
                 // Download JSON files, then...
-                this.downloadJsonFiles(
-
-                    // Process JSON files, then...
-                    this.processJsonFiles
-                );
+                this.downloadJsonFiles(() =>
+                {
+                    // Run importer.
+                    this.processData()
+                });
             });
         });
     }

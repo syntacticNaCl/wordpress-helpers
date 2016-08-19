@@ -28,6 +28,11 @@ class IOProgressBar
             total = IOProgressBar.total,
             percentage = (i/total)*100;
 
+        // If total is zero, override.
+        if ( 0 == total ) {
+            percentage = 0;
+        }
+
         IOProgressBar.bar().css( 'width', percentage + '%' );
         IOProgressBar.updateCounter();
     }

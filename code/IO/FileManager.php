@@ -81,6 +81,15 @@ class FileManager
     }
 
     /**
+     * @param $filename
+     * @return bool
+     */
+    public function exists($filename)
+    {
+        return file_exists( $this->getPath() . $filename );
+    }
+
+    /**
      * Get a file from disk.
      * @param $filename
      * @param bool $decodeJson

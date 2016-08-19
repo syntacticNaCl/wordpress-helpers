@@ -2,6 +2,7 @@
 namespace Zawntech\WordPress\IO\Ajax;
 
 use Zawntech\WordPress\IO\FileManager;
+use Zawntech\WordPress\IO\IOPostImporter;
 use Zawntech\WordPress\IO\IOSession;
 use Zawntech\WordPress\IO\RemoteInstance;
 use Zawntech\WordPress\IO\SecurityKey;
@@ -88,7 +89,10 @@ trait IOAjaxLocalTrait
         // Send the session back to the client.
         Ajax::jsonResponse( $session );
     }
-    
+
+    /**
+     * Downloads a remote data file.
+     */
     public function download_remote_resource()
     {
         // Get resource url that we need to download.
@@ -104,5 +108,86 @@ trait IOAjaxLocalTrait
         $newUrl = $files->download( $resourceUrl );
 
         Ajax::jsonResponse( $newUrl );
+    }
+
+    /**
+     * Returns an array of count, postIds, and postType.
+     */
+    public function get_post_manifest()
+    {
+        // Load session
+        $session = new IOSession( $_POST['sessionId'] );
+
+        // File manager.
+        $files = new FileManager;
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
+
+        // Post type
+        $postType = $_POST['postType'];
+
+        // Load posts data.
+        $posts = $files->get( "{$postType}-posts.json", true );
+
+        // Prepare an array of post IDs.
+        $postIds = [];
+
+        // Extract post IDs.
+        foreach( $posts as $post ) {
+            $postIds[] = $post->ID;
+        }
+
+        // Return count and post type.
+        Ajax::jsonResponse([
+            'count' => count($posts),
+            'postIds' => $postIds,
+            'postType' => $postType
+        ]);
+    }
+    
+    public function import_post()
+    {
+        // Load session
+        $session = new IOSession( $_POST['sessionId'] );
+
+        // Reference the post ID.
+        $postId = $_POST['postId'];
+
+        // File manager.
+        $files = new FileManager;
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
+
+        // Post type
+        $postType = $_POST['postType'];
+
+        // Load posts data.
+        $posts = $files->get( "{$postType}-posts.json", true );
+        $postsMeta = $files->get( "{$postType}-posts-meta.json", true );
+
+        // Declare place holders.
+        $thePost = null;
+        $thePostMeta = [];
+
+        // Extract post.
+        foreach( $posts as $post )
+        {
+            if ( $post->ID == $postId )
+            {
+                $thePost = $post;
+            }
+        }
+
+        // Extract post meta.
+        foreach( $postsMeta as $meta )
+        {
+            if ( $postId == $meta->post_id )
+            {
+                $thePostMeta[] = $meta;
+            }
+        }
+
+        // Create post importer.
+        $importer = new IOPostImporter( $session->sessionId, $thePost, $thePostMeta );
+
+        Ajax::jsonResponse( $importer );
     }
 }
