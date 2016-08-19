@@ -52,7 +52,7 @@ trait IOAjaxLocalTrait
 
         // Make remote.
         $remote = new RemoteInstance($url, $key);
-
+        
         $canConnect = $remote->canConnect();
         $error = $remote->getConnectionError();
 

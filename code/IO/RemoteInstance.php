@@ -94,6 +94,7 @@ class RemoteInstance
             ]);
         }
 
+
         // This check is local to my network, because AT&T hijacks my requests. Neat.
         if ( false !== strpos( $responseData['body'], 'http://dnserrorassist.att.net' ) )
         {
@@ -150,6 +151,7 @@ class RemoteInstance
             $this->connectionError = 'Invalid response from admin-ajax.php, expecting "0"';
             return false;
         }
+
 
         /*----------------------------------------------
         | Step 3: Can we authorize the security key?
@@ -231,6 +233,11 @@ class RemoteInstance
      */
     public function __construct($url, $securityKey)
     {
+        if( substr($url, -1) === '/')
+        {
+            $url = substr($url, 0, -1);
+        }
+
         $this->url = $url;
         $this->securityKey = $securityKey;
         $this->http = new \WP_Http;

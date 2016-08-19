@@ -12,7 +12,7 @@ class RemoteInstanceTest extends TestCase
     public function setUp()
     {
         $url = 'http://wordpress-helpers.wp';
-        $key = '84c5a635a68e9d0a4487787f7261ae4e';
+        $key = '7b52b222358253fa4ddb18952f8b84ac';
         $remote = new \Zawntech\WordPress\IO\RemoteInstance($url, $key);
 
         $this->remoteUrl = $url;
@@ -28,6 +28,6 @@ class RemoteInstanceTest extends TestCase
 
     public function testCanGetRemoteInstanceData()
     {
-        dump( $this->remote->getInstanceData() );
+        //dump( $this->remote->getInstanceData() );
     }
 }

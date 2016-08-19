@@ -97,9 +97,6 @@ class IOPostImporter
 
     protected function updateFeaturedImage()
     {
-        // Check if the post has a featured image.
-        $hasFeaturedImage = false;
-
         // Loop through this post's meta items.
         foreach( $this->postMeta as $item )
         {
@@ -107,16 +104,10 @@ class IOPostImporter
             if ( '_thumbnail_id' === $item->meta_key )
             {
                 // Old post id.
-                $oldId = $item->meta_value;
+                $oldId = (int) $item->meta_value;
 
                 // Now we need to determine what the new post ID is.
                 $oldFileName = "{$oldId}.json";
-
-                // If the file does not exist, continue.
-                if ( ! $this->files->exists( $oldFileName ) )
-                {
-                    continue;
-                }
 
                 // Pull data from file.
                 $data = $this->files->get( $oldFileName, true );
@@ -152,6 +143,8 @@ class IOPostImporter
 
         // Set state.
         $this->hasImportedPost = true;
+
+        $this->updateFeaturedImage();
     }
     
     public function import()
@@ -179,33 +172,69 @@ class IOPostImporter
 
     protected function load()
     {
-        // If the json file exists.
-        if ( $this->files->exists( $this->filename ) )
+        // Verify that the file exists before trying to load it.
+        if ( ! $this->fileExists() )
         {
-            // Load the data.
-            $data = $this->files->get( $this->filename, true );
-
-            // Assign data internally from file.
-            $this->hasImportedPost = $data->hasImportedPost;
+            throw new \Exception('Cannot load post json file, does not exist.');
         }
+
+        // Load the data.
+        $data = $this->files->get( $this->filename, true );
+
+        // Assign data internally from file.
+        $this->hasImportedPost = $data->hasImportedPost;
+        $this->postData = $data->postData;
+        $this->postMeta = $data->postMeta;
+        $this->newPostId = $data->newPostId;
+        $this->originalPostParent = $data->originalPostParent;
     }
-    
-    public function __construct($sessionId, $postData, $postMetaData)
+
+    public function viaSession($sessionId, $postData, $postMetaData)
     {
         // Assign post data and meta internally.
         $this->postData = $postData;
         $this->postMeta = $postMetaData;
         $this->originalPostId = (int) $postData->ID;
 
-        // Make a file manager.
-        $this->files = new FileManager;
-
         // Root to /uploads/io-data/import/{sessionId}/posts/{postId}.json
         $this->files->useCustomPath("io-data/import/{$sessionId}/posts");
         $this->filename = "{$this->originalPostId}.json";
+    }
 
-        // Run import.
-        $this->import();
+    /**
+     * @return bool Does the {postId}.json file exist?
+     */
+    public function fileExists()
+    {
+        return file_exists( $this->getPathToFile() );
+    }
+
+    /**
+     * @return string Absolute path to {postId}.json.
+     */
+    public function getPathToFile()
+    {
+        return $this->files->getPath() . $this->filename;
+    }
+
+    public function viaPostId($sessionId, $postId)
+    {
+        // Assign original post ID internally.
+        $this->originalPostId = $postId;
+
+        // Load from file.
+        $this->filename = "{$this->originalPostId}.json";
+
+        // Root to /uploads/io-data/import/{sessionId}/posts/{postId}.json
+        $this->files->useCustomPath("io-data/import/{$sessionId}/posts");
+
+        $this->load();
+    }
+
+    public function __construct()
+    {
+        // Make a file manager.
+        $this->files = new FileManager;
     }
 
     public function addAction($message)
@@ -213,9 +242,11 @@ class IOPostImporter
         $this->importActions[] = $message;
     }
 
+    protected $shouldImport = true;
+
     protected function shouldImport()
     {
-        return true;
+        return $this->shouldImport;
     }
 
     /**

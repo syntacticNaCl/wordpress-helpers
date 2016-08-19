@@ -24,7 +24,7 @@ class PostDumperTest extends TestCase
         // The list should not be empty.
         $this->assertNotEmpty( $jsonList );
 
-        dump( $jsonList );
+        //dump( $jsonList );
     }
 
     public function testCanPurgeJsonFiles()
