@@ -26,6 +26,7 @@ class IOMediaData
     public $mime;
 
     public $postId;
+    public $newPostId;
 
     public function __construct(IOPostImporter $importer)
     {
@@ -33,6 +34,7 @@ class IOMediaData
         $this->importer = $importer;
 
         $this->postId = $importer->originalPostId;
+        $this->newPostId = $importer->newPostId;
 
         $this->url = $importer->postData->guid;
         $this->mime = $importer->postData->post_mime_type;

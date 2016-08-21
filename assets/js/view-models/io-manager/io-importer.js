@@ -143,9 +143,11 @@ var IOImporter = (function () {
     IOImporter.prototype.processData = function () {
         // Function sequence.
         var functions = [];
+        // Do attachments first.
         if (-1 !== this.parent.options.selectedPostTypes().indexOf('attachment')) {
             functions.push('attachment');
         }
+        // Loop through remaining post types.
         _.each(this.parent.options.selectedPostTypes(), function (postType) {
             // Skip attachments.
             if ('attachment' == postType) {

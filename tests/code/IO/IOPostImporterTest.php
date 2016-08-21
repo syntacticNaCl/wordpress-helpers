@@ -14,7 +14,7 @@ class IOPostImporterTest extends TestCase
     public function setUp()
     {
         // Session ID.
-        $sessionId = '818bc4c08690f09b5147d9d546578d9f';
+        $sessionId = 'c4dcab711a8e1e2edda25bb0c04e0f76';
 
         // Load the session.
         $session = new \Zawntech\WordPress\IO\IOSession($sessionId);
@@ -117,5 +117,11 @@ class IOPostImporterTest extends TestCase
         
         // Update featured image.
         $this->importer->updateFeaturedImage();
+    }
+
+    public function testCanImportPost()
+    {
+        $this->importer->viaPostId('c4dcab711a8e1e2edda25bb0c04e0f76', 325);
+        $this->importer->import();
     }
 }

@@ -186,7 +186,9 @@ trait IOAjaxLocalTrait
         }
 
         // Create post importer.
-        $importer = new IOPostImporter( $session->sessionId, $thePost, $thePostMeta );
+        $importer = new IOPostImporter();
+        $importer->viaSession( $session->sessionId, $thePost, $thePostMeta );
+        $importer->import();
 
         Ajax::jsonResponse( $importer );
     }

@@ -145,16 +145,13 @@ class IOPostImporter
         
         // Get this post's featured image.
         $featuredImage = $this->getFeaturedImageData();
-        
-        // Import the media to this WordPress instance.
-        $newMediaId = MediaImporter::import( $featuredImage->url, $featuredImage->title );
 
-        // The post ID for which we need to reassign the featured image.
-        $postId = $this->originalPostId;
+        // Import the media to this WordPress instance.
+        $newMediaId = $featuredImage->newPostId;
 
         // Update the post thumbnail, which will assign the newly
         // download media to this post as its featured image.
-        return set_post_thumbnail( $postId, $newMediaId );
+        update_post_meta( $this->newPostId, '_thumbnail_id', $newMediaId );
     }
 
     /**
@@ -172,6 +169,80 @@ class IOPostImporter
         return new IOMediaData( $imagePost );
     }
 
+    /**
+     * Scans the post content for attachment URLs from the old site,
+     * and replaces them with new URLs from the new site.
+     * @param $postContent
+     * @return mixed
+     */
+    public function replaceInlineMediaUrls($postContent)
+    {
+        // Load attachment data.
+        $attachments = $this->files->get( '../attachment-posts.json', true );
+
+        /**
+         * Possible attachments.
+         * @var IOMediaData[]
+         */
+        $mediaData = [];
+
+        // Loop through attachment data.
+        foreach( $attachments as $attachment )
+        {
+            $file = $this->files->get( "{$attachment->ID}.json", true );
+            $importer = new IOPostImporter();
+            $importer->viaPostId( $this->sessionId, $attachment->ID );
+            $mediaData[] = new IOMediaData( $importer );
+        }
+
+        // Loop through attachments.
+        foreach( $mediaData as $data )
+        {
+            // Declare a default state for whether or not this media item is present
+            // in the inline content.
+            $foundInContent = false;
+            $foundUrl = null;
+
+            /** @var $data IOMediaData */
+            // Loop through URLs.
+            foreach( $data->urls as $url )
+            {
+                // We found a URL that we need to replace.
+                if ( false !== strpos( $postContent, $url ) )
+                {
+                    // Loop through mediaData items.
+                    foreach( $mediaData as $item )
+                    {
+                        /** @var $item IOMediaData */
+                        if ( in_array( $url, $item->urls ) )
+                        {
+                            // Default to post thumbnail.
+                            $mediaKey = 'post-thumbnail';
+
+                            // Determine which media key to use.
+                            foreach( $item->urls as $key => $curUrl )
+                            {
+                                $mediaKey = $key;
+                            }
+                            
+                            // New URL.
+                            $newUrl = wp_get_attachment_image_src( $item->newPostId, $mediaKey );
+                            $newUrl = $newUrl[0];
+
+                            // Replace the URL.
+                            if ( $newUrl )
+                            {
+                                $postContent = str_replace( $url, $newUrl, $postContent );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $postContent;
+    }
+
     protected function importPost()
     {
         // Set original post parent.
@@ -183,19 +254,18 @@ class IOPostImporter
             'post_name' => $this->postData->post_name,
             'post_date' => $this->postData->post_date,
             'post_date_gmt' => $this->postData->post_date_gmt,
-            'post_content' => $this->postData->post_content,
+            'post_content' => $this->replaceInlineMediaUrls( $this->postData->post_content ),
             'post_excerpt' => $this->postData->post_excerpt,
             'post_password' => $this->postData->post_password,
             'menu_order' => $this->postData->menu_order,
             'post_mime_type' => $this->postData->post_mime_type,
             'post_type' => $this->postData->post_type,
-            'post_status' => $this->postData->post_status
+            'post_status' => $this->postData->post_status,
+            'post_author' => get_current_user_id() ?: 1
         ]);
 
         // Set state.
         $this->hasImportedPost = true;
-
-        $this->updateFeaturedImage();
     }
     
     public function import()
@@ -219,6 +289,8 @@ class IOPostImporter
 
         // Set post meta.
         $this->importPostMeta();
+
+        $this->updateFeaturedImage();
     }
 
     protected function load()

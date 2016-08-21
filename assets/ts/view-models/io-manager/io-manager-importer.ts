@@ -36,8 +36,8 @@ class IOManagerImporter
 
     screen = ko.observable('connect');
     parent: IOManagerViewModel;
-    remoteUrl = ko.observable('http://wordpress-helpers.wp');
-    remoteSecurityKey = ko.observable('84c5a635a68e9d0a4487787f7261ae4e');
+    remoteUrl = ko.observable('http://projection.wp');
+    remoteSecurityKey = ko.observable('051faf3cff5dbe2c26de0d416e69a9b1');
     busy = ko.observable(false);
 
     // Determines if the client can connect to remote.

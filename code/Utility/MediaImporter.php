@@ -76,8 +76,7 @@ class MediaImporter
 
         // Insert the attachment.
         $attach_id = wp_insert_attachment( $attachment, $uploadPath, $attachTo );
-
-
+        
         // Generate the metadata for the attachment, and update the database record.
         $attach_data = wp_generate_attachment_metadata( $attach_id, $uploadPath );
 

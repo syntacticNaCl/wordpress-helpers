@@ -194,11 +194,13 @@ class IOImporter
         // Function sequence.
         let functions = [];
 
+        // Do attachments first.
         if ( -1 !== this.parent.options.selectedPostTypes().indexOf('attachment') )
         {
             functions.push( 'attachment' );
         }
 
+        // Loop through remaining post types.
         _.each( this.parent.options.selectedPostTypes(), (postType) =>
         {
             // Skip attachments.
