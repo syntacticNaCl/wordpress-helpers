@@ -117,9 +117,9 @@ class IOImporter
                 onFail(r);
             }
 
-            alert(`${r} Failed to process post.`);
+            console.log(`${r} Failed to process post, unshifting element to try again.`);
 
-            IOProgressBar.bump();
+            postIds.unshift( postId );
 
             if ( 0 == postIds.length )
             {

@@ -90,8 +90,8 @@ var IOImporter = (function () {
             if (onFail) {
                 onFail(r);
             }
-            alert(r + " Failed to process post.");
-            IOProgressBar.bump();
+            console.log(r + " Failed to process post, unshifting element to try again.");
+            postIds.unshift(postId);
             if (0 == postIds.length) {
                 if (done) {
                     return done();
