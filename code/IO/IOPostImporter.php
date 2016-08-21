@@ -195,15 +195,12 @@ class IOPostImporter
             $mediaData[] = new IOMediaData( $importer );
         }
 
+        /** @var $data IOMediaData */
+        /** @var $item IOMediaData */
+
         // Loop through attachments.
         foreach( $mediaData as $data )
         {
-            // Declare a default state for whether or not this media item is present
-            // in the inline content.
-            $foundInContent = false;
-            $foundUrl = null;
-
-            /** @var $data IOMediaData */
             // Loop through URLs.
             foreach( $data->urls as $url )
             {
@@ -213,7 +210,7 @@ class IOPostImporter
                     // Loop through mediaData items.
                     foreach( $mediaData as $item )
                     {
-                        /** @var $item IOMediaData */
+                        // Filter by URLs.
                         if ( in_array( $url, $item->urls ) )
                         {
                             // Default to post thumbnail.
