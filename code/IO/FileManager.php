@@ -113,6 +113,18 @@ class FileManager
         return $decodeJson ? json_decode( $data ) : $data;
     }
 
+    protected $cacheFileNames = [];
+
+    public function getCacheFilename($filename)
+    {
+        if ( ! isset( $this->cacheFileNames[ $filename ] ) )
+        {
+            $this->cacheFileNames[$filename] = md5($filename) . '-cache.json';
+        }
+
+        return $this->cacheFileNames[$filename];
+    }
+    
     /**
      * Download a URL to the working directory.
      * @param $url

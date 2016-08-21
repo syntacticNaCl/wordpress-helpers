@@ -20,7 +20,7 @@ class Logger
     /**
      * @var string Absolute path to /storage/logs
      */
-    protected $basePath = WORDPRESS_HELPERS_DIR . '/storage/logs';
+    protected $basePath = '/storage/logs';
 
     /**
      * @var string Path to logger directory.
@@ -64,7 +64,7 @@ class Logger
      */
     protected function getLoggerDirectoryPath()
     {
-        return $this->basePath . '/' . $this->loggerDir;
+        return WORDPRESS_HELPERS_DIR . $this->basePath . '/' . $this->loggerDir;
     }
 
     public static function log($data)

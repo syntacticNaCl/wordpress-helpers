@@ -23,13 +23,18 @@ class MultipleAttachmentMetaBox extends MetaBoxAbstract
     ];
 
     protected $defaultType = 'wp';
+
     protected $defaultMultiple = true;
 
-    protected $viewModel = [
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/custom-url-attachments-view-model.js',
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/wordpress-media-attachments-view-model.js',
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/multiple-attachment-meta-box-view-model.js'
-    ];
+    protected function setViewModels()
+    {
+        $this->viewModel = [
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/custom-url-attachments-view-model.js',
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/wordpress-media-attachments-view-model.js',
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/multiple-attachment-meta-box-view-model.js'
+        ];
+    }
+
 
     protected function getAttachmentSource($postId, $metaKey)
     {

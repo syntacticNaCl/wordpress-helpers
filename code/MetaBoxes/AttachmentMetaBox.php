@@ -15,14 +15,14 @@ class AttachmentMetaBox extends MetaBoxAbstract
      */
     protected $metaKey;
 
-    /**
-     * @var string Public URL to posts pivoter view model javascript.
-     */
-    protected $viewModel = [
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/custom-url-attachments-view-model.js',
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/wordpress-media-attachments-view-model.js',
-        WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box-view-model.js'
-    ];
+    protected function setViewModels()
+    {
+        $this->viewModel = [
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/custom-url-attachments-view-model.js',
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box/wordpress-media-attachments-view-model.js',
+            WORDPRESS_HELPERS_URL . 'assets/js/view-models/attachment-meta-box-view-model.js'
+        ];
+    }
 
     /**
      * @var bool

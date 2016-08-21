@@ -92,6 +92,17 @@ var IOImporter = (function () {
             }
             alert(r + " Failed to process post.");
             IOProgressBar.bump();
+            if (0 == postIds.length) {
+                if (done) {
+                    return done();
+                }
+                else {
+                    return;
+                }
+            }
+            else {
+                return _this.processPosts(postIds, postType, onSuccess, onFail, done);
+            }
         };
         // Download
         IOAjax.post('import_post', postData, success, fail);

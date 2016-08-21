@@ -3,8 +3,8 @@ var IOManagerImporter = (function () {
         var _this = this;
         this.main = new IOImporter(this);
         this.screen = ko.observable('connect');
-        this.remoteUrl = ko.observable('http://projection.wp');
-        this.remoteSecurityKey = ko.observable('051faf3cff5dbe2c26de0d416e69a9b1');
+        this.remoteUrl = ko.observable('http://nationalglazingsolutions.com');
+        this.remoteSecurityKey = ko.observable('e986083caa6beef62c4b440422224078');
         this.busy = ko.observable(false);
         // Determines if the client can connect to remote.
         this.canConnect = ko.pureComputed(function () {

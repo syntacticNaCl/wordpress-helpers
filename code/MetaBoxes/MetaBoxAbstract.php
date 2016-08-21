@@ -65,6 +65,11 @@ class MetaBoxAbstract
         }
     }
 
+    protected function setViewModels()
+    {
+        // extend me.
+    }
+
     /**
      * @param $postId
      * @return mixed|string|void
@@ -123,6 +128,9 @@ class MetaBoxAbstract
 
     public function _render($post)
     {
+        // Define set view models.
+        $this->setViewModels();
+
         // Is a view model assigned to this meta box?
         if ( $this->viewModel )
         {

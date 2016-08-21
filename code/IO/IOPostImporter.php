@@ -221,15 +221,28 @@ class IOPostImporter
                             {
                                 $mediaKey = $key;
                             }
-                            
-                            // New URL.
-                            $newUrl = wp_get_attachment_image_src( $item->newPostId, $mediaKey );
-                            $newUrl = $newUrl[0];
 
-                            // Replace the URL.
-                            if ( $newUrl )
+                            // If 'none' is the URL media key, then this is a non image style attachment.
+                            if ( 'none' === $mediaKey )
                             {
+                                // Get the new URL.
+                                $newUrl = wp_get_attachment_url( $item->newPostId );
+
+                                // Replace URL.
                                 $postContent = str_replace( $url, $newUrl, $postContent );
+                            }
+
+                            else
+                            {
+                                // New URL.
+                                $newUrl = wp_get_attachment_image_src( $item->newPostId, $mediaKey );
+                                $newUrl = $newUrl[0];
+
+                                // Replace the URL.
+                                if ( $newUrl )
+                                {
+                                    $postContent = str_replace( $url, $newUrl, $postContent );
+                                }
                             }
                         }
                     }
@@ -264,6 +277,12 @@ class IOPostImporter
         // Set state.
         $this->hasImportedPost = true;
     }
+
+    public function importTerms()
+    {
+        $importer = new IOTaxonomyImporter($this->sessionId, $this->postData->ID );
+        $importer->insertTerms();
+    }
     
     public function import()
     {
@@ -286,6 +305,7 @@ class IOPostImporter
 
         // Set post meta.
         $this->importPostMeta();
+
 
         $this->updateFeaturedImage();
     }

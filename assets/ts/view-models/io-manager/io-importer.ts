@@ -120,6 +120,20 @@ class IOImporter
             alert(`${r} Failed to process post.`);
 
             IOProgressBar.bump();
+
+            if ( 0 == postIds.length )
+            {
+
+                if ( done )
+                {
+                    return done();
+                } else {
+                    return;
+                }
+
+            } else {
+                return this.processPosts( postIds, postType, onSuccess, onFail, done );
+            }
         };
 
         // Download
