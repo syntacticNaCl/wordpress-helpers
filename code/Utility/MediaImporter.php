@@ -60,6 +60,10 @@ class MediaImporter
      */
     public static function import($url, $title=null, $attachTo=0)
     {
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+
         // Download the URL.
         $uploadPath = static::download($url);
 
@@ -73,7 +77,6 @@ class MediaImporter
         // Insert the attachment.
         $attach_id = wp_insert_attachment( $attachment, $uploadPath, $attachTo );
 
-        require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
         // Generate the metadata for the attachment, and update the database record.
         $attach_data = wp_generate_attachment_metadata( $attach_id, $uploadPath );

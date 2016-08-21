@@ -10,9 +10,9 @@ use Zawntech\WordPress\Utility\MediaImporter;
 class IOPostImporter
 {
     /**
-     * @var array An array describing actions taken by the importer.
+     * @var string This post importer's session ID.
      */
-    public $importActions = [];
+    public $sessionId;
 
     /**
      * @var int The original WordPress Post ID.
@@ -53,6 +53,38 @@ class IOPostImporter
      * @var bool
      */
     public $hasImportedPost = false;
+    
+    // Does the post have a featured image?
+    public function getFeaturedImagePostId()
+    {
+        // Featured image key.
+        $key = '_thumbnail_id';
+        
+        // If there's no post meta, return false.
+        if ( empty( $this->postMeta ) )
+        {
+            return false;
+        }
+        
+        // Loop through post meta.
+        foreach( $this->postMeta as $item )
+        {
+            // Match meta key.
+            if ( $key === $item->meta_key )
+            {
+                // Get the thumbnail ID.
+                $thumbnailId = (int) $item->meta_value;
+            }
+        }
+        
+        // No thumbnail found.
+        if ( ! isset( $thumbnailId ) ) {
+            return false;
+        }
+
+        // Return the thumbnail ID.
+        return $thumbnailId;
+    }
 
     /**
      * Import this post as an attachment.
@@ -95,30 +127,49 @@ class IOPostImporter
         }
     }
 
-    protected function updateFeaturedImage()
+    /**
+     * @return bool
+     */
+    public function hasFeaturedImage()
     {
-        // Loop through this post's meta items.
-        foreach( $this->postMeta as $item )
+        return $this->getFeaturedImagePostId() !== false;
+    }
+
+    public function updateFeaturedImage()
+    {
+        // Do nothing if this post has no featured image.
+        if ( ! $this->hasFeaturedImage() )
         {
-            // If '_thumbnail_id' is set then we need to update its ID to the new value.
-            if ( '_thumbnail_id' === $item->meta_key )
-            {
-                // Old post id.
-                $oldId = (int) $item->meta_value;
-
-                // Now we need to determine what the new post ID is.
-                $oldFileName = "{$oldId}.json";
-
-                // Pull data from file.
-                $data = $this->files->get( $oldFileName, true );
-
-                // Get the new post ID from the data.
-                $newAttachmentId = $data->newPostId;
-
-                // Update the featured image.
-                update_post_meta( $this->newPostId, '_thumbnail_id', $newAttachmentId );
-            }
+            return;
         }
+        
+        // Get this post's featured image.
+        $featuredImage = $this->getFeaturedImageData();
+        
+        // Import the media to this WordPress instance.
+        $newMediaId = MediaImporter::import( $featuredImage->url, $featuredImage->title );
+
+        // The post ID for which we need to reassign the featured image.
+        $postId = $this->originalPostId;
+
+        // Update the post thumbnail, which will assign the newly
+        // download media to this post as its featured image.
+        return set_post_thumbnail( $postId, $newMediaId );
+    }
+
+    /**
+     * @return IOMediaData
+     */
+    public function getFeaturedImageData()
+    {
+        // Get the featured image post ID.
+        $imagePostId = $this->getFeaturedImagePostId();
+
+        // Load the image data.
+        $imagePost = new IOPostImporter();
+        $imagePost->viaPostId( $this->sessionId, $imagePostId );
+
+        return new IOMediaData( $imagePost );
     }
 
     protected function importPost()
@@ -195,6 +246,7 @@ class IOPostImporter
         $this->postData = $postData;
         $this->postMeta = $postMetaData;
         $this->originalPostId = (int) $postData->ID;
+        $this->sessionId = $sessionId;
 
         // Root to /uploads/io-data/import/{sessionId}/posts/{postId}.json
         $this->files->useCustomPath("io-data/import/{$sessionId}/posts");
@@ -217,8 +269,17 @@ class IOPostImporter
         return $this->files->getPath() . $this->filename;
     }
 
+    /**
+     * Loads the post via the JSON file stored at {sessionId}/posts/{postId}.json.
+     * @param $sessionId
+     * @param $postId
+     * @throws \Exception
+     */
     public function viaPostId($sessionId, $postId)
     {
+        // Assign the session ID internally.
+        $this->sessionId = $sessionId;
+
         // Assign original post ID internally.
         $this->originalPostId = $postId;
 
@@ -228,6 +289,7 @@ class IOPostImporter
         // Root to /uploads/io-data/import/{sessionId}/posts/{postId}.json
         $this->files->useCustomPath("io-data/import/{$sessionId}/posts");
 
+        // Load data from json file.
         $this->load();
     }
 
@@ -235,11 +297,6 @@ class IOPostImporter
     {
         // Make a file manager.
         $this->files = new FileManager;
-    }
-
-    public function addAction($message)
-    {
-        $this->importActions[] = $message;
     }
 
     protected $shouldImport = true;

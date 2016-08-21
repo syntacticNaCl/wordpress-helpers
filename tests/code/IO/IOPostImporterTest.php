@@ -69,4 +69,53 @@ class IOPostImporterTest extends TestCase
         $this->assertInstanceOf( stdClass::class, $this->importer->postData );
         $this->assertTrue( is_array( $this->importer->postMeta ) );
     }
+
+    public function testCanGetThePostsFeaturedImagePostId()
+    {
+        // Define a post id.
+        $postId = 2;
+
+        // Load importer via post id.
+        $this->importer->viaPostId($this->session->sessionId, $postId);
+
+        $postId = $this->importer->getFeaturedImagePostId();
+
+        // Has post id?
+        $this->assertGreaterThan( 0, $postId );
+
+        $this->log( $postId );
+    }
+
+    public function testCanGetTheFeaturedPostImageData()
+    {
+        // Define a post id.
+        $postId = 2;
+
+        // Load importer via post id.
+        $this->importer->viaPostId($this->session->sessionId, $postId);
+
+        // Get post data.
+        $featuredImageData = $this->importer->getFeaturedImageData();
+
+        // Did we get out data?
+        $this->assertNotEmpty( $featuredImageData->postId );
+        $this->assertNotEmpty( $featuredImageData->mime );
+        $this->assertNotEmpty( $featuredImageData->url );
+        $this->assertNotEmpty( $featuredImageData->urls );
+    }
+    
+    public function testCanUpdateFeaturedImage()
+    {
+        // Define a post id.
+        $postId = 2;
+
+        // Load importer via post id.
+        $this->importer->viaPostId($this->session->sessionId, $postId);
+
+        // Get post data.
+        $featuredImageData = $this->importer->getFeaturedImageData();
+        
+        // Update featured image.
+        $this->importer->updateFeaturedImage();
+    }
 }
