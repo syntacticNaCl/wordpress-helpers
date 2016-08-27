@@ -9,17 +9,26 @@ A collection of custom WordPress extensions and HTML widgets by Zawntech.
 This plugin must be installed to the must-use plugins directory, ```wp-content/mu-plugins```, by default, so that 
 the WordPress extensions provided by this package are loaded *before* regular plugins.
 
-Currently, composer assets must be installed manually.
+Currently, composer packages must be installed manually via the ```composer install``` command from the installation
+directory. An exception will be thrown if composer packages are not found at runtime.
+
+## Goal
+
+The goal of this package is to provide a set of extensible web assets that expedite WordPress development, reducing
+code overhead for common data modelling tasks in WordPress. 
 
 ## Features
 
-+ Custom, non-colliding implementation of Twitter Bootstrap hooked into WordPress administration screens.
++ A highly customizable SASS Bootstrap configuration integration hooked into WordPress administration screens.
++ Adds the ability to relate posts types in a 1:1, non-hierarchical via a new posts_pivot database table; think post 
+  types as taxonomies.
++ A modularized view system utilizing [Laravel's](https://laravel.com/) with a hierarchical template inheritance model
+  that can be hooked or overridden from plugins and themes.
 + Extensible PHP classes wrapping various WordPress functions and methods for easily implementing or hooking:
   + custom post types
+  + post meta
   + metaboxes
-  + quick editor
-  + eloquent post meta
-+ Adds the ability to relate posts types in a 1-1, non-hierarchical via a new posts_pivot database table.
++ A custom input/output module (in progress)
 
 ## PHP Classes
 

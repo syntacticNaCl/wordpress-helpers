@@ -5,6 +5,7 @@ use Zawntech\WordPress\IO\IOManager;
 use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
 use Zawntech\WordPress\PostsPivot\PostsPivotHooks;
+use Zawntech\WordPress\Utility\View;
 
 /**
  * A utility class for installing and bootstrapping the WordPress helper plugin.
@@ -24,6 +25,15 @@ class PluginBootstrapper
             // Install the posts pivot table.
             PostsPivot::install();
         }
+    }
+
+    /**
+     * Register the default views path.
+     */
+    public function registerViewsPath()
+    {
+        // Register the directory.
+        View::addViewDirectory( WORDPRESS_HELPERS_DIR . '/view' );
     }
 
     public function __construct()
