@@ -42,10 +42,12 @@ class PluginBootstrapper
 
         // Load IO Manager.
         new IOManager;
-        
+
+        // Hook posts pivot.
+        new PostsPivotHooks;
+
         // Load posts pivoter functionality by instantiating their respective classes.
         new PostsPivotAjaxHandler;
-        new PostsPivotHooks;
 
         // Do nothing if not administrator screen.
         if ( ! is_admin() ) {

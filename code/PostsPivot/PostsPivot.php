@@ -99,6 +99,39 @@ class PostsPivot
     }
 
     /**
+     * Recursively get related post IDs.
+     * @param $postId
+     * @param $finalPostType string The desired related post type
+     * @param array $throughPostTypes The list of post types through which to iterate
+     * @return array
+     */
+    public static function getRelatedPostIdsThroughPostType($postId, $finalPostType, $throughPostTypes = ['post'])
+    {
+        // Declare post IDs.
+        $postIds = [];
+
+        // Iterate through post types.
+        while( ! empty( $throughPostTypes ) )
+        {
+            // Get first post type item.
+            $postType = array_shift( $throughPostTypes );
+
+            // Get todolist IDs
+            $postIds = PostsPivot::getRelatedPostIdsByPostType($postId, $postType);
+
+            // No post IDs, so break loop.
+            if ( empty( $postIds ) ) {
+                break;
+            }
+
+            // Update post ID.
+            $postId = $postIds[0];
+        }
+
+        return $postIds;
+    }
+
+    /**
      * @param $postId
      * @param string $postType
      * @return array
