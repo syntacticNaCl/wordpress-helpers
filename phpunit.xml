@@ -11,6 +11,7 @@
     <testsuites>
         <testsuite name="WordPress Helpers Plugin Tests">
             <directory suffix="Test.php">./tests</directory>
+            <exclude>./tests/code/IO</exclude>
         </testsuite>
     </testsuites>
     <filter>

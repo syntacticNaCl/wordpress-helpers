@@ -5,6 +5,7 @@ use Zawntech\WordPress\IO\IOManager;
 use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
 use Zawntech\WordPress\PostsPivot\PostsPivotHooks;
+use Zawntech\WordPress\PostsPivot\PostsUsersPivot;
 use Zawntech\WordPress\Utility\View;
 
 /**
@@ -24,6 +25,13 @@ class PluginBootstrapper
         {
             // Install the posts pivot table.
             PostsPivot::install();
+        }
+
+        // Check if the posts users pivot table is installed.
+        if ( ! PostsUsersPivot::isInstalled() )
+        {
+            // Install the post users pivot table.
+            PostsUsersPivot::install();
         }
     }
 

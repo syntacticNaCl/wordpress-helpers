@@ -2,7 +2,7 @@
 
 A collection of custom WordPress extensions and HTML widgets by Zawntech.
 
-**Currently in initial development. API subject to change until a release is tagged.**
+**Currently in initial development, mostly undocumented. API subject to change until a release is tagged.**
 
 ### Installation
 
@@ -29,6 +29,8 @@ code overhead for common data modelling tasks in WordPress.
   + post meta
   + metaboxes
 + A custom input/output module (in progress)
++ An attachment relationship implementation that associates attachments through a unique meta key. For example
+  if you wanted to implement an image gallery to a post type.
 
 ## PHP Classes
 

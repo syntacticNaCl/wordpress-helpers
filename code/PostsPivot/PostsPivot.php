@@ -48,8 +48,6 @@ class PostsPivot
 
         // Install table.
         $wpdb->query( $sql );
-
-
     }
 
     /**
@@ -110,6 +108,12 @@ class PostsPivot
         // Declare post IDs.
         $postIds = [];
 
+        // If $throughPostTypes is a string, convert to array.
+        if ( is_string( $throughPostTypes ) )
+        {
+            $throughPostTypes = [$throughPostTypes];
+        }
+
         // Iterate through post types.
         while( ! empty( $throughPostTypes ) )
         {
@@ -117,7 +121,7 @@ class PostsPivot
             $postType = array_shift( $throughPostTypes );
 
             // Get todolist IDs
-            $postIds = PostsPivot::getRelatedPostIdsByPostType($postId, $postType);
+            $postIds = PostsPivot::getRelatedPostIdsByPostType( $postId, $postType );
 
             // No post IDs, so break loop.
             if ( empty( $postIds ) ) {
