@@ -1,5 +1,6 @@
 <?php
 namespace Zawntech\WordPress\IO;
+use Zawntech\WordPress\PostsPivot\PostsPivot;
 
 /**
  * Extracts data from a WordPress instance.
@@ -195,6 +196,7 @@ class IODataDumper
         $this->dumpTable( $this->wpdb->term_relationships, 'term-relationships.json' );
         $this->dumpTable( $this->wpdb->term_taxonomy, 'term-taxonomy.json' );
         $this->dumpTable( $this->wpdb->options, 'options.json' );
+        $this->dumpTable( $this->wpdb->base_prefix . PostsPivot::TABLE_NAME, 'posts_pivot.json' );
         $this->dumpUsers();
         $this->dumpTable( $this->wpdb->usermeta, 'user-meta.json' );
         $this->dumpPosts();

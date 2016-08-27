@@ -6,6 +6,7 @@ use Zawntech\WordPress\IO\IOPostImporter;
 use Zawntech\WordPress\IO\IOSession;
 use Zawntech\WordPress\IO\RemoteInstance;
 use Zawntech\WordPress\IO\SecurityKey;
+use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\Utility\Ajax;
 
 /**
@@ -143,9 +144,77 @@ trait IOAjaxLocalTrait
             'postType' => $postType
         ]);
     }
+
+    public function get_post_pivots()
+    {
+        // Load session
+        $session = new IOSession( $_POST['sessionId'] );
+
+        // File manager.
+        $files = new FileManager;
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
+
+        // Post type
+        $postType = $_POST['postType'];
+
+        // Load posts data.
+        $data = $files->get( "posts_pivot.json", true );
+
+        // Return count and post type.
+        Ajax::jsonResponse( $data );
+    }
+
+    public function process_post_pivot()
+    {
+        // Load session
+        $session = new IOSession( $_POST['sessionId'] );
+
+        // Reference the post ID.
+        $pivotData = $_POST['pivot'];
+
+        $id1 = $pivotData['id_1'];
+        $id2 = $pivotData['id_2'];
+
+        $post1 = null;
+        $post2 = null;
+
+        // File manager.
+        $files = new FileManager;
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
+
+        // Post type
+        $postType = $_POST['postType'];
+
+        // Load posts data.
+        $posts = $files->get( "{$postType}-posts.json", true );
+        $postsMeta = $files->get( "{$postType}-posts-meta.json", true );
+
+        // Declare place holders.
+        $thePost = null;
+        $thePostMeta = [];
+
+        // Extract post.
+        foreach( $posts as $post )
+        {
+            if ( $post->ID == $id1 )
+            {
+                $post1 = $post;
+            }
+            if ( $post->ID == $id2 ) {
+                $post2 = $post;
+            }
+        }
+
+        // Attach the new post ids.
+        PostsPivot::attach( $post1->newPostId, $post2->newPostId );
+
+        // Return response.
+        Ajax::jsonResponse( true );
+    }
     
     public function import_post()
     {
+
         // Load session
         $session = new IOSession( $_POST['sessionId'] );
 
@@ -167,6 +236,7 @@ trait IOAjaxLocalTrait
         $thePost = null;
         $thePostMeta = [];
 
+
         // Extract post.
         foreach( $posts as $post )
         {
@@ -184,7 +254,7 @@ trait IOAjaxLocalTrait
                 $thePostMeta[] = $meta;
             }
         }
-
+        
         // Create post importer.
         $importer = new IOPostImporter();
         $importer->viaSession( $session->sessionId, $thePost, $thePostMeta );

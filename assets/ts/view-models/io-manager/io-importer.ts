@@ -117,7 +117,7 @@ class IOImporter
                 onFail(r);
             }
 
-            console.log(`${r} Failed to process post, unshifting element to try again.`);
+            console.log(`Failed to process post id: ${postId}, unshifting element to try again.`);
 
             postIds.unshift( postId );
 
@@ -185,6 +185,49 @@ class IOImporter
         IOAjax.post( 'get_post_manifest', postData, success, fail );
     }
 
+    processPostPivots(pivot, then?)
+    {
+
+    }
+
+
+    processPostPivotSequence(sequence)
+    {
+
+        // There are more items in sequence.
+        if ( 0 !== sequence.length )
+        {
+            // Get first in sequence.
+            let pivotData = sequence.shift();
+
+            let success = (r) => {
+                IOProgressBar.bump();
+                // Move to next in sequence.
+                return this.processPostPivotSequence( sequence );
+            };
+
+            let fail = (r) => {
+                IOProgressBar.bump();
+                return this.processPostPivotSequence( sequence );
+            };
+
+            let postData = {
+                nonce: this.parent.parent.nonce(),
+                sessionId: this.parent.session.sessionId(),
+                pivot: pivotData
+            };
+
+            // Do request.
+            IOAjax.post( 'process_post_pivot', postData, success, fail );
+        }
+
+        // Sequence is complete.
+        else
+        {
+            alert('All done!');
+        }
+    }
+
     processPostTypeSequence(sequence)
     {
         if ( 0 !== sequence.length )
@@ -197,10 +240,39 @@ class IOImporter
                 if ( sequence.length > 0 ) {
                     return this.processPostTypeSequence( sequence );
                 } else {
-                    alert('Sequence complete!');
+                    // Move onto post pivots.
+                    return this.getPostPivotData();
                 }
             });
         }
+    }
+
+
+    getPostPivotData()
+    {
+        let success = (r) => {
+
+            let count = r.length,
+                data = r;
+
+            // Reset the progress bar.
+            IOProgressBar.reset( count );
+            IOProgressBar.message( `Processing post pivot data...` );
+
+            // Process the returned post pivot data.
+            this.processPostPivots(r);
+        };
+
+        let fail = () => {
+        };
+
+        let postData = {
+            nonce: this.parent.parent.nonce(),
+            sessionId: this.parent.session.sessionId(),
+        };
+
+        // Get post pivot data.
+        IOAjax.post( 'get_post_pivots', postData, success, fail );
     }
 
     processData()

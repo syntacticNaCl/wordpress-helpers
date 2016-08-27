@@ -37,7 +37,9 @@ class MediaImporter
         $http = new \WP_Http();
 
         // Get URL.
-        $response = $http->get($url);
+        $response = $http->get($url, [
+            'timeout' => 300
+        ]);
 
         // Set file name internally.
         static::$fileName = substr( $url, strrpos($url, '/') + 1 );

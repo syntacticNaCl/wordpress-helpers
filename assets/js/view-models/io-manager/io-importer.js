@@ -90,7 +90,7 @@ var IOImporter = (function () {
             if (onFail) {
                 onFail(r);
             }
-            console.log(r + " Failed to process post, unshifting element to try again.");
+            console.log("Failed to process post id: " + postId + ", unshifting element to try again.");
             postIds.unshift(postId);
             if (0 == postIds.length) {
                 if (done) {
@@ -136,6 +136,35 @@ var IOImporter = (function () {
         };
         IOAjax.post('get_post_manifest', postData, success, fail);
     };
+    IOImporter.prototype.processPostPivots = function (pivot, then) {
+    };
+    IOImporter.prototype.processPostPivotSequence = function (sequence) {
+        var _this = this;
+        // There are more items in sequence.
+        if (0 !== sequence.length) {
+            // Get first in sequence.
+            var pivotData = sequence.shift();
+            var success = function (r) {
+                IOProgressBar.bump();
+                // Move to next in sequence.
+                return _this.processPostPivotSequence(sequence);
+            };
+            var fail = function (r) {
+                IOProgressBar.bump();
+                return _this.processPostPivotSequence(sequence);
+            };
+            var postData = {
+                nonce: this.parent.parent.nonce(),
+                sessionId: this.parent.session.sessionId(),
+                pivot: pivotData
+            };
+            // Do request.
+            IOAjax.post('process_post_pivot', postData, success, fail);
+        }
+        else {
+            alert('All done!');
+        }
+    };
     IOImporter.prototype.processPostTypeSequence = function (sequence) {
         var _this = this;
         if (0 !== sequence.length) {
@@ -146,10 +175,30 @@ var IOImporter = (function () {
                     return _this.processPostTypeSequence(sequence);
                 }
                 else {
-                    alert('Sequence complete!');
+                    // Move onto post pivots.
+                    return _this.getPostPivotData();
                 }
             });
         }
+    };
+    IOImporter.prototype.getPostPivotData = function () {
+        var _this = this;
+        var success = function (r) {
+            var count = r.length, data = r;
+            // Reset the progress bar.
+            IOProgressBar.reset(count);
+            IOProgressBar.message("Processing post pivot data...");
+            // Process the returned post pivot data.
+            _this.processPostPivots(r);
+        };
+        var fail = function () {
+        };
+        var postData = {
+            nonce: this.parent.parent.nonce(),
+            sessionId: this.parent.session.sessionId()
+        };
+        // Get post pivot data.
+        IOAjax.post('get_post_pivots', postData, success, fail);
     };
     IOImporter.prototype.processData = function () {
         // Function sequence.

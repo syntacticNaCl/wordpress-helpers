@@ -306,7 +306,6 @@ class IOPostImporter
         // Set post meta.
         $this->importPostMeta();
 
-
         $this->updateFeaturedImage();
     }
 

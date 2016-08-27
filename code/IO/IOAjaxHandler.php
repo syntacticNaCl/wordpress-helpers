@@ -31,7 +31,9 @@ class IOAjaxHandler
             'get_remote_data',
             'download_remote_resource',
             'get_post_manifest',
-            'import_post'
+            'import_post',
+            'get_post_pivots',
+            'process_post_pivot',
         ];
 
         // Loop through defined ajax calls.
