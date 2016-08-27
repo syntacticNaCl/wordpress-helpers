@@ -33,11 +33,13 @@ class PluginBootstrapper
     public function registerViewsPath()
     {
         // Register the directory.
-        View::addViewDirectory( WORDPRESS_HELPERS_DIR . '/view' );
+        View::addViewDirectory( WORDPRESS_HELPERS_DIR . '/views' );
     }
 
     public function __construct()
     {
+        $this->registerViewsPath();
+
         // Load IO Manager.
         new IOManager;
         
