@@ -185,15 +185,8 @@ class IOImporter
         IOAjax.post( 'get_post_manifest', postData, success, fail );
     }
 
-    processPostPivots(pivot, then?)
-    {
-
-    }
-
-
     processPostPivotSequence(sequence)
     {
-
         // There are more items in sequence.
         if ( 0 !== sequence.length )
         {
@@ -227,7 +220,7 @@ class IOImporter
             alert('All done!');
         }
     }
-
+    
     processPostTypeSequence(sequence)
     {
         if ( 0 !== sequence.length )
@@ -245,6 +238,11 @@ class IOImporter
                 }
             });
         }
+
+        else {
+            // Move onto post pivots.
+            return this.getPostPivotData();
+        }
     }
 
 
@@ -260,7 +258,7 @@ class IOImporter
             IOProgressBar.message( `Processing post pivot data...` );
 
             // Process the returned post pivot data.
-            this.processPostPivots(r);
+            return this.processPostPivotSequence(r);
         };
 
         let fail = () => {

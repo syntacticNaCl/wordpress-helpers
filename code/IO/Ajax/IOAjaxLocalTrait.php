@@ -180,30 +180,14 @@ trait IOAjaxLocalTrait
 
         // File manager.
         $files = new FileManager;
-        $files->useCustomPath( 'io-data/import/' . $session->sessionId );
 
-        // Post type
-        $postType = $_POST['postType'];
+        // Set file base to {session}/posts
+        $files->useCustomPath( 'io-data/import/' . $session->sessionId . '/posts' );
 
         // Load posts data.
-        $posts = $files->get( "{$postType}-posts.json", true );
-        $postsMeta = $files->get( "{$postType}-posts-meta.json", true );
+        $post1 = $files->get( "{$id1}.json", true );
+        $post2 = $files->get( "{$id2}.json", true );
 
-        // Declare place holders.
-        $thePost = null;
-        $thePostMeta = [];
-
-        // Extract post.
-        foreach( $posts as $post )
-        {
-            if ( $post->ID == $id1 )
-            {
-                $post1 = $post;
-            }
-            if ( $post->ID == $id2 ) {
-                $post2 = $post;
-            }
-        }
 
         // Attach the new post ids.
         PostsPivot::attach( $post1->newPostId, $post2->newPostId );

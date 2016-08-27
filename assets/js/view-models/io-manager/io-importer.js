@@ -136,8 +136,6 @@ var IOImporter = (function () {
         };
         IOAjax.post('get_post_manifest', postData, success, fail);
     };
-    IOImporter.prototype.processPostPivots = function (pivot, then) {
-    };
     IOImporter.prototype.processPostPivotSequence = function (sequence) {
         var _this = this;
         // There are more items in sequence.
@@ -180,6 +178,10 @@ var IOImporter = (function () {
                 }
             });
         }
+        else {
+            // Move onto post pivots.
+            return this.getPostPivotData();
+        }
     };
     IOImporter.prototype.getPostPivotData = function () {
         var _this = this;
@@ -189,7 +191,7 @@ var IOImporter = (function () {
             IOProgressBar.reset(count);
             IOProgressBar.message("Processing post pivot data...");
             // Process the returned post pivot data.
-            _this.processPostPivots(r);
+            return _this.processPostPivotSequence(r);
         };
         var fail = function () {
         };

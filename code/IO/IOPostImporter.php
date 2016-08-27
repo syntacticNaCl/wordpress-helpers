@@ -303,9 +303,13 @@ class IOPostImporter
                 break;
         }
 
+        // Set post terms.
+        $this->importTerms();
+
         // Set post meta.
         $this->importPostMeta();
 
+        // Assign the featured image.
         $this->updateFeaturedImage();
     }
 
