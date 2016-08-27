@@ -44,9 +44,6 @@ class View
         // Instantiate class.
         if ( null === static::$instance )
         {
-            // Set default views path.
-            static::$views = [WORDPRESS_HELPERS_DIR . '/views'];
-
             static::$instance = new static;
 
             // An array of absolute paths, each containing views.
