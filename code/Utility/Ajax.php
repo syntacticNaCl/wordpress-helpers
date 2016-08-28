@@ -16,6 +16,7 @@ class Ajax
 
     public static function jsonResponse($data, $statusCode=200)
     {
+        static::setHeaders();
         static::setResponseCode( $statusCode );
         echo json_encode( $data );
         exit;

@@ -8,6 +8,11 @@
   @import "lib/bootstrap-datetime-picker/bootstrap-datetimepicker-build";
 }
 
+// Hide WPBS on load, then show via javascript.
+.wpbs {
+  display: none;
+}
+
 .posts-pivot-meta-box
 {
   // Colors the background on attached post pivot panels.
@@ -17,3 +22,4 @@
 }
 
 @import "admin/attachment-meta-box";
+@import "admin/meta-boxes/post-users-pivot";

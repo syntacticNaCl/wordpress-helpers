@@ -19,11 +19,6 @@ class PostsPivotMetaBox extends MetaBoxAbstract
     protected $relatedType;
 
     /**
-     * @var string Public URL to posts pivoter view model javascript.
-     */
-    protected $viewModel = WORDPRESS_HELPERS_URL . 'assets/js/view-models/posts-pivoter-meta-box-view-model.js';
-
-    /**
      * @var bool If true, then the meta box will show an option for automatically creating and relating posts of
      * the related type. If false, the option does not appear.
      */
@@ -131,7 +126,10 @@ class PostsPivotMetaBox extends MetaBoxAbstract
     {
         // Verify the extending class is correctly defined.
         $this->validateClass();
-        
+
+        // Set view model.
+        $this->viewModel = WORDPRESS_HELPERS_URL . 'assets/js/view-models/posts-pivoter-meta-box-view-model.js';
+
         // Register the meta box (hooks to post type defined in $this->postType).
         add_action( 'add_meta_boxes', [$this, 'register'] );
     }

@@ -1,0 +1,30 @@
+.post-users-pivot-metabox {
+  h3 {
+    font-size: 21px;
+  }
+
+  p {
+    margin-bottom: 3px;
+  }
+
+  .available-users {
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 4px;
+  }
+
+  .user {
+    text-align: center;
+    padding: 5px;
+  }
+
+  .user-selected {
+    background-color: rgba(112, 235, 0, 0.37);
+  }
+
+  small.user-type {
+    top: 3px;
+    position: relative;
+    color: #b9b9b9;
+    font-style: italic;
+  }
+}

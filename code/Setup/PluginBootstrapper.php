@@ -6,6 +6,7 @@ use Zawntech\WordPress\PostsPivot\PostsPivot;
 use Zawntech\WordPress\PostsPivot\PostsPivotAjaxHandler;
 use Zawntech\WordPress\PostsPivot\PostsPivotHooks;
 use Zawntech\WordPress\PostsPivot\PostsUsersPivot;
+use Zawntech\WordPress\PostsPivot\PostUsersPivotAjaxHandler;
 use Zawntech\WordPress\Utility\View;
 
 /**
@@ -56,6 +57,7 @@ class PluginBootstrapper
 
         // Load posts pivoter functionality by instantiating their respective classes.
         new PostsPivotAjaxHandler;
+        new PostUsersPivotAjaxHandler;
 
         // Do nothing if not administrator screen.
         if ( ! is_admin() ) {

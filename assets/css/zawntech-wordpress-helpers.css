@@ -7270,6 +7270,9 @@
   .wpbs .input-group.date .input-group-addon {
     cursor: pointer; }
 
+.wpbs {
+  display: none; }
+
 .posts-pivot-meta-box .attached {
   background-color: rgba(255, 213, 5, 0.22); }
 
@@ -7295,5 +7298,28 @@
   padding: 10px;
   background-color: rgba(255, 217, 83, 0.2);
   border: dashed 1px rgba(0, 0, 0, 0.33); }
+
+.post-users-pivot-metabox h3 {
+  font-size: 21px; }
+
+.post-users-pivot-metabox p {
+  margin-bottom: 3px; }
+
+.post-users-pivot-metabox .available-users {
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 4px; }
+
+.post-users-pivot-metabox .user {
+  text-align: center;
+  padding: 5px; }
+
+.post-users-pivot-metabox .user-selected {
+  background-color: rgba(112, 235, 0, 0.37); }
+
+.post-users-pivot-metabox small.user-type {
+  top: 3px;
+  position: relative;
+  color: #b9b9b9;
+  font-style: italic; }
 
 /*# sourceMappingURL=zawntech-wordpress-helpers.css.map */

@@ -153,7 +153,7 @@ class PostsUsersPivot
         // Loop through results, determine the post IDs we need to return.
         foreach( $results as $result )
         {
-            $relatedUserIds[] = $result->user_id;
+            $relatedUserIds[] = (int) $result->user_id;
         }
 
         return $relatedUserIds;

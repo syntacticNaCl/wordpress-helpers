@@ -58,6 +58,20 @@ class AdminScripts
         );
     }
 
+    public function inlineContent()
+    {
+        // Give our Knockout modules and UIs a load-in.
+        ?>
+        <script type="text/javascript">
+            jQuery('.wpbs').after('<div class="wpbs-temp">Loading module...</div>');
+            jQuery(document).ready(function() {
+                jQuery('.wpbs').show();
+                jQuery('.wpbs-temp').remove();
+            });
+        </script>
+        <?php
+    }
+
     public function __construct()
     {
         // Do nothing if not admin screen.
@@ -67,5 +81,8 @@ class AdminScripts
 
         // Enqueue scripts.
         add_action( 'admin_enqueue_scripts', [$this, 'registerScripts'] );
+
+        // Hook inline content.
+        add_action( 'admin_head', [$this, 'inlineContent'] );
     }
 }
