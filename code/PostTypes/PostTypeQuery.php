@@ -80,7 +80,7 @@ abstract class PostTypeQuery
     public static function getRelatedPostModels($postId, $relatedPostType, $postTypeModel)
     {
         // Get the client's related person post IDs.
-        $relatedpostIds = PostsPivot::getRelatedPostIdsByPostType( $postId, $relatedPostType );
+        $relatedPostIds = PostsPivot::getRelatedPostIdsByPostType( $postId, $relatedPostType );
 
         // Declare an array for output.
         $output = [];
@@ -90,7 +90,7 @@ abstract class PostTypeQuery
         }
 
         // Loop through post IDs.
-        foreach( $postIds as $id )
+        foreach( $relatedPostIds as $id )
         {
             $output[] = new $postTypeModel($id);
         }
