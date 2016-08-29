@@ -7,7 +7,7 @@ var PostUsersPivoterMetaBoxViewModel = (function () {
         // Active view
         this.view = ko.observable('selected');
         this.selectionType = ko.observable('large');
-        this.displaySearchForm = ko.observable('');
+        this.displaySearchForm = ko.observable(false);
         this.searchInput = ko.observable('');
         // Loading states.
         this.loadingUsers = ko.observable(false);

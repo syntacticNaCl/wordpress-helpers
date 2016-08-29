@@ -17,7 +17,7 @@ class PostUsersPivoterMetaBoxViewModel
     // View model options.
     options: PostUsersPivoterMetaBoxOptions;
 
-    displaySearchForm = ko.observable('');
+    displaySearchForm = ko.observable(false);
     searchInput = ko.observable('');
 
     // Loading states.

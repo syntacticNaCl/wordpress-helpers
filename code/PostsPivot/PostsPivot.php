@@ -1,5 +1,6 @@
 <?php
 namespace Zawntech\WordPress\PostsPivot;
+use Zawntech\WordPress\PostTypes\PostTypeModel;
 
 /**
  * This class gives WordPress the ability to create relationships
@@ -58,6 +59,35 @@ class PostsPivot
     {
         global $wpdb;
         return $wpdb->prefix . static::TABLE_NAME;
+    }
+
+    /**
+     * Get a collection of related post type models.
+     * @param $postId
+     * @param $relatedPostType
+     * @param $postTypeModel
+     * @return PostTypeModel[]|array|bool
+     */
+    public static function getRelatedPostModels($postId, $relatedPostType, $postTypeModel)
+    {
+        // Get the client's related person post IDs.
+        $relatedpostIds = static::getRelatedPostIdsByPostType( $postId, $relatedPostType );
+
+        // Declare an array for output.
+        $output = [];
+
+        if ( empty( $postIds ) ) {
+            return false;
+        }
+
+        // Loop through post IDs.
+        foreach( $postIds as $id )
+        {
+            $output[] = new $postTypeModel($id);
+        }
+
+        // Return the array.
+        return $output;
     }
 
     /**
