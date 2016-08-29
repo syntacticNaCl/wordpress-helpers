@@ -85,7 +85,7 @@ abstract class PostTypeQuery
         // Declare an array for output.
         $output = [];
 
-        if ( empty( $postIds ) ) {
+        if ( empty( $relatedPostIds ) ) {
             return false;
         }
 
