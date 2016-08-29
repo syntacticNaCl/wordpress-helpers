@@ -1,6 +1,8 @@
 <?php
 namespace Zawntech\WordPress\PostTypes;
 
+use Zawntech\WordPress\PostsPivot\PostsPivot;
+
 abstract class PostTypeQuery
 {
     /**
@@ -66,5 +68,34 @@ abstract class PostTypeQuery
         }
 
         return false;
+    }
+
+    /**
+     * Get a collection of related post type models.
+     * @param $postId
+     * @param $relatedPostType
+     * @param $postTypeModel
+     * @return PostTypeModel[]|array|bool
+     */
+    public static function getRelatedPostModels($postId, $relatedPostType, $postTypeModel)
+    {
+        // Get the client's related person post IDs.
+        $relatedpostIds = PostsPivot::getRelatedPostIdsByPostType( $postId, $relatedPostType );
+
+        // Declare an array for output.
+        $output = [];
+
+        if ( empty( $postIds ) ) {
+            return false;
+        }
+
+        // Loop through post IDs.
+        foreach( $postIds as $id )
+        {
+            $output[] = new $postTypeModel($id);
+        }
+
+        // Return the array.
+        return $output;
     }
 }
