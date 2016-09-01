@@ -61,6 +61,45 @@ class PostsPivot
     }
 
     /**
+     * Match a multiple set of post IDs.
+     * @param array $postsIds
+     * @return array|bool
+     */
+    public static function getRelatedPostsIds($postsIds = [])
+    {
+        global $wpdb;
+
+        // Get table name.
+        $tableName = static::getTableName();
+
+        // Join by comma.
+        $idsString = implode( ',', $postsIds );
+
+        // Prepare SQL
+        $sql = "SELECT * FROM {$tableName} WHERE id_1 IN ( $idsString ) OR id_2 = ( $idsString );";
+
+        // Get results.
+        $results = $wpdb->get_results($sql);
+
+        // Declare $posts as an array for output.
+        $relatedPostIds = [];
+
+        // Loop through results, determine the post IDs we need to return.
+        foreach( $results as $result )
+        {
+            $value = (int) ( ! in_array( $result->id_1, $postsIds ) ? $result->id_2 : $result->id_1 );
+            $relatedPostIds[] = $value;
+        }
+
+        if ( ! isset( $relatedPostIds[0] ) || ( 0 == $relatedPostIds[0] && 1 == count($relatedPostIds) ) )
+        {
+            return false;
+        }
+
+        return $relatedPostIds;
+    }
+
+    /**
      * Return an array of related post IDs for a given post.
      * @param $postId
      * @return array|boolean
