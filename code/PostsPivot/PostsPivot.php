@@ -92,7 +92,7 @@ class PostsPivot
             $relatedPostIds[$input] = $value;
         }
 
-        if ( ! isset( $relatedPostIds[0] ) || ( 0 == $relatedPostIds[0] && 1 == count($relatedPostIds) ) )
+        if ( empty( $relatedPostIds ) )
         {
             return false;
         }
