@@ -88,7 +88,8 @@ class PostsPivot
         foreach( $results as $result )
         {
             $value = (int) ( in_array( $result->id_1, $postsIds ) ? $result->id_2 : $result->id_1 );
-            $relatedPostIds[] = $value;
+            $input = (int) ( ! in_array( $result->id_1, $postsIds ) ? $result->id_2 : $result->id_1 );
+            $relatedPostIds[$input] = $value;
         }
 
         if ( ! isset( $relatedPostIds[0] ) || ( 0 == $relatedPostIds[0] && 1 == count($relatedPostIds) ) )
