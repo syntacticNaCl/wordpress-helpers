@@ -76,7 +76,7 @@ class PostsPivot
         $idsString = implode( ',', $postsIds );
 
         // Prepare SQL
-        $sql = "SELECT * FROM {$tableName} WHERE id_1 IN ( $idsString ) OR id_2 = ( $idsString );";
+        $sql = "SELECT * FROM {$tableName} WHERE id_1 IN ( $idsString ) OR id_2 = IN ( $idsString );";
 
         // Get results.
         $results = $wpdb->get_results($sql);
