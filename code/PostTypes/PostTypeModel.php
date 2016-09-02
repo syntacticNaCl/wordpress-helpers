@@ -1,11 +1,21 @@
 <?php
 namespace Zawntech\WordPress\PostTypes;
 
+use Zawntech\WordPress\Models\FeaturedImageModel;
+
 abstract class PostTypeModel
 {
+    /**
+     * @var array
+     */
+    protected $options = [
+        'loadFeaturedImage' => true
+    ];
+
     public $postId;
     public $title;
     public $slug;
+    public $featuredImage;
 
     /**
      * PostTypeModel constructor.
@@ -27,5 +37,11 @@ abstract class PostTypeModel
         // Set name.
         $this->title = $post->post_title;
         $this->slug = $post->post_name;
+
+        // If the extending models are configured to load featured images.
+        if ( $this->options['loadFeatureImage'] )
+        {
+            $this->featuredImage = new FeaturedImageModel( $postId );
+        }
     }
 }
