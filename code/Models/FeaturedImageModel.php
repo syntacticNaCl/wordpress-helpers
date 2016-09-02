@@ -44,10 +44,10 @@ class FeaturedImageModel
     public function __construct($postId)
     {
         // Get post thumbnail ID.
-        $thumbnailId = get_post_thumbnail_id( $this->postId );
+        $thumbnailId = get_post_thumbnail_id( $postId );
 
         // No thumbnail ID for this post ID.
-        if ( '' ===  $thumbnailId ) {
+        if ( '' === $thumbnailId ) {
             return;
         }
 

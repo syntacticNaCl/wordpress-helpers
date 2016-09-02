@@ -15,6 +15,10 @@ abstract class PostTypeModel
     public $postId;
     public $title;
     public $slug;
+
+    /**
+     * @var FeaturedImageModel
+     */
     public $featuredImage;
 
     /**
@@ -43,5 +47,5 @@ abstract class PostTypeModel
         {
             $this->featuredImage = new FeaturedImageModel( $postId );
         }
-    }
+    }   
 }
