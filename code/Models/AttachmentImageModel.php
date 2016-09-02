@@ -47,6 +47,8 @@ class AttachmentImageModel
      */
     public $mime;
 
+    public $sizes = [];
+
     public function __construct( $attachmentId )
     {
         // Get attachment ID.
@@ -60,10 +62,22 @@ class AttachmentImageModel
         $this->caption = $post->post_content;
         $this->mime = $post->post_mime_type;
 
-        // Get image urls.
-        $this->urlFull = wp_get_attachment_image_src( $attachmentId, 'full' );
-        $this->urlLarge = wp_get_attachment_image_src( $attachmentId, 'large' );
-        $this->urlMedium = wp_get_attachment_image_src( $attachmentId, 'medium' );
-        $this->urlThumbnail = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+        // Get data.
+        $full = wp_get_attachment_image_src( $attachmentId, 'full' );
+        $large = wp_get_attachment_image_src( $attachmentId, 'large' );
+        $medium = wp_get_attachment_image_src( $attachmentId, 'medium' );
+        $thumbnail = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+
+        // Assign urls.
+        $this->urlFull = $full[0];
+        $this->urlLarge = $large[0];
+        $this->urlMedium = $medium[0];
+        $this->urlThumbnail = $thumbnail[0];
+
+        // Push sizes.
+        $this->sizes[] = $full;
+        $this->sizes[] = $large;
+        $this->sizes[] = $medium;
+        $this->sizes[] = $thumbnail;
     }
 }
