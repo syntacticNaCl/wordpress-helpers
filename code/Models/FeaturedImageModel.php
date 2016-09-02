@@ -43,6 +43,9 @@ class FeaturedImageModel
      */
     public function __construct($postId)
     {
+        // Assign the post ID internally.
+        $this->postId = $postId;
+
         // Get post thumbnail ID.
         $thumbnailId = get_post_thumbnail_id( $postId );
 
@@ -53,9 +56,10 @@ class FeaturedImageModel
 
         // Assign the featured image ID.
         $this->featuredImageId = $thumbnailId;
+        $this->hasFeaturedImage = true;
 
         // Assign the URL.
-        $this->urlFull = get_the_post_thumbnail_url( $this->featuredImageId, 'full' );
-        $this->urlThumbnail = get_the_post_thumbnail_url( $this->featuredImageId, 'post-thumbnail' );
+        $this->urlFull = get_the_post_thumbnail_url( $postId, 'full' );
+        $this->urlThumbnail = get_the_post_thumbnail_url( $postId, 'thumbnail' );
     }
 }
