@@ -14,18 +14,31 @@ abstract class PostTypeModel
     ];
 
     /**
-     * @var 
+     * @var
      */
     protected $metaClass;
 
     public $postId;
+
+    /**
+     * @var string post_title
+     */
     public $title;
+
+    /**
+     * @var string post_name
+     */
     public $slug;
 
     /**
      * @var PostMeta
      */
     public $meta;
+
+    /**
+     * @var string post_content
+     */
+    public $content;
 
     /**
      * @var FeaturedImageModel
@@ -52,6 +65,7 @@ abstract class PostTypeModel
         // Set name.
         $this->title = $post->post_title;
         $this->slug = $post->post_name;
+        $this->content = apply_filters('the_content', $post->post_content);
 
         // If the extending models are configured to load featured images.
         if ( $this->options['loadFeaturedImage'] )
