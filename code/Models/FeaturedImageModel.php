@@ -1,8 +1,22 @@
 <?php
 namespace Zawntech\WordPress\Models;
 
+/**
+ * Autoloads a post's featured image data (url to full, thumbnail sizes).
+ * Class FeaturedImageModel
+ * @package Zawntech\WordPress\Models
+ */
 class FeaturedImageModel
 {
+    /**
+     * @var array Defines options for how the featured image model should behave.
+     */
+    protected $options = [
+
+        // The default URL to return when the object is cast as a string.
+        'defaultUrl' => 'urlFull'
+    ];
+
     /**
      * @var int The post ID passed through the constructor.
      */
@@ -24,6 +38,16 @@ class FeaturedImageModel
     public $urlThumbnail;
 
     /**
+     * @var false|string Public URL to 'medium' size.
+     */
+    public $urlMedium;
+
+    /**
+     * @var false|string Public URL to 'large' size.
+     */
+    public $urlLarge;
+
+    /**
      * @var bool
      */
     protected $hasFeaturedImage = false;
@@ -34,6 +58,24 @@ class FeaturedImageModel
     public function hasFeaturedImage()
     {
         return $this->hasFeaturedImage;
+    }
+
+    /**
+     * Returns urlFull or ''.
+     * @return string
+     */
+    public function __toString()
+    {
+        // No featured image.
+        if ( $this->hasFeaturedImage() ) {
+            return '';
+        }
+
+        // Get the default url key.
+        $urlKey = $this->options['defaultUrl'];
+
+        // Return the url property.
+        return $this->{$urlKey};
     }
 
     /**
@@ -60,6 +102,8 @@ class FeaturedImageModel
 
         // Assign the URL.
         $this->urlFull = get_the_post_thumbnail_url( $postId, 'full' );
+        $this->urlLarge = get_the_post_thumbnail_url( $postId, 'large' );
+        $this->urlMedium = get_the_post_thumbnail_url( $postId, 'medium' );
         $this->urlThumbnail = get_the_post_thumbnail_url( $postId, 'thumbnail' );
     }
 }
