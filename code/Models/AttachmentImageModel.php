@@ -75,21 +75,21 @@ class AttachmentImageModel
         $this->urlThumbnail = $thumbnail[0];
 
         // Push sizes.
-        $this->sizes[] = $full;
-        $this->sizes[] = $large;
-        $this->sizes[] = $medium;
-        $this->sizes[] = $thumbnail;
+        $this->sizes['full'] = $full;
+        $this->sizes['large'] = $large;
+        $this->sizes['medium'] = $medium;
+        $this->sizes['thumbnail'] = $thumbnail;
     }
 
     /**
      * @param $size
-     * @param null $sizeKey
+     * @param null $urlKey
      */
-    public function loadCustomSize($size, $sizeKey=null)
+    public function loadCustomSize($size, $urlKey=null)
     {
-        $sizeKey = null === $sizeKey ? $size : $sizeKey;
+        $sizeKey = null === $urlKey ? $size : $urlKey;
         $customSize = wp_get_attachment_image_src( $this->attachmentId, $size );
-        $this->{$sizeKey} = $customSize[0];
-        $this->sizes[] = $customSize;
+        $this->{$urlKey} = $customSize[0];
+        $this->sizes['size'] = $customSize;
     }
 }
