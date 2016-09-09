@@ -17,7 +17,6 @@ class UserModel
         // Get user data by ID.
         $userData = get_user_by( 'ID', $userId );
 
-
         // Assign data internally.
         $this->login = $userData->user_login;
         $this->email = $userData->user_email;

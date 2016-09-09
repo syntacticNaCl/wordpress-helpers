@@ -80,4 +80,16 @@ class AttachmentImageModel
         $this->sizes[] = $medium;
         $this->sizes[] = $thumbnail;
     }
+
+    /**
+     * @param $size
+     * @param null $sizeKey
+     */
+    public function loadCustomSize($size, $sizeKey=null)
+    {
+        $sizeKey = null === $sizeKey ? $size : $sizeKey;
+        $customSize = wp_get_attachment_image_src( $this->attachmentId, $size );
+        $this->{$sizeKey} = $customSize[0];
+        $this->sizes[] = $customSize;
+    }
 }
