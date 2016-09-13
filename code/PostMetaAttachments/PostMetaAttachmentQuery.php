@@ -64,7 +64,13 @@ class PostMetaAttachmentQuery
 
         return $output;
     }
-    
+
+    /**
+     * Returns the metabox attachment view model.
+     * @param $postId
+     * @param $metaKey
+     * @return array|mixed|object
+     */
     public static function getAttachmentModel($postId, $metaKey)
     {
         $attachmentData = static::getAttachments($postId, $metaKey);
@@ -112,7 +118,8 @@ class PostMetaAttachmentQuery
                 'id' => $postID,
                 'title' => $postData->post_title,
                 'meta' => $attachmentData,
-                'filename' => basename( get_attached_file( $postID ) )
+                'filename' => basename( get_attached_file( $postID ) ),
+                'url' => wp_get_attachment_url($postID)
             ];
 
             // Get thumbnail url.

@@ -90,6 +90,6 @@ class AttachmentImageModel
         $sizeKey = null === $urlKey ? $size : $urlKey;
         $customSize = wp_get_attachment_image_src( $this->attachmentId, $size );
         $this->{$urlKey} = $customSize[0];
-        $this->sizes['size'] = $customSize;
+        $this->sizes[$size] = $customSize;
     }
 }
