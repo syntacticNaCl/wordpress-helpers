@@ -78,6 +78,11 @@ class FeaturedImageModel
         return $this->{$urlKey};
     }
 
+    public function bindImageUrl($urlKey, $size)
+    {
+        $this->{$urlKey} = get_the_post_thumbnail_url( $this->postId, $size );
+    }
+
     /**
      * Get featured image data for a given post ID.
      * FeaturedImageModel constructor.
@@ -101,9 +106,9 @@ class FeaturedImageModel
         $this->hasFeaturedImage = true;
 
         // Assign the URL.
-        $this->urlFull = get_the_post_thumbnail_url( $postId, 'full' );
-        $this->urlLarge = get_the_post_thumbnail_url( $postId, 'large' );
-        $this->urlMedium = get_the_post_thumbnail_url( $postId, 'medium' );
-        $this->urlThumbnail = get_the_post_thumbnail_url( $postId, 'thumbnail' );
+        $this->bindImageUrl( 'urlFull', 'full' );
+        $this->bindImageUrl( 'urlLarge', 'large' );
+        $this->bindImageUrl( 'urlMedium', 'medium' );
+        $this->bindImageUrl( 'urlThumbnail', 'thumbnail' );
     }
 }

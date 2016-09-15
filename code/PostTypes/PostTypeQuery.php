@@ -33,7 +33,7 @@ abstract class PostTypeQuery
         // Loop through models.
         foreach( $query->posts as $post )
         {
-            $models[] = new $className($query->posts[0]->ID);
+            $models[] = new $className($post->ID);
         }
 
         return $models;
