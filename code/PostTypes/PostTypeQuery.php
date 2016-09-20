@@ -98,4 +98,31 @@ abstract class PostTypeQuery
         // Return the array.
         return $output;
     }
+
+    /**
+     * @param string $order
+     * @return PostTypeModel[]
+     */
+    public static function getAllByMenuOrder($order = 'ASC')
+    {
+        // Get specifications.
+        $query = new \WP_Query([
+            'post_type' => static::$postType,
+            'nopaging' => true,
+            'orderby' => 'menu_order',
+            'order' => $order
+        ]);
+
+        // Models
+        $models = [];
+        $className = static::$model;
+
+        // Loop through models.
+        foreach( $query->posts as $post )
+        {
+            $models[] = new $className($post->ID);
+        }
+
+        return $models;
+    }
 }
