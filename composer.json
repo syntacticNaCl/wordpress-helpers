@@ -1,7 +1,7 @@
 {
   "name": "zawntech/wordpress-helpers",
   "description": "Adds enhancements to WordPress.",
-  "type": "wordpress-plugin",
+  "type": "wordpress-muplugin",
   "authors": [
     {
       "name": "Marty Eason",
