@@ -144,7 +144,7 @@ class PostTypeRoleManager
     /**
      * Remove this post type's custom capabilities.
      */
-    public function removeCustomCapabilities()
+    public function removeCustomCapabilities( $customRoleMap = [] )
     {
         // Get role map.
         $map = $this->getCustomMap( $customRoleMap );
