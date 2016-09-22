@@ -65,10 +65,7 @@ class PostTypeRoleManager
                 $output[$capabilityKey] = $capability;
             }
         }
-
-        // Add the ability to upload files.
-        $output['upload_files'] = 'upload_files';
-
+        
         // Return prepared array.
         return $output;
     }
