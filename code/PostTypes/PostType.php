@@ -62,14 +62,12 @@ class PostType
             }
         }
     }
-
-    protected $capabilities;
-
+    
     /**
      * Return a list of customized role capabilities for this post type.
      * @return array
      */
-    protected function getCustomCapabilities()
+    public function getCustomCapabilities()
     {
         // String filter.
         $filter = function($str) {
@@ -82,6 +80,7 @@ class PostType
         $singular = $filter( static::SINGULAR );
         $plural = $filter( static::PLURAL );
 
+        // Return the edit post.
         return [
             'edit_post'              => "edit_{$singular}",
             'read_post'              => "read_{$singular}",
@@ -200,11 +199,8 @@ class PostType
         });
     }
 
-    public function __construct()
+    protected function initialize()
     {
-        // Validate the class structure.
-        $this->_validatePostType();
-
         // Register the post type.
         $this->registerPostType();
 
@@ -251,5 +247,34 @@ class PostType
                 new $taxonomyClass;
             }
         }
+    }
+
+    public function __construct()
+    {
+        // Validate the class structure.
+        $this->_validatePostType();
+
+        // Initialize the post type.
+        $this->initialize();
+
+        // Assign to static instance.
+        static::$instance = $this;
+    }
+
+    /**
+     * @var static
+     */
+    protected static $instance;
+
+    /**
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if ( null === static::$instance )
+        {
+             new static;
+        }
+        return static::$instance;
     }
 }
