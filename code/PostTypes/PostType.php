@@ -17,6 +17,13 @@ class PostType
     
     protected $searchMeta = [];
 
+    /**
+     * If true, use our custom generated capabilities.
+     * If false, use the default 'edit_post' etc capabilities.
+     * @var bool
+     */
+    protected $useCustomCapabilities = false;
+
     protected $supports = ['title', 'editor', 'author', 'thumbnail'];
 
     /**
@@ -58,6 +65,45 @@ class PostType
 
     protected $capabilities;
 
+    /**
+     * Return a list of customized role capabilities for this post type.
+     * @return array
+     */
+    protected function getCustomCapabilities()
+    {
+        // String filter.
+        $filter = function($str) {
+            $str = strtolower( $str );
+            $str = str_replace( [' ', '-'], '_', $str );
+            return $str;
+        };
+
+        // Get singular and plural words.
+        $singular = $filter( static::SINGULAR );
+        $plural = $filter( static::PLURAL );
+
+        return [
+            'edit_post'              => "edit_{$singular}",
+            'read_post'              => "read_{$singular}",
+            'delete_post'            => "delete_{$singular}",
+            // primitive/meta caps
+            'create_posts'           => "create_{$plural}",
+            // primitive caps used outside of map_meta_cap()
+            'edit_posts'             => "edit_{$plural}",
+            'edit_others_posts'      => "manage_{$plural}",
+            'publish_posts'          => "manage_{$plural}",
+            'read_private_posts'     => "read",
+            // primitive caps used inside of map_meta_cap()
+            'read'                   => "read",
+            'delete_posts'           => "manage_{$plural}",
+            'delete_private_posts'   => "manage_{$plural}",
+            'delete_published_posts' => "manage_{$plural}",
+            'delete_others_posts'    => "manage_{$plural}",
+            'edit_private_posts'     => "edit_{$plural}",
+            'edit_published_posts'   => "edit_{$plural}"
+        ];
+    }
+
     protected function registerPostType()
     {
         add_action( 'init', function()
@@ -88,6 +134,7 @@ class PostType
                 'not_found_in_trash' => __( 'No ' . strtolower($plural) . ' found in Trash.', $textDomain )
             ];
 
+            // Declare arguments.
             $args = [
                 'labels'             => $labels,
                 'description'        => __( 'Description.', $textDomain ),
@@ -97,13 +144,19 @@ class PostType
                 'show_in_menu'       => true,
                 'query_var'          => true,
                 'rewrite'            => ['slug' => static::SLUG],
-                //'capability_type'    => [strtolower(static::SINGULAR), strtolower(static::PLURAL)],
                 'has_archive'        => true,
                 'hierarchical'       => false,
                 'menu_position'      => null,
-                'supports'           => $this->supports
+                'supports'           => $this->supports,
             ];
 
+            // Check if the class is configured to use custom capabilities.
+            if ( $this->useCustomCapabilities ) {
+                $args['map_meta_cap'] = true;
+                $args['capabilities'] = $this->getCustomCapabilities();
+            }
+
+            // Register the post type.
             register_post_type( static::KEY, $args );
         });
     }
