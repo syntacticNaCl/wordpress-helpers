@@ -257,7 +257,7 @@ class PostType
         }
     }
 
-    public function __construct()
+    protected function __construct()
     {
         // Validate the class structure.
         $this->_validatePostType();
