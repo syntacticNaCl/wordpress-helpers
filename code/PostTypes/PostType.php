@@ -285,4 +285,12 @@ class PostType
         }
         return static::$instance;
     }
+
+    /**
+     * Instantiate the post type class.
+     */
+    public static function register()
+    {
+        static::getInstance();
+    }
 }

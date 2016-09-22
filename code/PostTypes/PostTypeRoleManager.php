@@ -1,10 +1,21 @@
 <?php
 namespace Zawntech\WordPress\PostTypes;
 
+/**
+ * This class is auto-instantiated per PostType and extending classes as $roleManager,
+ * the parent class is bound to $postType.
+ *
+ * It is intended to be used in conjunction with an activation/deactivation
+ * hook, providing an automated method for adding custom post type capabilities
+ * to WordPress roles.
+ *
+ * Class PostTypeRoleManager
+ * @package Zawntech\WordPress\PostTypes
+ */
 class PostTypeRoleManager
 {
     /**
-     * @var PostType
+     * @var PostType The instantiating parent PostType or extending class.
      */
     private $postType;
 
