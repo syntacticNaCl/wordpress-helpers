@@ -18,6 +18,11 @@ class PostType
     protected $searchMeta = [];
 
     /**
+     * @var PostTypeRoleManager
+     */
+    public $roleManager;
+
+    /**
      * If true, use our custom generated capabilities.
      * If false, use the default 'edit_post' etc capabilities.
      * @var bool
@@ -62,7 +67,7 @@ class PostType
             }
         }
     }
-    
+
     /**
      * Return a list of customized role capabilities for this post type.
      * @return array
@@ -203,6 +208,9 @@ class PostType
     {
         // Register the post type.
         $this->registerPostType();
+
+        // Instantiate post type role manager.
+        $this->roleManager = new PostTypeRoleManager( $this );
 
         // Filter the 'Enter title here' text on the post editor screen.
         if ( static::ENTER_TITLE_HERE ) {
