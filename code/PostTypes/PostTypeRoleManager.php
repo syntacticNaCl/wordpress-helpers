@@ -63,20 +63,26 @@ class PostTypeRoleManager
     }
 
     /**
-     * Hook this post type's custom capabilities.
-     * @param array $customRoleMap A key pair map of of custom role keys to default
-     * WordPress role keys, for example, if you have a custom role of [{ROLE_KEY} => {DEFAULT_WP_ROLE}, ...]
-     * Valid default keys for mapping: 'administrator', 'editor', 'author'
-     * @throws \Exception
+     * @return array
      */
-    public function addCustomCapabilities( $customRoleMap = [] )
+    protected function getDefaultMap()
     {
-        // Get our capabilities by roles.
-        $map = [
+        return [
             'administrator' => $this->_getAdminCapabilities(),
             'editor' => $this->_getEditorCapabilities(),
             'author' => $this->_getAuthorCapabilities()
         ];
+    }
+
+    /**
+     * @param array $customRoleMap
+     * @return array
+     * @throws \Exception
+     */
+    protected function getCustomMap( $customRoleMap = [] )
+    {
+        // Get capabilities by roles.
+        $map = $this->getDefaultMap();
 
         // Process the supplied custom post type map.
         if ( ! empty( $customRoleMap ) )
@@ -99,6 +105,21 @@ class PostTypeRoleManager
                 $map[$customKey] = $map[$defaultKey];
             }
         }
+
+        return $map;
+    }
+
+    /**
+     * Hook this post type's custom capabilities.
+     * @param array $customRoleMap A key pair map of of custom role keys to default
+     * WordPress role keys, for example, if you have a custom role of [{ROLE_KEY} => {DEFAULT_WP_ROLE}, ...]
+     * Valid default keys for mapping: 'administrator', 'editor', 'author'
+     * @throws \Exception
+     */
+    public function addCustomCapabilities( $customRoleMap = [] )
+    {
+        // Get role map.
+        $map = $this->getCustomMap( $customRoleMap );
 
         // Loop through map capabilities.
         foreach( $map as $roleKey => $capabilities )
@@ -125,9 +146,8 @@ class PostTypeRoleManager
      */
     public function removeCustomCapabilities()
     {
-        $map = [
-            'administrator' => $this->_getAdminCapabilities()
-        ];
+        // Get role map.
+        $map = $this->getCustomMap( $customRoleMap );
 
         // Loop through map capabilities.
         foreach( $map as $roleKey => $capabilities )
