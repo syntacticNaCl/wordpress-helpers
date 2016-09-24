@@ -41,7 +41,7 @@ class AjaxHandler
         }
 
         // Protected routes.
-        foreach( $this->public as $actionKey )
+        foreach( $this->private as $actionKey )
         {
             add_action( "wp_ajax_{$this->prefix}{$actionKey}", function() use ($actionKey)
             {
