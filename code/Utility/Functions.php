@@ -52,8 +52,10 @@ if ( ! function_exists( 'ajax_url' ) )
      */
     function ajax_url($action, $arguments = [])
     {
-        $url = admin_url() . "admin-ajax.php={$action}";
+        // Prepare the base URL.
+        $url = admin_url() . "admin-ajax.php?action={$action}";
 
+        // If arguments were attached, append them to URL query.
         if ( ! empty( $arguments ) )
         {
             $url .= '&' . http_build_query( $arguments );
