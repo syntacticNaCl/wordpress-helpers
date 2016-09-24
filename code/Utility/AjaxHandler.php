@@ -28,6 +28,26 @@ class AjaxHandler
      */
     protected $prefix = '';
 
+    /**
+     * Send a JSON response.
+     * @param $data
+     * @param int $responseCode
+     */
+    protected function json( $data, $responseCode = 200 )
+    {
+        Ajax::jsonResponse( $data, $responseCode );
+    }
+
+    /**
+     * Send an error response.
+     * @param $data
+     * @param int $responseCode
+     */
+    protected function error( $data, $responseCode = 400 )
+    {
+        Ajax::jsonError( $data, $responseCode );
+    }
+
     public function __construct()
     {
         // Public routes.
