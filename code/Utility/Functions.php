@@ -41,3 +41,24 @@ if ( ! function_exists('get_edit_post_url') )
         return admin_url() . 'post.php?post=' . $postId . '&action=edit';
     }
 }
+
+if ( ! function_exists( 'ajax_url' ) )
+{
+    /**
+     * Generate an ajax url for a given action.
+     * @param $action
+     * @param array $arguments
+     * @return string
+     */
+    function ajax_url($action, $arguments = [])
+    {
+        $url = admin_url() . "admin-ajax.php={$action}";
+
+        if ( ! empty( $arguments ) )
+        {
+            $url .= '&' . http_build_query( $arguments );
+        }
+
+        return $url;
+    }
+}
