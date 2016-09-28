@@ -99,7 +99,7 @@ class Taxonomy
     {
         // If we've already hooked the taxonomy, do nothing.
         if ( static::$registered ) {
-            return;
+        //    return;
         }
 
         // Define arguments.
@@ -119,7 +119,7 @@ class Taxonomy
         }
 
         // The taxonomy has been registered.
-        static::$registered = true;
+        //static::$registered = true;
     }
 
     public function __construct()
