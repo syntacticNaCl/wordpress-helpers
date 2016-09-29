@@ -14,10 +14,13 @@ abstract class PostTypeModel
     ];
 
     /**
-     * @var
+     * @var string The extending meta class to instantiate for this model.
      */
     protected $metaClass;
 
+    /**
+     * @var int The post ID.
+     */
     public $postId;
 
     /**
@@ -36,9 +39,14 @@ abstract class PostTypeModel
     public $meta;
 
     /**
-     * @var string post_content
+     * @var string Filtered post_content.
      */
     public $content;
+
+    /**
+     * @var string Prefiltered post_content.
+     */
+    public $contentRaw;
 
     /**
      * @var FeaturedImageModel
@@ -66,6 +74,7 @@ abstract class PostTypeModel
         $this->title = $post->post_title;
         $this->slug = $post->post_name;
         $this->content = apply_filters('the_content', $post->post_content);
+        $this->contentRaw = $post->post_content;
 
         // If the extending models are configured to load featured images.
         if ( $this->options['loadFeaturedImage'] )
@@ -76,10 +85,12 @@ abstract class PostTypeModel
         // Autoload meta.
         if ( $this->options['loadMeta'] )
         {
-            // Verify that a class defintion is provided.
+            // Verify that a meta class definition is provided.
             if ( ! $this->metaClass )
             {
-                throw new \Exception('No PostMeta class defined in class.');
+                // Reference the extending post type model.
+                $staticClassName = static::class;
+                throw new \Exception("No PostMeta class defined in class {$staticClassName}.");
             }
 
             // Reference class name.
