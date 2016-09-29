@@ -170,7 +170,7 @@ var WordPressMediaAttachmentsViewModel = (function () {
             var self_1 = this;
             this.frame = new wp.media.view.MediaFrame.Select({
                 // Modal title
-                title: 'Select profile background',
+                title: self_1.parent.options.frameTitleText,
                 // Enable/disable multiple select
                 multiple: this.multiple,
                 // Library WordPress query arguments.

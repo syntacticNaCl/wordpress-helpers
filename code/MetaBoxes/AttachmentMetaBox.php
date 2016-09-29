@@ -42,6 +42,11 @@ class AttachmentMetaBox extends MetaBoxAbstract
     /**
      * @var string
      */
+    protected $frameTitleText = 'Set frame title text';
+
+    /**
+     * @var string
+     */
     protected $attachmentButtonText = 'Set attachment';
 
     /**
@@ -68,7 +73,8 @@ class AttachmentMetaBox extends MetaBoxAbstract
                 'attachmentType' => $this->attachmentType,
                 'attachmentButtonText' => $this->attachmentButtonText,
                 'attachmentPreload' => PostMetaAttachmentQuery::getAttachmentModel($post->ID, $this->metaKey),
-                'type' => $attachmentSource ?: $this->defaultType
+                'type' => $attachmentSource ?: $this->defaultType,
+                'frameTitleText' => $this->frameTitleText
             ],
 
             'metaKey' => $this->metaKey
