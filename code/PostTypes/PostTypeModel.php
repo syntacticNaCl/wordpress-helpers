@@ -54,6 +54,11 @@ abstract class PostTypeModel
     public $featuredImage;
 
     /**
+     * @var \WP_Post
+     */
+    public $post;
+
+    /**
      * PostTypeModel constructor.
      * @param $postId
      */
@@ -67,14 +72,16 @@ abstract class PostTypeModel
             return;
         }
 
-        // Set post ID.
+        // Assign the core WP_Post internally and post ID.
+        $this->post = $post;
         $this->postId = $postId;
 
-        // Set name.
+        // Set model properties.
         $this->title = $post->post_title;
         $this->slug = $post->post_name;
         $this->content = apply_filters('the_content', $post->post_content);
         $this->contentRaw = $post->post_content;
+        $this->permalink = get_permalink( $post );
 
         // If the extending models are configured to load featured images.
         if ( $this->options['loadFeaturedImage'] )
